@@ -35,9 +35,9 @@ export const textsArray = [
 ]
 
 export const backgroundImagesIcons = [
-    require('./assets/leha.png'),
-    require('./assets/garik.png'),
-    require('./assets/shurik.png'),
-    require('./assets/anton.png'),
-    require('./assets/den.png')
+    require('./assets/sh.webp'),
+    require('./assets/d.webp'),
+    require('./assets/a.webp'),
+    require('./assets/g.webp'),
+    require('./assets/l.webp')
 ];
