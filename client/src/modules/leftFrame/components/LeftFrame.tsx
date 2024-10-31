@@ -7,6 +7,7 @@ import { FaWater } from "react-icons/fa"
 import Tournaments from './Tournamets'
 import Statistics from './Statistics'
 import Reservoors from './Reservoors'
+import RenderHeaderLeft from './HeadersLeft'
 import '../styles/LeftFrame.css'
 
 
@@ -24,16 +25,19 @@ const LeftFrame = () => {
     }
     return (
         <div className="Left_frame">
+            <RenderHeaderLeft />
             <div className="wrapper">
-                <div className="btn" onClick={() => handleButtonClick('tounaments')}><GiTrophy className="class_icon icon_button" />
-                    <span className="title_name">Турниры</span>{getIconsArrow('tounaments')}</div>
-                {activeButton === 'tounaments' && <Tournaments />}
-                <div className="btn" onClick={() => handleButtonClick('stata')}><FaChartGantt className="class_icon icon_button" />
-                    <span className="title_name">Статистика</span>{getIconsArrow('stata')}</div>
-                {activeButton === 'stata' && <Statistics />}
-                <div className="btn" onClick={() => handleButtonClick('reservoors')}><FaWater className="class_icon icon_button" />
-                    <span className="title_name">Водоёмы</span>{getIconsArrow('reservoors')}</div>
-                {activeButton === 'reservoors' && <Reservoors />}
+                <div className="wrapper_navi">
+                    <div className="btn" onClick={() => handleButtonClick('tounaments')}><GiTrophy className="class_icon icon_button" />
+                        <span className="title_name">Турниры</span>{getIconsArrow('tounaments')}</div>
+                    {activeButton === 'tounaments' && <Tournaments />}
+                    <div className="btn" onClick={() => handleButtonClick('stata')}><FaChartGantt className="class_icon icon_button" />
+                        <span className="title_name">Статистика</span>{getIconsArrow('stata')}</div>
+                    {activeButton === 'stata' && <Statistics />}
+                    <div className="btn" onClick={() => handleButtonClick('reservoors')}><FaWater className="class_icon icon_button" />
+                        <span className="title_name">Водоёмы</span>{getIconsArrow('reservoors')}</div>
+                    {activeButton === 'reservoors' && <Reservoors />}
+                </div>
             </div>
         </div>
     )

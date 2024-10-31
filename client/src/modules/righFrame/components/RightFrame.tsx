@@ -1,6 +1,7 @@
 import React from 'react'
 import CardIconsText from './CardIconsText'
 import DiscriptionCard from './DiscriptionCard'
+import RenderHeaderRight from './HeadersRight'
 import '../styles/RightFrame.css'
 import { textsArray, backgroundImagesIcons } from '../stor'
 import { useState, useEffect } from 'react'
@@ -22,8 +23,11 @@ const RightFrame = () => {
 
     return (
         <div className='Right_frame'>
-            <DiscriptionCard />
-            <CardIconsText text={textsArray[currentIndexText]} iconsRef={backgroundImagesIcons[currentIndexIcon]} />
+            <RenderHeaderRight />
+            <div className="wrapper_right_frame">
+                <DiscriptionCard />
+                <CardIconsText text={textsArray[currentIndexText]} iconsRef={backgroundImagesIcons[currentIndexIcon]} />
+            </div>
         </div>
     )
 }

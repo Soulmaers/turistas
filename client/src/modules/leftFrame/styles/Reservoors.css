@@ -1,7 +1,18 @@
 .container_reservoors {
     width: 100%;
     margin: 5px 0;
+    color: #fff;
+}
+
+.reservour {
+    width: 100%;
+    cursor: pointer;
+    font-size: 0.9rem;
     padding: 2px 5px;
     box-sizing: border-box;
-    color: #fff;
+}
+
+.reservour:hover {
+    color: gray;
+    background-color: #fff;
 }

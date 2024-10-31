@@ -1,8 +1,7 @@
-.Header_container {
-    width: 97%;
-    height: 80px;
+.header_admin_container {
+    width: 100%;
+    height: 60px;
     background-color: #5db350;
     border-radius: 5px;
     border: 1px solid #fff;
-    box-sizing: border-box;
 }

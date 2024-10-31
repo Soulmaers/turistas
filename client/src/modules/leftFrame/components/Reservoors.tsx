@@ -11,7 +11,8 @@ const Reservoors = () => {
             <div className="reservour">Финский залив (Соколинское)</div>
             <div className="reservour">река Волхов</div>
             <div className="reservour">Ладожское озеро (Креницы)</div>
-            <div className="reservour">Лажоское озеро (Шхеры)</div>
+            <div className="reservour">Ладожское озеро (Шхеры)</div>
+            <div className="reservour">река Ловать</div>
         </div>
 
 
