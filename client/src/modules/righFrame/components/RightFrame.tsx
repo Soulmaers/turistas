@@ -16,7 +16,7 @@ const RightFrame = () => {
         const intervalId = setInterval(() => {
             setCurrentIndexText(Math.floor(Math.random() * textsArray.length));
             setCurrentIndexIcon(prevIndex => (prevIndex + 1) % backgroundImagesIcons.length);
-        }, 60000); // Обновление каждую минуту
+        }, 6000); // Обновление каждую минуту
 
         return () => clearInterval(intervalId);
     }, [])

@@ -11,15 +11,16 @@
 
 
 .Description_text {
-    width: 200px;
+    width: 220px;
     border: 1px solid #fff;
     border-radius: 10px;
     color: #fff;
+    font-size: 0.9rem;
     background-color: gray;
     padding: 10px 3px;
     box-sizing: border-box;
     position: absolute;
-    right: 100px;
+    right: 27%;
     top: 130px;
 }
 

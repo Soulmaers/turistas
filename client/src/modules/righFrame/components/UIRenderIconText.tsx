@@ -9,11 +9,10 @@ interface RenderIconTextProps {
 }
 const RenderIconText: React.FC<RenderIconTextProps> = ({ text, iconsRef }) => {
 
-
     return (
         <div className="Card_widget">
-            <div className="Description_text">{text}</div>
             <div className="icon" style={{ backgroundImage: `url(${iconsRef})` }}></div>
+            <div className="Description_text">{text}</div>
         </div >
     )
 }
