@@ -1,6 +1,8 @@
 .Header_container {
     width: 97%;
     height: 80px;
-    background-color: lightgray;
+    background-color: #5db350;
     border-radius: 5px;
+    border: 1px solid #fff;
+    box-sizing: border-box;
 }
