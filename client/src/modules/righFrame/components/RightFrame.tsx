@@ -2,7 +2,7 @@ import React from 'react'
 import CardIconsText from './CardIconsText'
 import DiscriptionCard from './DiscriptionCard'
 import '../styles/RightFrame.css'
-import { textsArray, iconsArray } from '../stor'
+import { textsArray, backgroundImagesIcons } from '../stor'
 import { useState, useEffect } from 'react'
 
 
@@ -14,8 +14,8 @@ const RightFrame = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCurrentIndexText(Math.floor(Math.random() * textsArray.length));
-            setCurrentIndexIcon(prevIndex => (prevIndex + 1) % iconsArray.length);
-        }, 20000); // Обновление каждую минуту
+            setCurrentIndexIcon(prevIndex => (prevIndex + 1) % backgroundImagesIcons.length);
+        }, 60000); // Обновление каждую минуту
 
         return () => clearInterval(intervalId);
     }, [])
@@ -23,7 +23,7 @@ const RightFrame = () => {
     return (
         <div className='Right_frame'>
             <DiscriptionCard />
-            <CardIconsText text={textsArray[currentIndexText]} icon={iconsArray[currentIndexIcon]} />
+            <CardIconsText text={textsArray[currentIndexText]} iconsRef={backgroundImagesIcons[currentIndexIcon]} />
         </div>
     )
 }

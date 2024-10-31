@@ -4,16 +4,17 @@ import '../styles/UIRenderIconText.css'
 
 interface RenderIconTextProps {
     text: string;
-    icon: string;
+    iconsRef: string
+
 }
-const RenderIconText: React.FC<RenderIconTextProps> = ({ text, icon }) => {
+const RenderIconText: React.FC<RenderIconTextProps> = ({ text, iconsRef }) => {
 
 
     return (
         <div className="Card_widget">
             <div className="Description_text">{text}</div>
-            <div className="icon">{icon}</div>
-        </div>
+            <div className="icon" style={{ backgroundImage: `url(${iconsRef})` }}></div>
+        </div >
     )
 }
 

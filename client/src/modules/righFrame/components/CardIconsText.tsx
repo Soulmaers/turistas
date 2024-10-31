@@ -7,12 +7,13 @@ import '../styles/CardIconsText.css'
 
 interface RenderIconTextProps {
     text: string;
-    icon: string;
+    iconsRef: string
+
 }
-const CardIconsText: React.FC<RenderIconTextProps> = ({ text, icon }) => {
+const CardIconsText: React.FC<RenderIconTextProps> = ({ text, iconsRef }) => {
 
     return (<div className="CardIconText">
-        <RenderIconText text={text} icon={icon} />
+        <RenderIconText text={text} iconsRef={iconsRef} />
     </div>)
 }
 
