@@ -1,5 +1,5 @@
 import React from 'react';
-import { LeftFrame, CenterFrame, RightFrame, Footer } from './modules/layout/index'
+import { LeftFrame, CenterFrame, RightFrame, Footer } from './modules/centerFrame/index'
 import './App.css';
 
 function App() {

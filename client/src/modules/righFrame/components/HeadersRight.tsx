@@ -16,13 +16,13 @@ const RenderHeaderRight = () => {
         <div className="header_admin_container">
             <div className="wrapper_account">
                 <div className="login">Soulmaers</div>
-                <div className="trophy_count">{trophies}</div>
-                <div className="fish_count"><FaFish className="fish_icon" />100</div>
-                <div className="fish_count"><FaStar className="star_icon" />0</div>
+                <div className="trophy_count"> <FaTrophy className="trophy_all" /> <span className="numbers">{trophyCount}</span></div>
+                <div className="fish_count"><FaFish className="fish_icon" /><span className="numbers">100</span></div>
+                <div className="fish_count"><FaStar className="star_icon" /><span className="numbers">0</span></div>
                 <div className="settings"><IoSettingsSharp className="settings_icon" /></div>
                 <div className="out"><IoLogOut className="exit" /></div>
             </div>
-        </div>
+        </div >
 
     )
 }

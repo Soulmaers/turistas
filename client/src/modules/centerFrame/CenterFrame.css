@@ -1,73 +1,59 @@
-.header_admin_container {
-    width: 100%;
-    height: 60px;
-    background-color: #5db350;
-    padding: 10px;
+.Center_frame {
+    width: 60%;
+    height: 100%;
+    background-color: lightgray;
     border-radius: 5px;
     border: 1px solid #fff;
     box-sizing: border-box;
     display: flex;
-    align-items: center;
-    justify-content: center;
-
-}
-
-
-.wrapper_account {
-    width: 100%;
-    height: 80%;
-    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    background-color: gray;
-    color: #fff;
-    border-radius: 5px;
-    padding: 3px;
-    border: 1px solid #fff;
+
 }
 
-
-
-.trophy_all {
-    margin: 0 2px;
-}
-
-.exit,
-.fish_count,
-.trophy_count,
-.settings_icon,
-.star_icon {
+.add_tour {
+    width: 100%;
+    height: 40px;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
-.fish_icon,
-.star_icon {
-    margin-right: 2px;
+.title_tour {
+    width: 400px;
+    background-color: gray;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.numbers {
-    height: 16px;
-}
-
-.settings_icon,
-.exit {
+.create_btn_tour {
+    margin-left: 10px;
+    color: #fff;
     cursor: pointer;
 }
 
-.exit {
-    width: 18px;
-    height: 18px;
+.disc_tour {
+    color: #fff;
 }
 
-.settings_icon:hover {
-    animation-name: wiggle;
-    animation-duration: 1s;
-    animation-timing-function: ease;
-    animation-iteration-count: 1;
+.add_tournament {
+    color: #fff;
 }
 
-.exit:hover {
+.logo_center {
+    width: 400px;
+    height: 400px;
+    background-image: url('./what.png');
+    background-size: cover;
+    border-radius: 5px;
+    border: 1px solid #fff;
+}
+
+.create_btn_tour:hover {
     animation-name: wiggle;
     animation-duration: 1s;
     animation-timing-function: ease;
