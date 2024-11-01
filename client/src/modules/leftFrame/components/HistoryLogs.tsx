@@ -1,9 +1,8 @@
 import React from 'react'
+import '../styles/HistoryLogs.css'
 
-import '../styles/Tournamets.css'
 
-const Tournaments = () => {
-
+const HistoryLogs = () => {
 
 
     return (
@@ -19,4 +18,4 @@ const Tournaments = () => {
 }
 
 
-export default Tournaments
+export default HistoryLogs

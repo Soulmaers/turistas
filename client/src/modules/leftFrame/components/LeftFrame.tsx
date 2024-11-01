@@ -3,11 +3,13 @@ import { useState } from 'react'
 import { GiTrophy } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io"
 import { FaChartGantt } from "react-icons/fa6"
-import { FaWater } from "react-icons/fa"
+import { FaWater, FaBookOpen } from "react-icons/fa"
 import Tournaments from './Tournamets'
 import Statistics from './Statistics'
 import Reservoors from './Reservoors'
 import RenderHeaderLeft from './HeadersLeft'
+import HistoryLogs from './HistoryLogs'
+
 import '../styles/LeftFrame.css'
 
 
@@ -37,6 +39,10 @@ const LeftFrame = () => {
                     <div className="btn" onClick={() => handleButtonClick('reservoors')}><FaWater className="class_icon icon_button" />
                         <span className="title_name">Водоёмы</span>{getIconsArrow('reservoors')}</div>
                     {activeButton === 'reservoors' && <Reservoors />}
+                    <div className="btn" onClick={() => handleButtonClick('history')}><FaBookOpen className="class_icon icon_button" />
+                        <span className="title_name">Журнал</span>{getIconsArrow('history')}</div>
+                    {activeButton === 'history' && <HistoryLogs />}
+
                 </div>
             </div>
         </div>
