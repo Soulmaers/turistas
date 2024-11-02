@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 import ModalAddTour from './ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
+import AddCarTournament from './tabletours/components/AddCarTournament'
 import './CenterFrame.css'
 
 interface CenterProps {
@@ -18,7 +19,7 @@ const СenterFrame: React.FC<CenterProps> = ({ defaultStateModal, closeHandler, 
             return <WiewCardReservours index={clickReservour.index} text={clickReservour.elem} />
         }
         else {
-            return <div className="logo_center"></div>
+            return <AddCarTournament />
         }
     }
 
@@ -26,6 +27,7 @@ const СenterFrame: React.FC<CenterProps> = ({ defaultStateModal, closeHandler, 
     return (
         <div className='Center_frame'>
             {renderComponents()}
+            {/*<div className="logo_center"></div>*/}
             {defaultStateModal && <ModalAddTour closeHandler={closeHandler} />}
         </div>
 

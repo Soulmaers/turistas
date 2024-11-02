@@ -5,3 +5,50 @@
     box-sizing: border-box;
     color: #fff;
 }
+
+
+.checkbox_item {
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.label_check {
+    font-size: 0.76rem;
+}
+
+
+/*код для кастомизации чекбоксов*/
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #fff;
+
+}
+
+input[type="checkbox"]:checked {
+    background-color: #fff;
+    ;
+}
+
+input[type="checkbox"]:checked::before {
+    content: "\2713";
+    font-size: 14px;
+    display: block;
+    font-weight: bold;
+    height: 14px;
+    width: 14px;
+    color: rgba(6, 28, 71, 1);
+    ;
+    text-align: center;
+    line-height: 15px;
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    display: block;
+    height: 14px;
+    width: 14px;
+    border-radius: 2px;
+    border: 1px solid gray;
+}

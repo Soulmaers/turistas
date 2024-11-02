@@ -15,7 +15,7 @@ import '../styles/LeftFrame.css'
 
 interface HadlerProps {
     handlerAddTour: (event: React.MouseEvent<SVGElement>) => void;
-    changeStateReservour: (index: number, e: string) => void
+    changeStateReservour: (index: number | null, e: string | null) => void
 }
 
 const LeftFrame: React.FC<HadlerProps> = ({ handlerAddTour, changeStateReservour }) => {
@@ -31,7 +31,7 @@ const LeftFrame: React.FC<HadlerProps> = ({ handlerAddTour, changeStateReservour
     }
     return (
         <div className="Left_frame">
-            <RenderHeaderLeft />
+            <RenderHeaderLeft changeStateReservour={changeStateReservour} />
             <div className="wrapper">
                 <div className="wrapper_navi">
                     <div className="btn" onClick={() => handleButtonClick('tounaments')}><GiTrophy className="class_icon icon_button" />

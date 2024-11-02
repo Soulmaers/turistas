@@ -7,7 +7,7 @@ function App() {
 
   const [defaultStateModal, setState] = useState(false)
   const [clickReservour, setClickReservour] = useState<{ index: number | null; elem: string | null }>({ index: null, elem: null });
-  const changeStateReservour = (index: number, e: string) => {
+  const changeStateReservour = (index: number | null, e: string | null) => {
     setClickReservour({ index: index, elem: e })
   }
 

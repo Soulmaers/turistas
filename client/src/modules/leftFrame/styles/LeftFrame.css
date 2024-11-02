@@ -2,7 +2,7 @@
     width: 15%;
     height: 100%;
     border-radius: 5px;
-    background-color: gray;
+    background-color: #4d4646;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -28,7 +28,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: gray;
+    background-color: #4d4646;
     border-radius: 5px;
     box-sizing: border-box;
 }
