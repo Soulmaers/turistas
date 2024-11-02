@@ -1,27 +1,32 @@
 import React from 'react'
 import { useState } from 'react'
-import { IoMdAddCircle } from "react-icons/io";
+
 import ModalAddTour from './ModalAddTour'
+import WiewCardReservours from './reservours/components/WiewCardReservours'
 import './CenterFrame.css'
 
-const СenterFrame = () => {
-    const [defaultState, setState] = useState(false)
+interface CenterProps {
+    defaultStateModal: boolean;
+    closeHandler: () => void
+    clickReservour: { index: number | null, elem: string | null }
 
-    const handler = () => {
-        setState(true)
+}
+const СenterFrame: React.FC<CenterProps> = ({ defaultStateModal, closeHandler, clickReservour }) => {
+
+    const renderComponents = () => {
+        if (clickReservour.index !== null) {
+            return <WiewCardReservours index={clickReservour.index} text={clickReservour.elem} />
+        }
+        else {
+            return <div className="logo_center"></div>
+        }
     }
-    const closeHandler = () => {
-        setState(false)
-    }
+
+
     return (
         <div className='Center_frame'>
-            <div className="title_tour">
-                <div className="add_tour"><div className="add_tournament">Создать новый турнир</div>
-                    < IoMdAddCircle className="create_btn_tour" onClick={() => handler()} /></div>
-
-            </div>
-            <div className="logo_center"></div>
-            {defaultState && <ModalAddTour closeHandler={closeHandler} />}
+            {renderComponents()}
+            {defaultStateModal && <ModalAddTour closeHandler={closeHandler} />}
         </div>
 
     )

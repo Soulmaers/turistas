@@ -2,17 +2,23 @@ import React from 'react'
 
 import '../styles/Reservoors.css'
 
-const Reservoors = () => {
-
+interface ChangeProps {
+    changeStateReservour: (index: number, e: string) => void
+}
+const Reservoors: React.FC<ChangeProps> = ({ changeStateReservour }) => {
+    const reservoirs = [
+        'Финский залив (Соколинское)',
+        'река Волхов (Ленинградская область)',
+        'Ладожское озеро (Креницы)',
+        'Ладожское озеро (Шхеры)',
+        'река Ловать (Новгородская область)'
+    ];
+    const rows = reservoirs.map((e, index) => <div key={index} className="reservour" onClick={() => changeStateReservour(index, e)}>{e}</div>)
 
 
     return (
         <div className="container_reservoors">
-            <div className="reservour">Финский залив (Соколинское)</div>
-            <div className="reservour">река Волхов</div>
-            <div className="reservour">Ладожское озеро (Креницы)</div>
-            <div className="reservour">Ладожское озеро (Шхеры)</div>
-            <div className="reservour">река Ловать</div>
+            {rows}
         </div>
 
 

@@ -1,0 +1,35 @@
+.title {
+    width: 90%;
+    padding: 10px 5px;
+    background-color: gray;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.3rem;
+    box-sizing: border-box;
+}
+
+.body_reservours {
+    width: 90%;
+    height: 80%;
+    padding: 5px;
+    background-color: gray;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    font-size: 1.3rem;
+    box-sizing: border-box;
+}
+
+.image_reservour {
+    width: 60%;
+    height: 80%;
+    border-radius: 5px;
+    border: 1px solid #fff;
+}

@@ -13,76 +13,12 @@
 
 }
 
-.add_tour {
-    width: 100%;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.title_tour {
-    width: 400px;
-    background-color: gray;
-    border-radius: 5px;
-    border: 1px solid #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.create_btn_tour {
-    margin-left: 10px;
-    color: #fff;
-    cursor: pointer;
-}
-
-.disc_tour {
-    color: #fff;
-}
-
-.add_tournament {
-    color: #fff;
-}
 
 .logo_center {
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
     background-image: url('./what.png');
     background-size: cover;
     border-radius: 5px;
     border: 1px solid #fff;
-}
-
-.create_btn_tour:hover {
-    animation-name: wiggle;
-    animation-duration: 1s;
-    animation-timing-function: ease;
-    animation-iteration-count: 1;
-}
-
-@keyframes wiggle {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    20% {
-        transform: rotate(20deg);
-    }
-
-    40% {
-        transform: rotate(-20deg);
-    }
-
-    60% {
-        transform: rotate(15deg);
-    }
-
-    80% {
-        transform: rotate(-15deg);
-    }
-
-    100% {
-        transform: rotate(0deg);
-    }
 }

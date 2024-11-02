@@ -74,6 +74,7 @@
     border-bottom: 1px solid #fff;
     box-sizing: border-box;
     cursor: pointer;
+    position: relative;
 }
 
 .btn:hover .icon_button {
@@ -86,4 +87,45 @@
 .title_name {
     font-size: 1.0rem;
     color: #fff
+}
+
+.create_btn_tour {
+    margin-left: 10px;
+    color: #fff;
+    cursor: pointer;
+    position: absolute;
+    right: 40px;
+}
+
+.create_btn_tour:hover {
+    animation-name: wiggle;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-iteration-count: 1;
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(20deg);
+    }
+
+    40% {
+        transform: rotate(-20deg);
+    }
+
+    60% {
+        transform: rotate(15deg);
+    }
+
+    80% {
+        transform: rotate(-15deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
 }
