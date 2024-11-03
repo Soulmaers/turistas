@@ -1,9 +1,9 @@
 
-import sokol from './assets/sokol.jpeg'
-import volhov from './assets/volhov.jpg'
+import sokol from './assets/sokol.webp'
+import volhov from './assets/volhov.webp'
 import krenicy from './assets/krenicy.webp'
 import shhery from './assets/shhery.webp'
-import lovat from './assets/lovat.jpg'
+import lovat from './assets/lovat.webp'
 
 export const arrayBans = [
     { bans: ['C 20 мая по 30 июня – судака и леща', 'От распаления льда до 31 мая – щуки', 'От распадения льда по 15 июня — вылов в бухтах Выборгского залива: Селезневская, Подберёзовая, Малая Пихтовая, а также в озере Зайчихино', 'От распадения льда по 30 июня — вылов в озере Тихое и в протоке, соединяющей озеро с рекой Россонь, в озере Липовском и в протоке, соединяющей озеро с Финским заливом.'], src: sokol },

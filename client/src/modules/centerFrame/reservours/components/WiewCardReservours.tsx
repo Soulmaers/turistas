@@ -11,12 +11,12 @@ interface IndexProps {
 }
 const WiewCardReservours: React.FC<IndexProps> = ({ index, text }) => {
 
-
+    console.log('рендер')
     return (
         <React.Fragment>
             <div className="title">{text}</div>
             <div className="body_reservours">
-                <img className="image_reservour" src={arrayBans[index].src}></img>
+                <img className="image_reservour" src={arrayBans[index].src} ></img>
                 <FishingBans disc={arrayBans[index].bans} />
             </div>
         </React.Fragment >

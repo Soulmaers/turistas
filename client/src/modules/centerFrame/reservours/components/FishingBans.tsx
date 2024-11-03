@@ -7,7 +7,7 @@ interface DiscrProps {
 }
 const FishingBans: React.FC<DiscrProps> = ({ disc }) => {
 
-    const rows = disc.map(e => <li className="discription_bans">{e}</li>)
+    const rows = disc.map((e, index) => <li key={e + index} className="discription_bans">{e}</li>)
 
     return (
 

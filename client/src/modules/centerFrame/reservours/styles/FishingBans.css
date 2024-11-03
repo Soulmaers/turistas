@@ -1,11 +1,13 @@
 .bans_card {
     width: 35%;
-    height: 80%;
+    height: 85%;
     border: 1px solid #fff;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 3px;
+    box-sizing: border-box;
 }
 
 .bans {
@@ -20,7 +22,7 @@
 .discription_bans {
     margin: 5px 0;
     margin-left: 15px;
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: 400;
 }
 
@@ -35,8 +37,8 @@
 
 
 .norma {
-    margin: 10px;
+    margin: 5px;
     padding: 2px;
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: 400;
 }

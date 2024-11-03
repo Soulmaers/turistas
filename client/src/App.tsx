@@ -18,8 +18,12 @@ function App() {
   const closeHandler = () => {
     setState(false)
   }
+  const backGroudFlash = () => {
+    if (defaultStateModal) return (<div className="popup_backgroud"></div>)
+  }
   return (
     <div className="App">
+      {backGroudFlash()}
       <div className="Body">
         <LeftFrame handlerAddTour={handler} changeStateReservour={changeStateReservour} />
         <CenterFrame defaultStateModal={defaultStateModal} closeHandler={closeHandler} clickReservour={clickReservour} />
