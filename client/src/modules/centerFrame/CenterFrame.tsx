@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 
-import ModalAddTour from './ModalAddTour'
+import ModalAddTour from './modalCarTour/components/ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
 import AddCarTournament from './tabletours/components/AddCarTournament'
 import './CenterFrame.css'

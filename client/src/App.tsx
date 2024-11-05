@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react'
 import { LeftFrame, CenterFrame, RightFrame, Footer } from './modules/centerFrame/index'
+import Form from './modules/form/components/Form'
 import './App.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
   return (
     <div className="App">
       {backGroudFlash()}
+      {/*<Form />*/}
       <div className="Body">
         <LeftFrame handlerAddTour={handler} changeStateReservour={changeStateReservour} />
         <CenterFrame defaultStateModal={defaultStateModal} closeHandler={closeHandler} clickReservour={clickReservour} />

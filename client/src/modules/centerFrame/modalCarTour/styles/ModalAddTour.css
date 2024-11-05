@@ -29,28 +29,8 @@
     align-items: center;
 }
 
-.user_card {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin: 5px 0;
-}
 
-.rows_user {
-    width: 45%;
-    display: flex;
-    align-items: center;
-}
-
-.label_name {
-    width: 40%;
-    color: #fff;
-    font-size: 0.9rem;
-}
-
-.input_car_tour,
-.input_user_value {
+.input_car_tour {
     margin-left: 5px;
     width: 40%;
     color: #fff;
@@ -62,10 +42,6 @@
     font-size: 0.8rem;
 }
 
-.input_user_value {
-    margin-left: 10px;
-    width: 50%;
-}
 
 .addUser {
     margin-left: 5px;
@@ -96,7 +72,7 @@
 
 .input_card_tour_picker {
     margin-left: 5px;
-    width: 90%;
+    width: 100%;
     color: #fff;
     background: transparent;
     border-radius: 5px;
@@ -213,7 +189,9 @@
 
 
 
-
+.react-datepicker-wrapper {
+    width: 40%;
+}
 
 .react-datepicker-popper {
     left: -50px !important;

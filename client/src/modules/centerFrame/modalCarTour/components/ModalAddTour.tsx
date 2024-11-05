@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 import { IoSave } from "react-icons/io5";
 import { IoMdAddCircle } from "react-icons/io"
-import './ModalAddTour.css'
+import UserInput from './UserInput'
+import DatePickerInput from './DatePickerInput'
+import '../styles/ModalAddTour.css'
 
 
 interface ModalAddTourProps {
@@ -11,49 +11,18 @@ interface ModalAddTourProps {
 }
 
 const ModalAddTour: React.FC<ModalAddTourProps> = ({ closeHandler }) => {
-    const [array, setArray] = useState<string[]>([]);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
-    const [showStartDateCalendar, setShowStartDateCalendar] = useState(false);
-
     const [messageAlarm, setMessageAlarm] = useState(''); // Состояние для сообщения об ошибке
+    const [usersData, setUsersData] = useState<{ name: string, contact: string }[]>([]); // Состояние для данных участников
 
     const nameInputRef = useRef<HTMLInputElement>(null); // Ссылка на input для названия
 
-    const [usersData, setUsersData] = useState<
-        { name: string, contact: string }[]
-    >([]); // Состояние для данных участников
-
-
     const addUser = () => {
-        setArray([...array, 'user']);
         setUsersData([...usersData, { name: '', contact: '' }]);
     };
 
-    const users = array.map((e, index) => (
-        <div key={e + index} className="user_card">
-            <div className="rows_user">
-                <div className="label_name">Имя</div>
-                <input
-                    className="input_user_value"
-                    onChange={(event) => handleUserInputChange(index, 'name', event.target.value)}
-                />
-            </div>
-            <div className="rows_user">
-                <div className="label_name">КонтактID</div>
-                <input
-                    className="input_user_value"
-                    onChange={(event) => handleUserInputChange(index, 'contact', event.target.value)}
-                />
-            </div>
-        </div>
-    ));
 
-
-    const handleStartDateFocus = () => {
-        setShowStartDateCalendar(true);
-
-    };
     const handleUserInputChange = (index: number, type: 'name' | 'contact', value: string) => {
         setUsersData((prevUsersData) => {
             return prevUsersData.map((user, i) => {
@@ -91,32 +60,13 @@ const ModalAddTour: React.FC<ModalAddTourProps> = ({ closeHandler }) => {
             <div className="body_modal_tour">
                 <div className="rows_card_tour"><div className="name_car_tour">Название</div><input className="input_car_tour" ref={nameInputRef} /></div>
                 <div className="rows_card_tour"><div className="name_car_tour">Участники<IoMdAddCircle className="addUser" onClick={() => addUser()} /></div></div>
-                <div className="users">{users}</div>
-                <div className="rows_card_tour"><div className="name_car_tour">Дата старта</div>
-                    <DatePicker className="input_card_tour_picker"
-                        selected={startDate}
-                        onFocus={handleStartDateFocus}
-                        onChange={(date) => {
-                            if (date) {
-                                setStartDate(date);
-                                setShowStartDateCalendar(false); // Скрываем календарь после выбора
-                            }
-                        }}
-                        dateFormat="dd/MM/yyyy"
-                    />
+                <div className="users">
+                    {usersData.map((user, index) => (
+                        <UserInput key={index} index={index} user={user} onUserInputChange={handleUserInputChange} />
+                    ))}
                 </div>
-                <div className="rows_card_tour"><div className="name_car_tour">Дата завершения</div>
-                    <DatePicker className="input_card_tour_picker"
-                        selected={finishDate}
-                        onFocus={handleStartDateFocus}
-                        onChange={(date) => {
-                            if (date) {
-                                setFinishDate(date);
-                                setShowStartDateCalendar(false); // Скрываем календарь после выбора
-                            }
-                        }}
-                        dateFormat="dd/MM/yyyy"
-                    /></div>
+                <DatePickerInput label="Дата старта" selectedDate={startDate} onDateChange={setStartDate} />
+                <DatePickerInput label="Дата завершения" selectedDate={finishDate} onDateChange={setFinishDate} />
 
 
             </div>
