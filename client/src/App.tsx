@@ -1,6 +1,11 @@
 import React from 'react';
 import { useState } from 'react'
-import { LeftFrame, CenterFrame, RightFrame, Footer } from './modules/centerFrame/index'
+
+import LeftFrame from './modules/leftFrame/components/LeftFrame'
+import RightFrame from './modules/righFrame/components/RightFrame'
+import CenterFrame from './modules/centerFrame/CenterFrame'
+import Footer from './modules/centerFrame/Footer'
+
 import Form from './modules/form/components/Form'
 import './App.css';
 
@@ -22,10 +27,12 @@ function App() {
   const backGroudFlash = () => {
     if (defaultStateModal) return (<div className="popup_backgroud"></div>)
   }
+
+
   return (
     <div className="App">
       {backGroudFlash()}
-      {/*<Form />*/}
+      <Form />
       <div className="Body">
         <LeftFrame handlerAddTour={handler} changeStateReservour={changeStateReservour} />
         <CenterFrame defaultStateModal={defaultStateModal} closeHandler={closeHandler} clickReservour={clickReservour} />
