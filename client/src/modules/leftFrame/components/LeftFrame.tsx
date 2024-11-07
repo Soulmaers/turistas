@@ -14,11 +14,11 @@ import HistoryLogs from './HistoryLogs'
 import '../styles/LeftFrame.css'
 
 interface HadlerProps {
-    handlerAddTour: (event: React.MouseEvent<SVGElement>) => void;
+    onClickAddTour: () => void;
     changeStateReservour: (index: number | null, e: string | null) => void
 }
 
-const LeftFrame: React.FC<HadlerProps> = ({ handlerAddTour, changeStateReservour }) => {
+const LeftFrame: React.FC<HadlerProps> = ({ onClickAddTour, changeStateReservour }) => {
 
 
     const [activeButton, setActivButton] = useState<string | null>(null)
@@ -36,7 +36,7 @@ const LeftFrame: React.FC<HadlerProps> = ({ handlerAddTour, changeStateReservour
                 <div className="wrapper_navi">
                     <div className="btn" onClick={() => handleButtonClick('tounaments')}><GiTrophy className="class_icon icon_button" />
                         <span className="title_name">Турниры</span>
-                        < IoMdAddCircle className="create_btn_tour" onClick={handlerAddTour} />{getIconsArrow('tounaments')}</div>
+                        < IoMdAddCircle className="create_btn_tour" onClick={onClickAddTour} />{getIconsArrow('tounaments')}</div>
                     {activeButton === 'tounaments' && <Tournaments />}
                     <div className="btn" onClick={() => handleButtonClick('stata')}><FaChartGantt className="class_icon icon_button" />
                         <span className="title_name">Статистика</span>{getIconsArrow('stata')}</div>

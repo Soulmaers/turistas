@@ -10,32 +10,30 @@ import Form from './modules/form/components/Form'
 import './App.css';
 
 function App() {
-
-  const [defaultStateModal, setState] = useState(false)
+  const [haveTour, setHaveTour] = useState(0) //стэйт
+  const [defaultStateModal, setState] = useState(false) //стэйт открывает модальное окно создания турнира
   const [clickReservour, setClickReservour] = useState<{ index: number | null; elem: string | null }>({ index: null, elem: null });
   const changeStateReservour = (index: number | null, e: string | null) => {
     setClickReservour({ index: index, elem: e })
   }
 
-  const handler = (event: React.MouseEvent<SVGElement>) => {
-    event.stopPropagation();
+  const handler = () => {
+    console.log('хэндлер')
     setState(true)
   }
+
   const closeHandler = () => {
     setState(false)
-  }
-  const backGroudFlash = () => {
-    if (defaultStateModal) return (<div className="popup_backgroud"></div>)
   }
 
 
   return (
     <div className="App">
-      {backGroudFlash()}
-      <Form />
+      {haveTour === 0 && <Form updateHaveTour={setHaveTour} />}
+      {defaultStateModal && <div className="popup_backgroud"></div>}
       <div className="Body">
-        <LeftFrame handlerAddTour={handler} changeStateReservour={changeStateReservour} />
-        <CenterFrame defaultStateModal={defaultStateModal} closeHandler={closeHandler} clickReservour={clickReservour} />
+        <LeftFrame onClickAddTour={handler} changeStateReservour={changeStateReservour} />
+        <CenterFrame defaultStateModal={defaultStateModal} haveTour={haveTour} closeHandler={closeHandler} clickReservour={clickReservour} />
         <RightFrame />
       </div>
       <Footer />

@@ -2,11 +2,18 @@ import React from 'react'
 import { useState } from 'react'
 import '../styles/Form.css'
 
-const Form = () => {
+interface HaveTour {
+    updateHaveTour: (newValue: number) => void
+    // activ: () => void
+}
+
+
+const Form: React.FC<HaveTour> = ({ updateHaveTour }) => {
     const [contactID, setContactID] = useState(7)
     const [nameUser, setNameUser] = useState<string>('')
     const [subField, setSubField] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+
     const changeInputField = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value ? parseInt(event.target.value) : 7;
         setContactID(newValue); // Обновляем состояние contactID
@@ -16,21 +23,24 @@ const Form = () => {
         setNameUser(newValue); // Обновляем состояние contactID
     };
     const findUser = () => {
-        console.log(subField)
         if (!subField) {
             if (contactID.toString().length < 11) {
                 setErrorMessage('Некорректный КонтактID')
                 return
             }
+            //  updateHaveTour(1)
+
         }
         else {
             if (contactID.toString().length < 11 || nameUser.trim() === "") {
                 setErrorMessage('Некорректный ввод')
                 return
             }
+            updateHaveTour(1)
         }
         setErrorMessage('')
         setSubField(true)
+
     }
 
 
