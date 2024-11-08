@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
+import { MyContext } from '../../../../context/contexts';
 import { IoSave } from "react-icons/io5";
 import { IoMdAddCircle } from "react-icons/io"
 import UserInput from './UserInput'
@@ -6,11 +7,10 @@ import DatePickerInput from './DatePickerInput'
 import '../styles/ModalAddTour.css'
 
 
-interface ModalAddTourProps {
-    closeHandler: () => void; // Указываем тип функции onClose
-}
 
-const ModalAddTour: React.FC<ModalAddTourProps> = ({ closeHandler }) => {
+const ModalAddTour = () => {
+
+    const { setStateModal } = useContext(MyContext)
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
     const [messageAlarm, setMessageAlarm] = useState(''); // Состояние для сообщения об ошибке
@@ -22,7 +22,9 @@ const ModalAddTour: React.FC<ModalAddTourProps> = ({ closeHandler }) => {
         setUsersData([...usersData, { name: '', contact: '' }]);
     };
 
-
+    const closeModal = () => {
+        setStateModal(false)
+    }
     const handleUserInputChange = (index: number, type: 'name' | 'contact', value: string) => {
         setUsersData((prevUsersData) => {
             return prevUsersData.map((user, i) => {
@@ -56,7 +58,7 @@ const ModalAddTour: React.FC<ModalAddTourProps> = ({ closeHandler }) => {
 
     return (
         <div className="modal_add_tour">
-            <div className="header_modal_tour">Карточка турнира<span className="close" onClick={closeHandler}>x</span></div>
+            <div className="header_modal_tour">Карточка турнира<span className="close" onClick={closeModal}>x</span></div>
             <div className="body_modal_tour">
                 <div className="rows_card_tour"><div className="name_car_tour">Название</div><input className="input_car_tour" ref={nameInputRef} /></div>
                 <div className="rows_card_tour"><div className="name_car_tour">Участники<IoMdAddCircle className="addUser" onClick={() => addUser()} /></div></div>

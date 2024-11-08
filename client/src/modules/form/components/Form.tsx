@@ -1,14 +1,15 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import '../styles/Form.css'
-
-interface HaveTour {
-    updateHaveTour: (newValue: number) => void
-    // activ: () => void
-}
+import { MyContext } from '../../../context/contexts'
 
 
-const Form: React.FC<HaveTour> = ({ updateHaveTour }) => {
+
+const Form = () => {
+
+    const { setState } = useContext(MyContext)  //контекст для передачи состояния
+
+
     const [contactID, setContactID] = useState(7)
     const [nameUser, setNameUser] = useState<string>('')
     const [subField, setSubField] = useState(false)
@@ -36,7 +37,7 @@ const Form: React.FC<HaveTour> = ({ updateHaveTour }) => {
                 setErrorMessage('Некорректный ввод')
                 return
             }
-            updateHaveTour(1)
+            setState(1)
         }
         setErrorMessage('')
         setSubField(true)
