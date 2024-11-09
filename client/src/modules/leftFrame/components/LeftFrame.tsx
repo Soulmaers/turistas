@@ -20,7 +20,7 @@ interface HadlerProps {
 
 const LeftFrame: React.FC<HadlerProps> = ({ changeStateReservour }) => {
 
-    const { setStateModal } = useContext(MyContext)
+    const { state, dispatch } = useContext(MyContext)
     const [activeButton, setActivButton] = useState<string | null>(null)
 
     const handleButtonClick = (selectSubMenu: string) => {
@@ -31,7 +31,7 @@ const LeftFrame: React.FC<HadlerProps> = ({ changeStateReservour }) => {
     }
 
     const addCardTour = () => {  //меняем стэйт по отображению модального окна
-        setStateModal(true)
+        dispatch({ type: 'update_modal', payload: true })
     }
     return (
         <div className="Left_frame">

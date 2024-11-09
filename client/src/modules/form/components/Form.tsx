@@ -7,7 +7,7 @@ import { MyContext } from '../../../context/contexts'
 
 const Form = () => {
 
-    const { setState } = useContext(MyContext)  //контекст для передачи состояния
+    const { state, dispatch } = useContext(MyContext)  //контекст для передачи состояния
 
 
     const [contactID, setContactID] = useState(7)
@@ -37,7 +37,7 @@ const Form = () => {
                 setErrorMessage('Некорректный ввод')
                 return
             }
-            setState(1)
+            dispatch({ type: 'update_content', payload: 1 })
         }
         setErrorMessage('')
         setSubField(true)

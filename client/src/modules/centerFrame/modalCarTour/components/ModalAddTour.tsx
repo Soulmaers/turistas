@@ -10,7 +10,8 @@ import '../styles/ModalAddTour.css'
 
 const ModalAddTour = () => {
 
-    const { setStateModal } = useContext(MyContext)
+    const { state, dispatch } = useContext(MyContext)  //контекст для передачи состояния
+
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
     const [messageAlarm, setMessageAlarm] = useState(''); // Состояние для сообщения об ошибке
@@ -23,7 +24,7 @@ const ModalAddTour = () => {
     };
 
     const closeModal = () => {
-        setStateModal(false)
+        dispatch({ type: 'update_modal', payload: false })
     }
     const handleUserInputChange = (index: number, type: 'name' | 'contact', value: string) => {
         setUsersData((prevUsersData) => {
