@@ -12,19 +12,16 @@ import Form from './modules/form/components/Form'
 import './App.css';
 
 function App() {
-  const { state, stateModal } = useContext(MyContext)
-  const [clickReservour, setClickReservour] = useState<{ index: number | null; elem: string | null }>({ index: null, elem: null });
-  const changeStateReservour = (index: number | null, e: string | null) => {
-    setClickReservour({ index: index, elem: e })
-  }
+  const { state } = useContext(MyContext)
+
 
   return (
     <div className="App">
-      {!state && <Form />}
-      {stateModal && <div className="popup_backgroud"></div>}
+      {!state.content && <Form />}
+      {state.stateModal && <div className="popup_backgroud"></div>}
       <div className="Body">
-        <LeftFrame changeStateReservour={changeStateReservour} />
-        <CenterFrame clickReservour={clickReservour} />
+        <LeftFrame />
+        <CenterFrame />
         <RightFrame />
       </div>
       <Footer />

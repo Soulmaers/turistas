@@ -27,17 +27,17 @@ const Statistics = () => {
     ];
 
 
-    const rowsTour = sotTour.map((e, index) => <div className="checkbox_item rows_list object_list">
+    const rowsTour = sotTour.map((e, index) => <div key={index} className="checkbox_item rows_list object_list">
         <input className="object_checks" type="checkbox" id={e + index} />
         <label className="label_check" htmlFor={e + index}>{e}</label>
     </div>)
 
-    const rowsUser = sotUser.map((e, index) => <div className="checkbox_item rows_list object_list">
+    const rowsUser = sotUser.map((e, index) => <div key={index} className="checkbox_item rows_list object_list">
         <input className="object_checks" type="checkbox" id={e + index} />
         <label className="label_check" htmlFor={e + index}>{e}</label>
     </div>)
 
-    const rowsReservours = reservoirs.map((e, index) => <div className="checkbox_item rows_list object_list">
+    const rowsReservours = reservoirs.map((e, index) => <div key={index} className="checkbox_item rows_list object_list">
         <input className="object_checks" type="checkbox" id={e + index} />
         <label className="label_check" htmlFor={e + index}>{e}</label>
     </div>)

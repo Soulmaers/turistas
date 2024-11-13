@@ -14,43 +14,47 @@ import HistoryLogs from './HistoryLogs'
 
 import '../styles/LeftFrame.css'
 
-interface HadlerProps {
-    changeStateReservour: (index: number | null, e: string | null) => void
-}
 
-const LeftFrame: React.FC<HadlerProps> = ({ changeStateReservour }) => {
+
+const LeftFrame = () => {
 
     const { state, dispatch } = useContext(MyContext)
-    const [activeButton, setActivButton] = useState<string | null>(null)
 
-    const handleButtonClick = (selectSubMenu: string) => {
-        setActivButton(activeButton === selectSubMenu ? null : selectSubMenu)
+    const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
+        dispatch({ type: 'update_spoyler', payload: state.subMenu === selectSubMenu ? null : selectSubMenu })
     }
-    const getIconsArrow = (selectSubMenu: string) => {
-        return activeButton === selectSubMenu ? <IoIosArrowUp className="class_icon" /> : < IoIosArrowDown className="class_icon" />
+    const getIconsArrow = (selectSubMenu: string) => { //Меняем иконку стрелки
+        return state.subMenu === selectSubMenu ? <IoIosArrowUp className="class_icon" /> : < IoIosArrowDown className="class_icon" />
     }
 
     const addCardTour = () => {  //меняем стэйт по отображению модального окна
         dispatch({ type: 'update_modal', payload: true })
     }
+    const changeStateReservour = (index: number | null, e: string | null) => {
+        dispatch({ type: 'update_reservours', payload: { index: index, text: e } })
+
+    }
+    const menuItems = [
+        { label: 'Турниры', icon: <GiTrophy className="class_icon icon_button" />, component: <Tournaments />, key: 'tounaments' },
+        { label: 'Статистика', icon: <FaChartGantt className="class_icon icon_button" />, component: <Statistics />, key: 'stata' },
+        { label: 'Водоёмы', icon: <FaWater className="class_icon icon_button" />, component: <Reservoors changeStateReservour={changeStateReservour} />, key: 'reservoors' },
+        { label: 'Журнал', icon: <FaBookOpen className="class_icon icon_button" />, component: <HistoryLogs />, key: 'history' }
+
+    ]
+
     return (
         <div className="Left_frame">
             <RenderHeaderLeft changeStateReservour={changeStateReservour} />
             <div className="wrapper">
                 <div className="wrapper_navi">
-                    <div className="btn" onClick={() => handleButtonClick('tounaments')}><GiTrophy className="class_icon icon_button" />
-                        <span className="title_name">Турниры</span>
-                        < IoMdAddCircle className="create_btn_tour" onClick={addCardTour} />{getIconsArrow('tounaments')}</div>
-                    {activeButton === 'tounaments' && <Tournaments />}
-                    <div className="btn" onClick={() => handleButtonClick('stata')}><FaChartGantt className="class_icon icon_button" />
-                        <span className="title_name">Статистика</span>{getIconsArrow('stata')}</div>
-                    {activeButton === 'stata' && <Statistics />}
-                    <div className="btn" onClick={() => handleButtonClick('reservoors')}><FaWater className="class_icon icon_button" />
-                        <span className="title_name">Водоёмы</span>{getIconsArrow('reservoors')}</div>
-                    {activeButton === 'reservoors' && <Reservoors changeStateReservour={changeStateReservour} />}
-                    <div className="btn" onClick={() => handleButtonClick('history')}><FaBookOpen className="class_icon icon_button" />
-                        <span className="title_name">Журнал</span>{getIconsArrow('history')}</div>
-                    {activeButton === 'history' && <HistoryLogs />}
+                    {menuItems.map(e =>
+                        <>
+                            <div className="btn" key={e.key} onClick={() => handleButtonClick(e.key)}>{e.icon}
+                                <span className="title_name">{e.label}</span>
+                                {e.key === 'tounaments' && < IoMdAddCircle className="create_btn_tour" onClick={addCardTour} />}{getIconsArrow(e.key)}
+                            </div>{e.key === state.subMenu && e.component}
+                        </>
+                    )}
 
                 </div>
             </div>

@@ -6,27 +6,24 @@ import WiewCardReservours from './reservours/components/WiewCardReservours'
 import AddCarTournament from './tabletours/components/AddCarTournament'
 import './CenterFrame.css'
 
-interface CenterProps {
-    clickReservour: { index: number | null, elem: string | null }
 
-}
-const СenterFrame: React.FC<CenterProps> = ({ clickReservour }) => {
+const СenterFrame = () => {
 
-    const { state, stateModal } = useContext(MyContext); // Получаем состояние из контекста
+    const { state } = useContext(MyContext); // Получаем состояние из контекста
+    
     const renderComponents = () => {
-        if (clickReservour.index !== null) {
-            return <WiewCardReservours index={clickReservour.index} text={clickReservour.elem} />
+        if (state.updateReservours.index !== null) {
+            return <WiewCardReservours index={state.updateReservours.index} text={state.updateReservours.text} />
         }
         else {
-            return state && state === 1 ? <AddCarTournament /> : <div className="logo_center"></div>
+            return state.content && state.content === 1 ? <AddCarTournament /> : <div className="logo_center"></div>
         }
     }
 
-    console.log(stateModal)
     return (
         <div className='Center_frame'>
             {renderComponents()}
-            {stateModal && <ModalAddTour />}
+            {state.stateModal && <ModalAddTour />}
         </div>
 
     )
