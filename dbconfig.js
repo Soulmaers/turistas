@@ -4,7 +4,8 @@ require('dotenv').config();
 
 
 const config = {
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+    server: process.env.DB_HOST
 }
 
 
