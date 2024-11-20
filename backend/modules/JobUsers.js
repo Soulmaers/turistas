@@ -1,6 +1,6 @@
 
 
-const { connection } = require('../../dbconfig')
+const { connection } = require('../dbconfig')
 class JobUsers {
     constructor(contactID) {
         this.contactID = contactID
@@ -10,6 +10,9 @@ class JobUsers {
 
 
     async getUser() {
+
+        return ['222']
+        /*
         const postModel = `SELECT * FROM users WHERE contactID=@contactID`
         try {
             const pool = await connection
@@ -18,10 +21,13 @@ class JobUsers {
         }
         catch (e) {
             console.log(e)
-        }
+        }*/
     }
 
     async addUser(username) {
+
+        return { username: username, contactID: this.contactID }
+        /*
         const postModel = `INSERT INTO users (username,contactID) OUTPUT INSERTED. * VALUES(@username, @contactID)`
         try {
             const pool = await connection
@@ -30,7 +36,7 @@ class JobUsers {
         }
         catch (e) {
             console.log(e)
-        }
+        }*/
 
     }
 
