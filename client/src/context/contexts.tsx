@@ -56,7 +56,7 @@ export const MyProvider: React.FC<MyProviderProps> = ({ children }) => {
         content: null,
         stateModal: false,
         subMenu: null,
-        updateReservours: { index: 0, text: null }
+        updateReservours: { index: null, text: null }
     });
     return (
         <MyContext.Provider value={{ state, dispatch }}>

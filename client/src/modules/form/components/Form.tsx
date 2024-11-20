@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import '../styles/Form.css'
 import { MyContext } from '../../../context/contexts'
 
@@ -14,6 +14,7 @@ const Form = () => {
     const [nameUser, setNameUser] = useState<string>('')
     const [subField, setSubField] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [getUser, setGetUser] = useState(false)
 
     const changeInputField = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value ? parseInt(event.target.value) : 7;
@@ -24,13 +25,16 @@ const Form = () => {
         setNameUser(newValue); // Обновляем состояние contactID
     };
     const findUser = () => {
+        console.log(subField)
         if (!subField) {
             if (contactID.toString().length < 11) {
                 setErrorMessage('Некорректный КонтактID')
                 return
             }
-            //  updateHaveTour(1)
+            else {
+                setGetUser(true)
 
+            }
         }
         else {
             if (contactID.toString().length < 11 || nameUser.trim() === "") {
@@ -40,9 +44,30 @@ const Form = () => {
             dispatch({ type: 'update_content', payload: 1 })
         }
         setErrorMessage('')
-        setSubField(true)
 
     }
+
+
+    useEffect(() => {
+        console.log(getUser)
+        async function getDataUser() {
+            console.log('тута?')
+            const res = await fetch(`http://localhost:3333/api/user/check/${contactID}`);
+            const data = await res.json()
+            if (data.length === 0) {
+                setSubField(true)
+            }
+            else {
+                dispatch({ type: 'update_content', payload: 0 })
+            }
+            console.log(data)
+        }
+        if (getUser) {
+            getDataUser()
+            //  setGetUser(false)
+        }
+
+    }, [getUser])
 
 
 

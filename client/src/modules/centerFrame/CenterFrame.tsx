@@ -10,8 +10,9 @@ import './CenterFrame.css'
 const СenterFrame = () => {
 
     const { state } = useContext(MyContext); // Получаем состояние из контекста
-    
+
     const renderComponents = () => {
+        console.log(state)
         if (state.updateReservours.index !== null) {
             return <WiewCardReservours index={state.updateReservours.index} text={state.updateReservours.text} />
         }

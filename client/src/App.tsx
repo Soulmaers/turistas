@@ -14,7 +14,7 @@ import './App.css';
 function App() {
   const { state } = useContext(MyContext)
 
-
+  console.log(state.content)
   return (
     <div className="App">
       {!state.content && <Form />}
