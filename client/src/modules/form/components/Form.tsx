@@ -33,7 +33,6 @@ const Form = () => {
             }
             else {
                 setGetUser(true)
-
             }
         }
         else {
@@ -58,7 +57,7 @@ const Form = () => {
                 setSubField(true)
             }
             else {
-                dispatch({ type: 'update_content', payload: 0 })
+                dispatch({ type: 'update_content', payload: 2 })
             }
             console.log(data)
         }
