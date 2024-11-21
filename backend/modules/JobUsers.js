@@ -11,23 +11,23 @@ class JobUsers {
 
     async getUser() {
 
-        //   return ['222']
-        console.log(this.contactID)
-        const postModel = `SELECT * FROM users WHERE contactID=@contactID`
-        try {
-            const pool = await connection
-            console.log(pool)
-            const result = pool.request().input('contactID', this.contactID).query(postModel)
-            return result.recordset
-        }
-        catch (e) {
-            console.log(e)
-        }
+        return null
+        /*  console.log(this.contactID)
+          const postModel = `SELECT * FROM users WHERE contactID=@contactID`
+          try {
+              const pool = await connection
+              console.log(pool)
+              const result = pool.request().input('contactID', this.contactID).query(postModel)
+              return result.recordset
+          }
+          catch (e) {
+              console.log(e)
+          }*/
     }
 
     async addUser(username) {
 
-        return { username: username, contactID: this.contactID }
+        return { username: username, contactID: this.contactID, trophys: 3, fishs: 0, stars: 0 }
         /*
         const postModel = `INSERT INTO users (username,contactID) OUTPUT INSERTED. * VALUES(@username, @contactID)`
         try {

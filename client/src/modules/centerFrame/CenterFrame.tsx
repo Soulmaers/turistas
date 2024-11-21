@@ -1,6 +1,6 @@
 import React from 'react'
-import { useState, useContext } from 'react'
-import { MyContext } from '../../context/contexts';
+import { useContext } from 'react'
+import { MyContext, selectContent, selectStateModal, selectReservours } from '../../context/contexts';
 import ModalAddTour from './modalCarTour/components/ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
 import AddCarTournament from './tabletours/components/AddCarTournament'
@@ -10,21 +10,23 @@ import './CenterFrame.css'
 const СenterFrame = () => {
 
     const { state } = useContext(MyContext); // Получаем состояние из контекста
-
+    const content = selectContent(state)
+    const stateModal = selectStateModal(state)
+    const updateReservours = selectReservours(state)
+    console.log('рендер')
     const renderComponents = () => {
-        console.log(state)
-        if (state.updateReservours.index !== null) {
-            return <WiewCardReservours index={state.updateReservours.index} text={state.updateReservours.text} />
+        if (updateReservours.index !== null) {
+            return <WiewCardReservours index={updateReservours.index} text={updateReservours.text} />
         }
         else {
-            return state.content && state.content === 1 ? <AddCarTournament /> : <div className="logo_center"></div>
+            return content && content === 1 ? <AddCarTournament /> : <div className="logo_center"></div>
         }
     }
 
     return (
         <div className='Center_frame'>
             {renderComponents()}
-            {state.stateModal && <ModalAddTour />}
+            {stateModal && <ModalAddTour />}
         </div>
 
     )

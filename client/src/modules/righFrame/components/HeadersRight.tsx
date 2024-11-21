@@ -1,26 +1,33 @@
-import React from 'react';
+import { useContext } from 'react';
+import { MyContext, selectUserStatus } from '../../../context/contexts';
+
+
 import '../styles/HeadersRight.css'
 import { FaTrophy, FaStar } from "react-icons/fa";
 import { FaFish } from "react-icons/fa6"
-import { IoSettingsSharp, IoExitSharp, IoLogOut } from "react-icons/io5"
-import { ImExit } from "react-icons/im";
-import { GiExitDoor } from "react-icons/gi";
+import { IoSettingsSharp, IoLogOut } from "react-icons/io5"
+
 
 const RenderHeaderRight = () => {
-    const trophyCount = 3;
-    const trophies = Array.from({ length: trophyCount }, (_, index) => (
-        <FaTrophy className="trophy_all" key={index} />
-    ));
+    const { state, dispatch } = useContext(MyContext)
+    const userStatus = selectUserStatus(state)
 
+
+    const { username = "", trophys = 0, fishs = 0, stars = 0 } = userStatus || {};
+
+    const onClick = () => {
+        dispatch({ type: 'update_content', payload: null })
+        dispatch({ type: 'update_status_user', payload: null })
+    }
     return (
         <div className="header_admin_container">
             <div className="wrapper_account">
-                <div className="login">Soulmaers</div>
-                <div className="trophy_count"> <FaTrophy className="trophy_all" /> <span className="numbers">{trophyCount}</span></div>
-                <div className="fish_count"><FaFish className="fish_icon" /><span className="numbers">100</span></div>
-                <div className="fish_count"><FaStar className="star_icon" /><span className="numbers">0</span></div>
+                <div className="login">{username}</div>
+                <div className="trophy_count"> <FaTrophy className="trophy_all" /> <span className="numbers">{trophys}</span></div>
+                <div className="fish_count"><FaFish className="fish_icon" /><span className="numbers">{fishs}</span></div>
+                <div className="fish_count"><FaStar className="star_icon" /><span className="numbers">{stars}</span></div>
                 <div className="settings"><IoSettingsSharp className="settings_icon" /></div>
-                <div className="out"><IoLogOut className="exit" /></div>
+                <div className="out"><IoLogOut className="exit" onClick={onClick} /></div>
             </div>
         </div >
 

@@ -6,19 +6,21 @@ import LeftFrame from './modules/leftFrame/components/LeftFrame'
 import RightFrame from './modules/righFrame/components/RightFrame'
 import CenterFrame from './modules/centerFrame/CenterFrame'
 import Footer from './modules/centerFrame/Footer'
-import { MyContext } from './context/contexts';
+import { MyContext, selectContent, selectStateModal } from './context/contexts';
 
 import Form from './modules/form/components/Form'
 import './App.css';
 
 function App() {
   const { state } = useContext(MyContext)
-
-  console.log(state.content)
+  const content = selectContent(state)
+  const stateModal = selectStateModal(state)
+  console.log(content, stateModal)
+  console.log('рендер')
   return (
     <div className="App">
-      {!state.content && <Form />}
-      {state.stateModal && <div className="popup_backgroud"></div>}
+      {!content && <Form />}
+      {stateModal && <div className="popup_backgroud"></div>}
       <div className="Body">
         <LeftFrame />
         <CenterFrame />

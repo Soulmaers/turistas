@@ -13,7 +13,7 @@ const config = {
     }
 };
 
-sql.connect(config)
+/*sql.connect(config)
     .then(() => {
         console.log('Подключение успешно!');
         sql.close();
@@ -28,7 +28,7 @@ sql.connect(config)
         console.error('Строка:', err.lineNumber); // если есть
         console.error('Конфигурация подключения:', config);
         console.log('Переменная окружения DATABASE:', process.env.DATABASE);
-    });
+    });*/
 //const pool = new sql.ConnectionPool(config);
 //const connection = pool.connect();
 //console.log(connection)
