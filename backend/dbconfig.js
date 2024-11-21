@@ -4,16 +4,15 @@ require('dotenv').config();
 
 console.log(process.env.DATABASE)
 const config = {
-    server: 'DESKTOP-7M690IC\\MSSQLSERVER1', // Обратите внимание на двойной обратный слеш!
-    database: 'turistas',
-    port: 1433,
+    server: 'localhost', // Или '127.0.0.1', или 'localhost\имя_экземпляра'
+    database: 'turistas', // Имя вашей базы данных
     options: {
-        trustedConnection: true,
-        encrypt: true
+        trustedConnection: true, // Используйте Windows Authentication
+        encrypt: false // Установите в true, если требуется шифрование
     }
 };
 
-/*sql.connect(config)
+sql.connect(config)
     .then(() => {
         console.log('Подключение успешно!');
         sql.close();
@@ -28,7 +27,7 @@ const config = {
         console.error('Строка:', err.lineNumber); // если есть
         console.error('Конфигурация подключения:', config);
         console.log('Переменная окружения DATABASE:', process.env.DATABASE);
-    });*/
+    });
 //const pool = new sql.ConnectionPool(config);
 //const connection = pool.connect();
 //console.log(connection)
