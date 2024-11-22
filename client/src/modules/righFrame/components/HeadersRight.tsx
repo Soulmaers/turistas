@@ -13,16 +13,16 @@ const RenderHeaderRight = () => {
     const userStatus = selectUserStatus(state)
 
 
-    const { username = "", trophys = 0, fishs = 0, stars = 0 } = userStatus || {};
+    const { name_user = "", trophys = 0, fishs = 0, stars = 0 } = userStatus.user || {};
 
     const onClick = () => {
         dispatch({ type: 'update_content', payload: null })
-        dispatch({ type: 'update_status_user', payload: null })
+        dispatch({ type: 'update_status_user', payload: { user: null, tournament: [] } })
     }
     return (
         <div className="header_admin_container">
             <div className="wrapper_account">
-                <div className="login">{username}</div>
+                <div className="login">{name_user}</div>
                 <div className="trophy_count"> <FaTrophy className="trophy_all" /> <span className="numbers">{trophys}</span></div>
                 <div className="fish_count"><FaFish className="fish_icon" /><span className="numbers">{fishs}</span></div>
                 <div className="fish_count"><FaStar className="star_icon" /><span className="numbers">{stars}</span></div>

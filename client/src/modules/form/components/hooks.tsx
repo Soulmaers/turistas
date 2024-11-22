@@ -63,6 +63,7 @@ const useForm = () => {
             }
             const res = await fetch(`http://localhost:3333/api/user/check`, params);
             const data: UserResponce = await res.json()
+            console.log(data)
             if (!data) {
                 setSubField(true)
             }

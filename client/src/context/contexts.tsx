@@ -17,7 +17,7 @@ interface MyContextType {
         stateModal: boolean;
         subMenu: string | null;
         updateReservours: UpdateReservours,
-        userStatus: User | null,
+        userStatus: User,
         usersData: UpdateData[]
 
     },
@@ -30,7 +30,7 @@ type ActionType =
     | { type: 'update_modal'; payload: boolean }
     | { type: 'update_spoyler'; payload: string | null }
     | { type: 'update_reservours'; payload: UpdateReservours }
-    | { type: 'update_status_user'; payload: User | null }
+    | { type: 'update_status_user'; payload: User }
     | { type: 'update_userdata'; payload: UpdateData[] }
 
 const reducer = (state: MyContextType['state'], action: ActionType): MyContextType['state'] => {
@@ -58,7 +58,7 @@ export const MyContext = createContext<MyContextType>({
         stateModal: false,
         subMenu: null,
         updateReservours: { index: null, text: null },
-        userStatus: null,
+        userStatus: { user: null, tournament: [] },
         usersData: []
 
     },
@@ -75,7 +75,7 @@ export const MyProvider: React.FC<MyProviderProps> = ({ children }) => {
         stateModal: false,
         subMenu: null,
         updateReservours: { index: null, text: null },
-        userStatus: null,
+        userStatus: { user: null, tournament: [] },
         usersData: []
     });
     return (

@@ -3,30 +3,26 @@ const { JobUsers } = require('../modules/JobUsers')
 
 
 exports.getUserCheck = async (req, res) => {
-    console.log('бэк')
-    console.log(req.body)
-    const contactID = req.body.contactID
-    const username = req.body.username
-    console.log(contactID, username)
-    const instance = new JobUsers(contactID)
-    const user = await instance.getUser()
+    const { contactID, username } = req.body
 
-    // Если пользователя нет и не передано имя
-    if (!user) {
-        if (!username) {
-            return res.json(null); // Возвращаем пустой массив
+    const instance = new JobUsers(contactID)
+
+    if (!username) {
+        const user = await instance.getUser()
+        if (user) {
+            const tournament = await instance.getTournaments(user.id)
+            res.json({ user, tournament })
         }
-        // Если имя передано, добавляем пользователя
-        const propsUser = await instance.addUser(username);
-        return res.json(propsUser); // Возвращаем свойства нового пользователя
-    } else {
-        // Если пользователь найден, возвращаем его свойства
-        return res.json(user);
+        else {
+            res.json(null)
+        }
     }
-    //  else {
-    //  const tournament = await instance.getTournaments(user.id)
-    //   return tournament.length === 0 ? user : tournament
-    //  }
+    else {
+        const propsUser = await instance.addUser(username);
+        return res.json(propsUser);
+    }
+
+
 
 
 

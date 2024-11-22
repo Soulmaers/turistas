@@ -2,10 +2,13 @@
 
 
 export interface User {
-    contactID: number,
-    username: 'string',
-    trophys: number,
-    fishs: number,
-    stars: number
+    user: {
+        contactID: '',
+        name_user: 'string',
+        trophys: number,
+        fishs: number,
+        stars: number
+    } | null,
+    tournament: []
 
 }
