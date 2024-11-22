@@ -31,7 +31,7 @@ class JobUsers {
             const pool = await connection
             const result = await pool.request().input('contactID', this.contactID).input('username', username).query(postModel)
             console.log(result.recordset)
-            return result.recordset[0]
+            return { user: result.recordset[0], tournament: [] }
         }
         catch (e) {
             console.log(e)

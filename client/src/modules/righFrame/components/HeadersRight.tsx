@@ -12,7 +12,7 @@ const RenderHeaderRight = () => {
     const { state, dispatch } = useContext(MyContext)
     const userStatus = selectUserStatus(state)
 
-
+    console.log(userStatus)
     const { name_user = "", trophys = 0, fishs = 0, stars = 0 } = userStatus.user || {};
 
     const onClick = () => {
