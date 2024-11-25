@@ -11,6 +11,7 @@ interface DatePickerInputProps {
 
 const DataPickerInput: React.FC<DatePickerInputProps> = ({ label, selectedDate, onDateChange }) => {
 
+
     return (<div className="rows_card_tour">
         <div className="name_car_tour">{label}</div>
         <DatePicker

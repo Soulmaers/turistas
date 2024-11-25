@@ -1,34 +1,38 @@
 import React from 'react'
-import { useState, useCallback, useContext } from 'react'
-import { MyContext } from '../../../../context/contexts';
+import { useCallback } from 'react'
+
 import { IoMdAddCircle } from "react-icons/io";
 import '../styles/UserInput.css'
 
 
-const UserInput = () => {
+interface UpdateData {
+    name: string,
+    contact: string
+}
 
-    const { state, dispatch } = useContext(MyContext)
+interface UserInputProps {
+    users: UpdateData[];
+    onUsersChange: (users: UpdateData[]) => void;
+}
 
-    const addUser = () => {
-        dispatch({ type: 'update_userdata', payload: [...state.usersData, { name: '', contact: '' }] })
-    }
+const UserInput: React.FC<UserInputProps> = ({ users, onUsersChange }) => {
+
+
+    const addUser = useCallback(() => {
+        onUsersChange([...users, { name: '', contact: '7' }]);
+    }, [users, onUsersChange]);
 
 
     const handleUserInputChange = useCallback((index: number, type: 'name' | 'contact', value: string) => {
-        dispatch({
-            type: 'update_userdata',
-            payload: state.usersData.map((user, i) => {
-                if (i === index) {
-                    return { ...user, [type]: value };
-                }
-                return user;
-            }),
-        });
-    }, [dispatch, state.usersData]);
+        const filteredValue = type === 'name' ? value : value.replace(/\D/g, '')
+        const updatedUsers = [...users];
+        updatedUsers[index] = { ...updatedUsers[index], [type]: filteredValue };
+        onUsersChange(updatedUsers);
+    }, [users, onUsersChange]);
 
-    const rows = state.usersData.map((e, index) => <div key={index} className="user_card">
+    const rows = users.map((e, index) => <div key={index} className="user_card">
         <div className="rows_user"><div className="label_name">Имя</div><input className="input_user_value" value={e.name} onChange={(event) => handleUserInputChange(index, 'name', event.target.value)} /></div>
-        <div className="rows_user"><div className="label_name">КонтактID</div><input className="input_user_value" value={e.contact} onChange={(event) => handleUserInputChange(index, 'contact', event.target.value)} /></div>
+        <div className="rows_user"><div className="label_name">КонтактID</div><input className="input_user_value" value={e.contact} maxLength={11} onChange={(event) => handleUserInputChange(index, 'contact', event.target.value)} /></div>
     </div>)
 
     return (

@@ -1,11 +1,13 @@
+import React from 'react'
+
 import '../styles/Form.css'
 import useForm from './hooks'
 
 
 
-const Form = () => {
+const Form: React.FC<{ stateForm: () => void }> = ({ stateForm }) => {
 
-    const { subField, errorMessage, changeInputField, changeInputFieldName, findUser, contactRef, nameRef } = useForm()
+    const { subField, errorMessage, changeInputField, changeInputFieldName, findUser, contactRef, nameRef } = useForm(stateForm)
 
     console.log('рендерформ')
 

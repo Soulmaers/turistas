@@ -7,7 +7,7 @@ import { MyContext } from '../../../context/contexts'
 type UserResponce = User | null
 
 
-const useForm = () => {
+const useForm = (stateForm: () => void) => {
 
     const { dispatch } = useContext(MyContext)
 
@@ -51,9 +51,8 @@ const useForm = () => {
 
 
     useEffect(() => {
-        async function getDataUser() {
-            const contactID = contactRef.current ? contactRef.current.value : null;
-            const username = nameRef.current ? nameRef.current.value : null;
+        async function getDataUser(contactID: string | null, username: string | null) {
+
             const params = {
                 method: 'POST',
                 headers: {
@@ -65,15 +64,22 @@ const useForm = () => {
             const data: UserResponce = await res.json()
             console.log(data)
             if (!data) {
+                console.log('тута?')
                 setSubField(true)
             }
             else {
+                const lastTournament = data.tournament.pop()
+                const status = Number(lastTournament?.status)
                 dispatch({ type: 'update_status_user', payload: data })
-                dispatch({ type: 'update_content', payload: 2 })
+                dispatch({ type: 'update_content', payload: status })
+                stateForm()
             }
+
         }
         if (getUser) {
-            getDataUser()
+            const contactID = contactRef.current ? contactRef.current.value : null;
+            const username = nameRef.current ? nameRef.current.value : null;
+            getDataUser(contactID, username)
             setGetUser(false)
         }
 

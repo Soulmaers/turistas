@@ -19,7 +19,7 @@ const СenterFrame = () => {
             return <WiewCardReservours index={updateReservours.index} text={updateReservours.text} />
         }
         else {
-            return content && content === 1 ? <AddCarTournament /> : <div className="logo_center"></div>
+            return content && content === 1 ? <AddCarTournament /> : <AddCarTournament />// {/*<div className="logo_center"></div>*/}
         }
     }
 

@@ -20,11 +20,12 @@ const LeftFrame = () => {
 
     const { state, dispatch } = useContext(MyContext)
 
+    const [subMenu, setSubMenu] = useState<null | string>(null)
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
-        dispatch({ type: 'update_spoyler', payload: state.subMenu === selectSubMenu ? null : selectSubMenu })
+        setSubMenu(subMenu === selectSubMenu ? null : selectSubMenu)
     }
     const getIconsArrow = (selectSubMenu: string) => { //Меняем иконку стрелки
-        return state.subMenu === selectSubMenu ? <IoIosArrowUp className="class_icon" /> : < IoIosArrowDown className="class_icon" />
+        return subMenu === selectSubMenu ? <IoIosArrowUp className="class_icon" /> : < IoIosArrowDown className="class_icon" />
     }
 
     const addCardTour = () => {  //меняем стэйт по отображению модального окна
@@ -52,7 +53,7 @@ const LeftFrame = () => {
                             <div className="btn" key={e.key} onClick={() => handleButtonClick(e.key)}>{e.icon}
                                 <span className="title_name">{e.label}</span>
                                 {e.key === 'tounaments' && < IoMdAddCircle className="create_btn_tour" onClick={addCardTour} />}{getIconsArrow(e.key)}
-                            </div>{e.key === state.subMenu && e.component}
+                            </div>{e.key === subMenu && e.component}
                         </>
                     )}
 

@@ -1,23 +1,29 @@
 import React, { useState, useRef, useContext } from 'react';
-import { MyContext, selectUserData } from '../../../../context/contexts';
+import { MyContext } from '../../../../context/contexts';
+import useAddTour from '../hooks'
 import { IoSave } from "react-icons/io5";
 import UserInput from './UserInput';
 import DatePickerInput from './DatePickerInput';
 import '../styles/ModalAddTour.css';
 
-
+interface UpdateData {
+    name: string,
+    contact: string
+}
 const ModalAddTour = () => {
     const { state, dispatch } = useContext(MyContext);
-    const usersData = selectUserData(state)
 
+    const [users, setUsers] = useState<UpdateData[]>([])
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
     const [messageAlarm, setMessageAlarm] = useState('');
 
-
+    const { addTour } = useAddTour()
     const nameInputRef = useRef<HTMLInputElement>(null);
 
-
+    const handleUsersChange = (updatedUsers: UpdateData[]) => {
+        setUsers(updatedUsers);
+    };
     const closeModal = () => { dispatch({ type: 'update_modal', payload: false }); };
 
 
@@ -27,16 +33,22 @@ const ModalAddTour = () => {
         const hasName = !!name && name.trim() !== '';
         const hasStartDate = !!startDate;
         const hasFinishDate = !!finishDate;
-        const hasUsers = usersData.some((user) => user.name.trim() !== '' && user.contact.trim() !== '');
-
-        if (hasName && hasStartDate && hasFinishDate && hasUsers) {
+        console.log(users)
+        const hasUsers = users.every((user) => user.name.trim() !== '' && user.contact.length === 11);
+        console.log(hasUsers)
+        if (users.length !== 0 && hasName && hasStartDate && hasFinishDate && hasUsers) {
+            const startUnixTime = (new Date(startDate)).getTime() / 1000
+            const finishUnixTime = (new Date(finishDate)).getTime() / 1000
+            const created_by = state.userStatus.user?.id
+            // closeModal()
+            addTour({ name, startUnixTime, finishUnixTime, created_by, users })
             setMessageAlarm('Турнир успешно создан!');
         } else {
             let message = 'Добавьте:';
             if (!hasName) message += 'Название, ';
             if (!hasStartDate) message += 'Дата старта, ';
             if (!hasFinishDate) message += 'Дата завершения, ';
-            if (!hasUsers) message += 'Участники, ';
+            if (users.length === 0 || !hasUsers) message += 'Участники, ';
             setMessageAlarm(message.slice(0, -2));
         }
     };
@@ -49,7 +61,7 @@ const ModalAddTour = () => {
                     <div className="name_car_tour">Название</div>
                     <input className="input_car_tour" ref={nameInputRef} />
                 </div>
-                <UserInput />
+                <UserInput users={users} onUsersChange={handleUsersChange} />
                 <DatePickerInput label="Дата старта" selectedDate={startDate} onDateChange={setStartDate} />
                 <DatePickerInput label="Дата завершения" selectedDate={finishDate} onDateChange={setFinishDate} />
             </div>

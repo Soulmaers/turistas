@@ -2,20 +2,14 @@
 
 const { sql, connection } = require('../dbconfig')
 class JobUsers {
-    constructor(contactID) {
-        this.contactID = contactID
-
+    constructor() {
     }
 
-
-
-    async getUser() {
-
-        console.log(this.contactID)
+    async getUser(contactID) {
         const postModel = `SELECT * FROM users WHERE contactID=@contactID`
         try {
             const pool = await connection
-            const result = await pool.request().input('contactID', this.contactID).query(postModel)
+            const result = await pool.request().input('contactID', contactID).query(postModel)
             return result.recordset.length == 0 ? null : result.recordset[0]
         }
         catch (e) {
@@ -23,14 +17,11 @@ class JobUsers {
         }
     }
 
-    async addUser(username) {
-
-        console.log(typeof this.contactID)
+    async addUser(contactID, username) {
         const postModel = `INSERT INTO users (name_user,contactID) OUTPUT INSERTED. * VALUES(@username, @contactID)`
         try {
             const pool = await connection
-            const result = await pool.request().input('contactID', this.contactID).input('username', username).query(postModel)
-            console.log(result.recordset)
+            const result = await pool.request().input('contactID', contactID).input('username', username).query(postModel)
             return { user: result.recordset[0], tournament: [] }
         }
         catch (e) {
@@ -43,9 +34,9 @@ class JobUsers {
 
         const postModel = `SELECT  t.*
         FROM users u 
-        LEFT JOIN tournamentParticipans ut ON u.id = ut.id
-        LEFT JOIN tournaments t ON t.id = ut.tournament_id
-        WHERE u.id = @id
+        LEFT JOIN tournamentParticipants ut ON u.id = ut.userId
+        LEFT JOIN tournaments t ON t.id = ut.tournamentId
+       WHERE u.id = @id    ORDER BY t.id
         `;
 
         try {
@@ -60,7 +51,50 @@ class JobUsers {
             return []; // Возвращаем пустые значения в случае ошибки
         }
     }
+
+
+    async tournamentsPartopanses(tournamentID, userID) {
+        const postModel = `INSERT INTO tournamentParticipants (userID, tournamentID) VALUES(@userID,@tournamentID)`
+        try {
+            const pool = await connection
+            const result = await pool.request().input('userID', userID).input('tournamentID', tournamentID).query(postModel)
+            return 'Турнир создан'
+        } catch (e) {
+            console.log(e)
+            return []
+        }
+    }
+
+
+
+    async createTournament(name, startTime, finishTime, created_by) {
+        console.log(name, startTime, finishTime, created_by)
+        const status = 0
+        const postModel = `INSERT INTO tournaments (name, dateStart, dateFinish, created_by, status) 
+OUTPUT INSERTED.* 
+VALUES (@name, @startTime, @finishTime, @created_by, @status)`
+
+        try {
+            const pool = await connection
+            const result = await pool.request()
+                .input('name', name)
+                .input('startTime', startTime)
+                .input('finishTime', finishTime)
+                .input('created_by', created_by)
+                .input('status', status)
+                .query(postModel)
+
+            return result.recordset[0]
+        } catch (e) {
+            console.log(e)
+            return []
+
+        }
+
+    }
 }
+
+
 
 module.exports =
     { JobUsers }

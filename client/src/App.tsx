@@ -13,13 +13,17 @@ import './App.css';
 
 function App() {
   const { state } = useContext(MyContext)
-  const content = selectContent(state)
   const stateModal = selectStateModal(state)
-  console.log(content, stateModal)
+
+  const [activForm, setactivForm] = useState<boolean>(false)
+
+  const hadleToogleForm = () => {
+    setactivForm((prev) => !prev)
+  }
   console.log('рендер')
   return (
     <div className="App">
-      {!content && <Form />}
+      {!activForm && <Form stateForm={hadleToogleForm} />}
       {stateModal && <div className="popup_backgroud"></div>}
       <div className="Body">
         <LeftFrame />
