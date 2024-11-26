@@ -42,10 +42,7 @@ class JobUsers {
         try {
             const pool = await connection;
             const result = await pool.request().input('id', idUser).query(postModel);
-            const tournaments = result.recordset.filter(tournament =>
-                Object.values(tournament).some(value => value !== null)
-            );
-            return tournaments
+            return result.recordset
         } catch (e) {
             console.log(e);
             return []; // Возвращаем пустые значения в случае ошибки

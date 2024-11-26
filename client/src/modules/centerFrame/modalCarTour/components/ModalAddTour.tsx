@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext } from 'react';
-import { MyContext } from '../../../../context/contexts';
+import { MyContext } from '../../../servises/contexs/contexts';
+import { ContextForm } from '../../../servises/contexs/contextCloseForm';
 import useAddTour from '../hooks'
 import { IoSave } from "react-icons/io5";
 import UserInput from './UserInput';
@@ -12,7 +13,7 @@ interface UpdateData {
 }
 const ModalAddTour = () => {
     const { state, dispatch } = useContext(MyContext);
-
+    const { dispatch: dispatchForm } = useContext(ContextForm)
     const [users, setUsers] = useState<UpdateData[]>([])
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
@@ -24,7 +25,7 @@ const ModalAddTour = () => {
     const handleUsersChange = (updatedUsers: UpdateData[]) => {
         setUsers(updatedUsers);
     };
-    const closeModal = () => { dispatch({ type: 'update_modal', payload: false }); };
+    const closeModal = () => { dispatchForm({ type: 'update_modal', payload: false }); };
 
 
 
@@ -40,7 +41,7 @@ const ModalAddTour = () => {
             const startUnixTime = (new Date(startDate)).getTime() / 1000
             const finishUnixTime = (new Date(finishDate)).getTime() / 1000
             const created_by = state.userStatus.user?.id
-            // closeModal()
+            closeModal()
             addTour({ name, startUnixTime, finishUnixTime, created_by, users })
             setMessageAlarm('Турнир успешно создан!');
         } else {

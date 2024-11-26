@@ -1,17 +1,13 @@
 .modal_add_tour {
-    margin-top: 25px;
-    width: 45%;
-    height: 93vh;
+    width: 400px;
+    height: 55vh;
     border: 1px solid #fff;
     background-color: #4d4646;
     border-radius: 5px;
-    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.5);
-    z-index: 2;
 
 }
 

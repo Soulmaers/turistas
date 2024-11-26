@@ -1,16 +1,16 @@
 import React from 'react'
 import { useState, useContext, useEffect, useRef } from 'react'
 import { User } from './Interface'
-import { MyContext } from '../../../context/contexts'
-
+import { MyContext } from '../../servises/contexs/contexts'
+import { ContextForm } from '../../servises/contexs/contextCloseForm'
 
 type UserResponce = User | null
 
 
-const useForm = (stateForm: () => void) => {
+const useForm = () => {
 
     const { dispatch } = useContext(MyContext)
-
+    const { dispatch: dispatchForm } = useContext(ContextForm)
     const [subField, setSubField] = useState<boolean>(false)
     const [errorMessage, setErrorMessage] = useState<string>('')
     const [getUser, setGetUser] = useState<boolean>(false)
@@ -62,17 +62,22 @@ const useForm = (stateForm: () => void) => {
             }
             const res = await fetch(`http://localhost:3333/api/user/check`, params);
             const data: UserResponce = await res.json()
-            console.log(data)
             if (!data) {
                 console.log('тута?')
                 setSubField(true)
             }
             else {
-                const lastTournament = data.tournament.pop()
-                const status = Number(lastTournament?.status)
+                let statusTour;
+                if (data.tournament.length !== 0) {
+                    const lastTournament = data.tournament[data.tournament.length - 1]
+                    statusTour = Number(lastTournament?.status)
+                }
+                else {
+                    statusTour = null
+                }
                 dispatch({ type: 'update_status_user', payload: data })
-                dispatch({ type: 'update_content', payload: status })
-                stateForm()
+                dispatchForm({ type: 'controll_modal_form', payload: false })
+                dispatch({ type: 'update_content', payload: statusTour })
             }
 
         }

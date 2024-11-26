@@ -2,8 +2,8 @@
 
 
 
-interface Tournament {
-    status: number | undefined | null,
+export interface Tournament {
+    status: number | undefined | null | string,
     big_fish: number | null,
     name: string,
     created_by: number,

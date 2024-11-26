@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { MyContext, selectUserStatus } from '../../../context/contexts';
-
+import { MyContext, selectUserStatus } from '../../servises/contexs/contexts';
+import { ContextForm } from '../../servises/contexs/contextCloseForm'
 
 import '../styles/HeadersRight.css'
 import { FaTrophy, FaStar } from "react-icons/fa";
@@ -10,13 +10,14 @@ import { IoSettingsSharp, IoLogOut } from "react-icons/io5"
 
 const RenderHeaderRight = () => {
     const { state, dispatch } = useContext(MyContext)
+    const { dispatch: dispatchForm } = useContext(ContextForm)
     const userStatus = selectUserStatus(state)
 
-    console.log(userStatus)
     const { name_user = "", trophys = 0, fishs = 0, stars = 0 } = userStatus.user || {};
 
     const onClick = () => {
         dispatch({ type: 'update_content', payload: null })
+        dispatchForm({ type: 'controll_modal_form', payload: true })
         dispatch({ type: 'update_status_user', payload: { user: null, tournament: [] } })
     }
     return (

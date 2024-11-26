@@ -5,13 +5,13 @@ import useForm from './hooks'
 
 
 
-const Form: React.FC<{ stateForm: () => void }> = ({ stateForm }) => {
+const Form = () => {
 
-    const { subField, errorMessage, changeInputField, changeInputFieldName, findUser, contactRef, nameRef } = useForm(stateForm)
+    const { subField, errorMessage, changeInputField, changeInputFieldName, findUser, contactRef, nameRef } = useForm()
 
     console.log('рендерформ')
 
-    return (<div className="form">
+    return (
         <div className="form_card">
             <div className="title_form">Форма входа</div>
             <div className="contact_ID"><span className="label_form">Введите КонтактID</span>
@@ -25,7 +25,7 @@ const Form: React.FC<{ stateForm: () => void }> = ({ stateForm }) => {
                 <div className="message_from">{errorMessage}</div>
             </div>
         </div>
-    </div>)
+    )
 }
 
 

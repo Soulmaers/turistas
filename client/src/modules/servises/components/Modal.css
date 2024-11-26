@@ -1,0 +1,25 @@
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Затемнение области */
+    z-index: 1;
+    /* Убедитесь, что фон находится под модальным окном */
+}
+
+.modal_window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Центрируем модальное окно */
+    background-color: #4d4646;
+    border-radius: 10px;
+    z-index: 2;
+    /* Модальное окно должно быть над фоном */
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+}

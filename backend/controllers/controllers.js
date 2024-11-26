@@ -37,6 +37,7 @@ exports.getUserCheck = async (req, res) => {
         const user = await instance.getUser(contactID)
         if (user) {
             const tournament = await instance.getTournaments(user.id)
+            console.log(tournament)
             res.json({ user, tournament })
         }
         else {
