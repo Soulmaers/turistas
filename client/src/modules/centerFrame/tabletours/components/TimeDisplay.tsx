@@ -40,7 +40,7 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart }) => {
         } else {
             setTime(null); // Очищаем значение если статус не 0
         }
-    }, [status]);
+    }, [status, dateStart]);
 
     return (
         <span className='status'>

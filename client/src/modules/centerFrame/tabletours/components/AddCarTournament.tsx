@@ -10,12 +10,11 @@ import { Tournament } from '../../../form/components/Interface'
 
 
 const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
+    const { idClickTour } = useContext(ContextActiv)
 
-    const { idClickTour, dispatch } = useContext(ContextActiv)
-    console.log(useContext(ContextActiv))
-    console.log(data)
-    console.log(idClickTour)
-    const { name, dateStart, dateFinish, status, big_fish } = data[data.length - 1]
+    const celevoys = data.find(e => e.id === idClickTour)
+    const celevoy = celevoys ? celevoys : data[data.length - 1]
+    const { name, dateStart, dateFinish, status, big_fish } = celevoy
 
     const rows = reglament.map((e, index) => <li key={e + index} className="rows_reg">{e}</li>)
     return (<div className="card_tournament">

@@ -2,7 +2,6 @@ import React from 'react'
 import { useContext } from 'react'
 import { MyContext, selectContent, selectReservours } from '../servises/contexs/contexts';
 import { ContextForm } from '../servises/contexs/contextCloseForm';
-import { ProvideActivTour } from '../servises/contexs/contextActivId'
 import ModalAddTour from './modalCarTour/components/ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
 import AddCarTournament from './tabletours/components/AddCarTournament'
@@ -24,7 +23,7 @@ const СenterFrame = () => {
             return <WiewCardReservours index={updateReservours.index} text={updateReservours.text} />
         }
         else {
-            return content !== null ? <ProvideActivTour><AddCarTournament data={state.userStatus.tournament} /></ProvideActivTour> : <div className="logo_center"></div> //{/*<div className="logo_center"></div>*/ }
+            return content !== null ? <AddCarTournament data={state.userStatus.tournament} /> : <div className="logo_center"></div> //{/*<div className="logo_center"></div>*/ }
         }
     }
 

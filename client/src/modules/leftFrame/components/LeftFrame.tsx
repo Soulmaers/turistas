@@ -39,7 +39,7 @@ const LeftFrame = () => {
 
     }
     const menuItems = [
-        { label: 'Турниры', icon: <GiTrophy className="class_icon icon_button" />, component: <ProvideActivTour><Tournaments /></ProvideActivTour>, key: 'tournaments' },
+        { label: 'Турниры', icon: <GiTrophy className="class_icon icon_button" />, component: <Tournaments />, key: 'tournaments' },
         { label: 'Статистика', icon: <FaChartGantt className="class_icon icon_button" />, component: <Statistics />, key: 'stata' },
         { label: 'Водоёмы', icon: <FaWater className="class_icon icon_button" />, component: <Reservoors changeStateReservour={changeStateReservour} />, key: 'reservoors' },
         { label: 'Журнал', icon: <FaBookOpen className="class_icon icon_button" />, component: <HistoryLogs />, key: 'history' }
