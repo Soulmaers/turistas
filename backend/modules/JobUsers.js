@@ -89,6 +89,23 @@ VALUES (@name, @startTime, @finishTime, @created_by, @status)`
         }
 
     }
+
+    async deleteTournament(id) {
+        console.log(id)
+        const post = `DELETE FROM tournaments WHERE id=@id`
+
+        try {
+            const pool = await connection
+            const res = await pool.request()
+                .input('id', id)
+                .query(post)
+            return 'ОК'
+        }
+
+        catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 

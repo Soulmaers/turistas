@@ -1,6 +1,8 @@
 import React, { useState, useRef, useContext } from 'react';
 import { MyContext } from '../../../servises/contexs/contexts';
 import { ContextForm } from '../../../servises/contexs/contextCloseForm';
+import Modal from '../../../servises/components/Modal'
+import TextInfoModal from '../../../servises/components/TextInfoModal';
 import useAddTour from '../hooks'
 import { IoSave } from "react-icons/io5";
 import UserInput from './UserInput';
@@ -12,6 +14,9 @@ interface UpdateData {
     contact: string
 }
 const ModalAddTour = () => {
+    const [dels, setDels] = useState<boolean>(false)
+    const [text, setText] = useState<string>('')
+
     const { state, dispatch } = useContext(MyContext);
     const { dispatch: dispatchForm } = useContext(ContextForm)
     const [users, setUsers] = useState<UpdateData[]>([])
@@ -27,22 +32,20 @@ const ModalAddTour = () => {
     };
     const closeModal = () => { dispatchForm({ type: 'update_modal', payload: false }); };
 
-
-
-    const handleSaveClick = () => {
+    const handleSaveClick = async () => {
         const name = nameInputRef.current?.value;
         const hasName = !!name && name.trim() !== '';
         const hasStartDate = !!startDate;
         const hasFinishDate = !!finishDate;
-        console.log(users)
         const hasUsers = users.every((user) => user.name.trim() !== '' && user.contact.length === 11);
-        console.log(hasUsers)
         if (users.length !== 0 && hasName && hasStartDate && hasFinishDate && hasUsers) {
             const startUnixTime = (new Date(startDate)).getTime() / 1000
             const finishUnixTime = (new Date(finishDate)).getTime() / 1000
             const created_by = state.userStatus.user?.id
-            closeModal()
-            addTour({ name, startUnixTime, finishUnixTime, created_by, users })
+            const res = await addTour({ name, startUnixTime, finishUnixTime, created_by, users })
+            setTimeout(() => (setDels(false), closeModal()), 1000)
+            setDels(true)
+            setText(res)
             setMessageAlarm('Турнир успешно создан!');
         } else {
             let message = 'Добавьте:';
@@ -54,23 +57,27 @@ const ModalAddTour = () => {
         }
     };
     console.log('рендеринг')
+
     return (
-        <div className="modal_add_tour">
-            <div className="header_modal_tour">Карточка турнира<span className="close" onClick={closeModal}>x</span></div>
-            <div className="body_modal_tour">
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Название</div>
-                    <input className="input_car_tour" ref={nameInputRef} />
+        <>
+            {dels && <Modal><TextInfoModal text={text} /></Modal>}
+            <div className="modal_add_tour">
+                <div className="header_modal_tour">Карточка турнира<span className="close" onClick={closeModal}>x</span></div>
+                <div className="body_modal_tour">
+                    <div className="rows_card_tour">
+                        <div className="name_car_tour">Название</div>
+                        <input className="input_car_tour" ref={nameInputRef} />
+                    </div>
+                    <UserInput users={users} onUsersChange={handleUsersChange} />
+                    <DatePickerInput label="Дата старта" selectedDate={startDate} onDateChange={setStartDate} />
+                    <DatePickerInput label="Дата завершения" selectedDate={finishDate} onDateChange={setFinishDate} />
                 </div>
-                <UserInput users={users} onUsersChange={handleUsersChange} />
-                <DatePickerInput label="Дата старта" selectedDate={startDate} onDateChange={setStartDate} />
-                <DatePickerInput label="Дата завершения" selectedDate={finishDate} onDateChange={setFinishDate} />
+                <div className="footer_modal_tour">
+                    <div className="messageAlarm">{messageAlarm}</div>
+                    <IoSave className="start_tour" onClick={handleSaveClick} />
+                </div>
             </div>
-            <div className="footer_modal_tour">
-                <div className="messageAlarm">{messageAlarm}</div>
-                <IoSave className="start_tour" onClick={handleSaveClick} />
-            </div>
-        </div>
+        </>
     );
 };
 

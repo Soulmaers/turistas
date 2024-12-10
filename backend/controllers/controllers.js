@@ -37,7 +37,6 @@ exports.getUserCheck = async (req, res) => {
         const user = await instance.getUser(contactID)
         if (user) {
             const tournament = await instance.getTournaments(user.id)
-            console.log(tournament)
             res.json({ user, tournament })
         }
         else {
@@ -49,6 +48,14 @@ exports.getUserCheck = async (req, res) => {
         return res.json(propsUser);
     }
 
+}
+
+exports.deleteTour = async (req, res) => {
+    console.log('здесь')
+    const id = req.body.id
+    const instance = new JobUsers()
+    const result = await instance.deleteTournament(id)
+    res.json(result)
 }
 
 

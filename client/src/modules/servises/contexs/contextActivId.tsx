@@ -10,7 +10,7 @@ interface PropsProviderActivId {
     children: ReactNode
 }
 
-type ActionType = | { type: 'click_tour', payload: number | null }
+type ActionType = | { type: 'click_tour', payload: number | null } | { type: 'delete_tour', payload: number | null }
 
 const reducer = (state: ContextActivId, action: ActionType): ContextActivId => {
 

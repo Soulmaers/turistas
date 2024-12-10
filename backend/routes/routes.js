@@ -6,3 +6,5 @@ module.exports = router
 
 router.post('/api/addTournaments', controllers.addTournament)
 router.post('/api/user/check', controllers.getUserCheck)
+router.post('/api/deleteTour', controllers.deleteTour)
+
