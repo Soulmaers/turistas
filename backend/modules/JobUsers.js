@@ -90,6 +90,53 @@ VALUES (@name, @startTime, @finishTime, @created_by, @status)`
 
     }
 
+
+    async getContentTour(id) {
+        try {
+            const tournamentData = await this.getTournamentData(id); // Первый запрос - данные о турнире
+            if (!tournamentData) {
+                return null; // Турнир не найден
+            }
+
+            const users = await this.getTournamentUsers(id); // Второй запрос - участники турнира
+            return { ...tournamentData[0], users }; // объединение данных
+        } catch (error) {
+            console.error("Error fetching tournament data:", error);
+            return null;
+        }
+    }
+
+    async getTournamentData(id) {
+        const query = `SELECT * FROM tournaments WHERE id = @id`;
+        try {
+            const pool = await connection;
+            const result = await pool.request().input('id', id).query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error fetching tournament data:", error);
+            return null;
+        }
+    }
+
+    async getTournamentUsers(id) {
+        const query = `
+            SELECT u.name_user, u.contactID, u.id AS userId
+            FROM tournamentParticipants tp
+            JOIN users u ON tp.userId = u.id
+            WHERE tp.tournamentId = @id;
+        `;
+        try {
+            const pool = await connection;
+            const result = await pool.request().input('id', id).query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error fetching tournament users:", error);
+            return []; // Возвращаем пустой массив в случае ошибки
+        }
+    }
+
+
+
     async deleteTournament(id) {
         console.log(id)
         const post = `DELETE FROM tournaments WHERE id=@id`

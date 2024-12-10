@@ -11,7 +11,7 @@ const useForm = () => {
 
     const { dispatch } = useContext(MyContext)
     const { dispatch: dispatchForm } = useContext(ContextForm)
-    const [subField, setSubField] = useState<boolean>(false)
+    const [subField, setSubField] = useState<boolean>(true)
     const [errorMessage, setErrorMessage] = useState<string>('')
     const [getUser, setGetUser] = useState<boolean>(false)
 
@@ -32,9 +32,9 @@ const useForm = () => {
     const findUser = () => {
         const contactValue = contactRef.current ? contactRef.current.value.toString() : '';
         const nameValue = nameRef.current ? nameRef.current.value.trim() : '';
-
+        console.log(subField)
         // Проверка на некорректный ввод
-        if (!subField) {
+        if (subField) {
             if (contactValue.length < 11) {
                 setErrorMessage('Некорректный КонтактID');
                 return;
@@ -63,8 +63,7 @@ const useForm = () => {
             const res = await fetch(`http://localhost:3333/api/user/check`, params);
             const data: UserResponce = await res.json()
             if (!data) {
-                console.log('тута?')
-                setSubField(true)
+                setErrorMessage('Пользователь не найден');
             }
             else {
                 let statusTour;
@@ -90,7 +89,7 @@ const useForm = () => {
 
     }, [getUser])
 
-    return { subField, errorMessage, getUser, findUser, changeInputField, changeInputFieldName, contactRef, nameRef }
+    return { subField, setSubField, errorMessage, getUser, findUser, changeInputField, changeInputFieldName, contactRef, nameRef }
 
 }
 

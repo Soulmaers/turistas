@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { MyContext } from '../../../servises/contexs/contexts';
 import { ContextForm } from '../../../servises/contexs/contextCloseForm';
 import Modal from '../../../servises/components/Modal'
@@ -17,7 +17,10 @@ const ModalAddTour = () => {
     const [dels, setDels] = useState<boolean>(false)
     const [text, setText] = useState<string>('')
 
-    const { state, dispatch } = useContext(MyContext);
+    const { state } = useContext(MyContext);
+    const nameCreater = state.userStatus.user?.name_user
+    const contactIDCreater = state.userStatus.user?.contactID
+
     const { dispatch: dispatchForm } = useContext(ContextForm)
     const [users, setUsers] = useState<UpdateData[]>([])
     const [startDate, setStartDate] = useState<Date | null>(null);
@@ -26,6 +29,27 @@ const ModalAddTour = () => {
 
     const { addTour } = useAddTour()
     const nameInputRef = useRef<HTMLInputElement>(null);
+    const modalka = useRef<HTMLDivElement>(null)
+
+
+    useEffect(() => {
+        if (nameCreater && contactIDCreater) {
+            setUsers([{ name: nameCreater, contact: contactIDCreater }])
+        }
+    }, [])
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalka.current && !modalka.current.contains(event.target as Node)) {
+                closeModal();
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+
+    }, [])
 
     const handleUsersChange = (updatedUsers: UpdateData[]) => {
         setUsers(updatedUsers);
@@ -56,13 +80,11 @@ const ModalAddTour = () => {
             setMessageAlarm(message.slice(0, -2));
         }
     };
-    console.log('рендеринг')
-
     return (
         <>
             {dels && <Modal><TextInfoModal text={text} /></Modal>}
-            <div className="modal_add_tour">
-                <div className="header_modal_tour">Карточка турнира<span className="close" onClick={closeModal}>x</span></div>
+            <div className="modal_add_tour" ref={modalka}>
+                <div className="header_modal_tour">Карточка турнира</div>
                 <div className="body_modal_tour">
                     <div className="rows_card_tour">
                         <div className="name_car_tour">Название</div>

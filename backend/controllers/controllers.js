@@ -59,3 +59,11 @@ exports.deleteTour = async (req, res) => {
 }
 
 
+exports.getContentTour = async (req, res) => {
+    const id = req.body.id
+    const instance = new JobUsers()
+    const tournament = await instance.getContentTour(id)
+    res.json(tournament)
+}
+
+
