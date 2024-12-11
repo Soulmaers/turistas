@@ -9,6 +9,7 @@ import Footer from './modules/centerFrame/Footer'
 
 import Form from './modules/form/components/Form'
 import Modal from './modules/servises/components/Modal'
+
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   console.log(activForm)
   console.log('рендер')
   return (
+
     <div className="App">
       {activForm && <Modal><Form /></Modal>}
       <div className="Body">
@@ -26,6 +28,7 @@ function App() {
       </div>
       <Footer />
     </div>
+
   );
 }
 

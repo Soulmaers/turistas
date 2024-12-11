@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { MyContext } from '../../../servises/contexs/contexts';
+import { TourData, Participants } from '../../../servises/contexs/contextStateTourData'
 import { ContextForm } from '../../../servises/contexs/contextCloseForm';
 import Modal from '../../../servises/components/Modal'
 import TextInfoModal from '../../../servises/components/TextInfoModal';
@@ -9,20 +10,18 @@ import UserInput from './UserInput';
 import DatePickerInput from './DatePickerInput';
 import '../styles/ModalAddTour.css';
 
-interface UpdateData {
-    name: string,
-    contact: string
-}
+
+
 const ModalAddTour = () => {
+    const tourData = useContext(TourData)
+    console.log(tourData)
     const [dels, setDels] = useState<boolean>(false)
     const [text, setText] = useState<string>('')
 
     const { state } = useContext(MyContext);
-    const nameCreater = state.userStatus.user?.name_user
-    const contactIDCreater = state.userStatus.user?.contactID
 
     const { dispatch: dispatchForm } = useContext(ContextForm)
-    const [users, setUsers] = useState<UpdateData[]>([])
+    //   const [users, setUsers] = useState<Participants[]>([])
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
     const [messageAlarm, setMessageAlarm] = useState('');
@@ -33,9 +32,9 @@ const ModalAddTour = () => {
 
 
     useEffect(() => {
-        if (nameCreater && contactIDCreater) {
-            setUsers([{ name: nameCreater, contact: contactIDCreater }])
-        }
+        if (nameInputRef.current) nameInputRef.current.value = tourData?.tour?.nameTour || '';
+        setStartDate(new Date(Number(tourData?.tour?.dateStart) * 1000))
+        setFinishDate(new Date(Number(tourData?.tour?.dateFinish) * 1000))
     }, [])
 
     useEffect(() => {
@@ -51,8 +50,10 @@ const ModalAddTour = () => {
 
     }, [])
 
-    const handleUsersChange = (updatedUsers: UpdateData[]) => {
-        setUsers(updatedUsers);
+    const handleUsersChange = (updatedUsers: Participants[]) => {
+        console.log(updatedUsers)
+        tourData?.setTour((prev) => ({ ...prev, users: updatedUsers }))
+        //    setUsers(updatedUsers);
     };
     const closeModal = () => { dispatchForm({ type: 'update_modal', payload: false }); };
 
@@ -61,11 +62,12 @@ const ModalAddTour = () => {
         const hasName = !!name && name.trim() !== '';
         const hasStartDate = !!startDate;
         const hasFinishDate = !!finishDate;
-        const hasUsers = users.every((user) => user.name.trim() !== '' && user.contact.length === 11);
-        if (users.length !== 0 && hasName && hasStartDate && hasFinishDate && hasUsers) {
+        const hasUsers = tourData?.tour.users.every((user) => user.name_user.trim() !== '' && user.contactID.length === 11);
+        if (tourData?.tour.users.length !== 0 && hasName && hasStartDate && hasFinishDate && hasUsers) {
             const startUnixTime = (new Date(startDate)).getTime() / 1000
             const finishUnixTime = (new Date(finishDate)).getTime() / 1000
             const created_by = state.userStatus.user?.id
+            const users = tourData?.tour.users
             const res = await addTour({ name, startUnixTime, finishUnixTime, created_by, users })
             setTimeout(() => (setDels(false), closeModal()), 1000)
             setDels(true)
@@ -76,7 +78,7 @@ const ModalAddTour = () => {
             if (!hasName) message += 'Название, ';
             if (!hasStartDate) message += 'Дата старта, ';
             if (!hasFinishDate) message += 'Дата завершения, ';
-            if (users.length === 0 || !hasUsers) message += 'Участники, ';
+            if (tourData?.tour.users.length === 0 || !hasUsers) message += 'Участники, ';
             setMessageAlarm(message.slice(0, -2));
         }
     };
@@ -90,7 +92,7 @@ const ModalAddTour = () => {
                         <div className="name_car_tour">Название</div>
                         <input className="input_car_tour" ref={nameInputRef} />
                     </div>
-                    <UserInput users={users} onUsersChange={handleUsersChange} />
+                    <UserInput users={tourData?.tour.users || []} onUsersChange={handleUsersChange} />
                     <DatePickerInput label="Дата старта" selectedDate={startDate} onDateChange={setStartDate} />
                     <DatePickerInput label="Дата завершения" selectedDate={finishDate} onDateChange={setFinishDate} />
                 </div>

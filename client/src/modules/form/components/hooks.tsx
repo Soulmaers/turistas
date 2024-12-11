@@ -3,12 +3,13 @@ import { useState, useContext, useEffect, useRef } from 'react'
 import { User } from './Interface'
 import { MyContext } from '../../servises/contexs/contexts'
 import { ContextForm } from '../../servises/contexs/contextCloseForm'
+import { TourData } from '../../servises/contexs/contextStateTourData'
 
 type UserResponce = User | null
 
 
 const useForm = () => {
-
+    const tourContext = useContext(TourData)
     const { dispatch } = useContext(MyContext)
     const { dispatch: dispatchForm } = useContext(ContextForm)
     const [subField, setSubField] = useState<boolean>(true)
@@ -75,6 +76,8 @@ const useForm = () => {
                     statusTour = null
                 }
                 dispatch({ type: 'update_status_user', payload: data })
+                tourContext?.setTour((prev) => ({ ...prev, users: [{ name_user: data.user?.name_user || '', contactID: data.user?.contactID || '', userID: data.user?.id || null }] }))
+
                 dispatchForm({ type: 'controll_modal_form', payload: false })
                 dispatch({ type: 'update_content', payload: statusTour })
             }

@@ -2,6 +2,7 @@
 
 import { useContext } from 'react'
 import { ContextForm } from '../servises/contexs/contextCloseForm'
+import { TourData } from '../servises/contexs/contextStateTourData'
 export const useDeleteTour = () => {
 
     const deleteTour = async (id: number, name: string) => {
@@ -31,6 +32,7 @@ export const useDeleteTour = () => {
 
 export const useEditTour = () => {
     const { stateModal, dispatch } = useContext(ContextForm)
+    const tourData = useContext(TourData)
 
     const editFunc = async (id: number) => {
         const param = {
@@ -46,6 +48,14 @@ export const useEditTour = () => {
             const result = await res.json()
             dispatch({ type: 'update_modal', payload: true })
             console.log(result)
+
+            tourData?.setTour((prev) => ({
+                ...prev,
+                nameTour: result.name,
+                dateStart: result.dateStart,
+                dateFinish: result.dateFinish,
+                users: result.users
+            }))
             return
         }
         catch (e) {
