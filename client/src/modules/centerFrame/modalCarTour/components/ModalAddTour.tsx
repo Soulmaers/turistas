@@ -14,14 +14,13 @@ import '../styles/ModalAddTour.css';
 
 const ModalAddTour = () => {
     const tourData = useContext(TourData)
-    console.log(tourData)
+
     const [dels, setDels] = useState<boolean>(false)
     const [text, setText] = useState<string>('')
 
     const { state } = useContext(MyContext);
 
     const { dispatch: dispatchForm } = useContext(ContextForm)
-    //   const [users, setUsers] = useState<Participants[]>([])
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
     const [messageAlarm, setMessageAlarm] = useState('');
@@ -29,12 +28,13 @@ const ModalAddTour = () => {
     const { addTour } = useAddTour()
     const nameInputRef = useRef<HTMLInputElement>(null);
     const modalka = useRef<HTMLDivElement>(null)
-
+    console.log(tourData)
 
     useEffect(() => {
         if (nameInputRef.current) nameInputRef.current.value = tourData?.tour?.nameTour || '';
-        setStartDate(new Date(Number(tourData?.tour?.dateStart) * 1000))
-        setFinishDate(new Date(Number(tourData?.tour?.dateFinish) * 1000))
+        console.log(tourData?.tour)
+        setStartDate(tourData?.tour?.nameTour === '' ? null : new Date(Number(tourData?.tour?.dateStart) * 1000))
+        setFinishDate(tourData?.tour?.nameTour === '' ? null : new Date(Number(tourData?.tour?.dateFinish) * 1000))
     }, [])
 
     useEffect(() => {
@@ -51,11 +51,22 @@ const ModalAddTour = () => {
     }, [])
 
     const handleUsersChange = (updatedUsers: Participants[]) => {
-        console.log(updatedUsers)
         tourData?.setTour((prev) => ({ ...prev, users: updatedUsers }))
-        //    setUsers(updatedUsers);
     };
-    const closeModal = () => { dispatchForm({ type: 'update_modal', payload: false }); };
+    const closeModal = () => {
+        dispatchForm({ type: 'update_modal', payload: false });
+        tourData?.setTour({
+            id: null,
+            nameTour: '',
+            dateStart: '',
+            dateFinish: '',
+            users: [{
+                name_user: state.userStatus.user?.name_user || '', // Защита от отсутствия данных
+                contactID: state.userStatus.user?.contactID || '',
+                userID: state.userStatus.user?.id || null // Или любое другое значение по умолчанию
+            }]
+        })
+    };
 
     const handleSaveClick = async () => {
         const name = nameInputRef.current?.value;
@@ -68,7 +79,8 @@ const ModalAddTour = () => {
             const finishUnixTime = (new Date(finishDate)).getTime() / 1000
             const created_by = state.userStatus.user?.id
             const users = tourData?.tour.users
-            const res = await addTour({ name, startUnixTime, finishUnixTime, created_by, users })
+            const idTour = tourData?.tour.id
+            const res = await addTour({ idTour, name, startUnixTime, finishUnixTime, created_by, users })
             setTimeout(() => (setDels(false), closeModal()), 1000)
             setDels(true)
             setText(res)

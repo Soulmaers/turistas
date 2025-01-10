@@ -50,44 +50,88 @@ class JobUsers {
     }
 
 
-    async tournamentsPartopanses(tournamentID, userID) {
-        const postModel = `INSERT INTO tournamentParticipants (userID, tournamentID) VALUES(@userID,@tournamentID)`
+    async tournamentsParticipants(tournamentID, userID) {
+        const checkModel = `SELECT COUNT(*) AS count FROM tournamentParticipants WHERE userID = @userID AND tournamentID = @tournamentID`;
+        const postModel = `INSERT INTO tournamentParticipants (userID, tournamentID) VALUES(@userID, @tournamentID)`;
+
         try {
-            const pool = await connection
-            const result = await pool.request().input('userID', userID).input('tournamentID', tournamentID).query(postModel)
-            return 'Турнир создан'
+            const pool = await connection;
+
+            // Проверка существования записи
+            const checkResult = await pool.request()
+                .input('userID', userID)
+                .input('tournamentID', tournamentID)
+                .query(checkModel);
+
+            if (checkResult.recordset[0].count > 0) {
+                return 'Участник уже зарегистрирован в турнире.';
+            }
+
+            // Если записи нет, выполняем вставку
+            await pool.request()
+                .input('userID', userID)
+                .input('tournamentID', tournamentID)
+                .query(postModel);
+
+            return 'Участник успешно зарегистрирован в турнире.';
         } catch (e) {
-            console.log(e)
-            return []
+            console.log(e);
+            return 'Произошла ошибка при регистрации участника.';
         }
     }
 
 
 
-    async createTournament(name, startTime, finishTime, created_by) {
-        console.log(name, startTime, finishTime, created_by)
-        const status = 0
-        const postModel = `INSERT INTO tournaments (name, dateStart, dateFinish, created_by, status) 
-OUTPUT INSERTED.* 
-VALUES (@name, @startTime, @finishTime, @created_by, @status)`
+    async createTournament(id, name, startTime, finishTime, created_by) {
+        console.log(id)
+        const status = 0;
+        // Определяем SQL для проверки существования турнира
+        const checkExistenceModel = `SELECT COUNT(*) as count FROM tournaments WHERE id = @id`;
+        // Определяем SQL для обновления турнира
+        const updateModel = `UPDATE tournaments SET name = @name, dateStart = @startTime, dateFinish = @finishTime, created_by = @created_by, status = @status OUTPUT INSERTED.*  WHERE id = @id`;
+        // Определяем SQL для вставки нового турнира
+        const insertModel = `INSERT INTO tournaments (name, dateStart, dateFinish, created_by, status) OUTPUT INSERTED.* VALUES (@name, @startTime, @finishTime, @created_by, @status)`;
 
         try {
-            const pool = await connection
-            const result = await pool.request()
-                .input('name', name)
-                .input('startTime', startTime)
-                .input('finishTime', finishTime)
-                .input('created_by', created_by)
-                .input('status', status)
-                .query(postModel)
+            const pool = await connection;
+            // Проверяем, существует ли турнир с данным id
+            const existenceResult = await pool.request()
+                .input('id', id)
+                .query(checkExistenceModel);
 
-            return result.recordset[0]
+            const exists = existenceResult.recordset[0].count > 0;
+            console.log(exists)
+            let result;
+
+            if (exists) {
+                // Если существует, выполняем UPDATE
+                result = await pool.request()
+                    .input('id', id)
+                    .input('name', name)
+                    .input('startTime', startTime)
+                    .input('finishTime', finishTime)
+                    .input('created_by', created_by)
+                    .input('status', status)
+                    .query(updateModel);
+            } else {
+                // Если не существует, выполняем INSERT
+                result = await pool.request()
+                    .input('name', name)
+                    .input('startTime', startTime)
+                    .input('finishTime', finishTime)
+                    .input('created_by', created_by)
+                    .input('status', status)
+                    .query(insertModel);
+            }
+
+            // Возвращаем созданную или обновленную запись
+            console.log()
+            return result.recordset[0];
+
         } catch (e) {
-            console.log(e)
-            return []
-
+            console.log(e);
+            return [];
         }
-
     }
 
 

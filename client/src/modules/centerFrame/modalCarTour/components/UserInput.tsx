@@ -1,7 +1,7 @@
 import React from 'react'
 import { useCallback } from 'react'
 import { Participants } from '../../../servises/contexs/contextStateTourData'
-import { IoMdAddCircle } from "react-icons/io";
+import { IoMdAddCircle, IoMdRemoveCircle } from "react-icons/io";
 import '../styles/UserInput.css'
 
 
@@ -18,6 +18,11 @@ const UserInput: React.FC<UserInputProps> = ({ users, onUsersChange }) => {
         onUsersChange([...users, { name_user: '', contactID: '7', userID: null }]);
     }, [users, onUsersChange]);
 
+    const removeLastUser = useCallback(() => {
+        const updatedUsers = users.slice(0, -1); // Удаляем последнего пользователя из списка
+        //  setUsers(updatedUsers);
+        onUsersChange(updatedUsers);
+    }, [users, onUsersChange]);
 
     const handleUserInputChange = useCallback((index: number, type: 'name_user' | 'contactID', value: string) => {
         const filteredValue = type === 'name_user' ? value : value.replace(/\D/g, '')
@@ -35,7 +40,7 @@ const UserInput: React.FC<UserInputProps> = ({ users, onUsersChange }) => {
     return (
         <>
             <div className="rows_card_tour">
-                <div className="name_car_tour">Участники<IoMdAddCircle className="addUser" onClick={addUser} /></div>
+                <div className="name_car_tour">Участники<IoMdAddCircle className="addUser" onClick={addUser} /> <IoMdRemoveCircle className="removeUser" onClick={removeLastUser} /></div>
             </div>
             <div className="users">{rows}</div>
         </>

@@ -6,7 +6,6 @@ import { GiTrophy } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowUp, IoMdAddCircle } from "react-icons/io"
 import { FaChartGantt } from "react-icons/fa6"
 import { FaWater, FaBookOpen } from "react-icons/fa"
-import { ProvideActivTour } from '../../servises/contexs/contextActivId';
 
 import Tournaments from './Tournamets'
 import Statistics from './Statistics'
@@ -21,7 +20,6 @@ import '../styles/LeftFrame.css'
 const LeftFrame = () => {
     const { dispatch: dispatchForm } = useContext(ContextForm)
     const { dispatch } = useContext(MyContext)
-
     const [subMenu, setSubMenu] = useState<null | string>(null)
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
         setSubMenu(subMenu === selectSubMenu ? null : selectSubMenu)
@@ -33,6 +31,7 @@ const LeftFrame = () => {
     const addCardTour = () => {  //меняем стэйт по отображению модального окна
         console.log('окно?')
         dispatchForm({ type: 'update_modal', payload: true })
+
     }
     const changeStateReservour = (index: number | null, e: string | null) => {
         dispatch({ type: 'update_reservours', payload: { index: index, text: e } })

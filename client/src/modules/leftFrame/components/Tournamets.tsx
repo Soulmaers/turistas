@@ -34,8 +34,7 @@ const Tournaments = () => {
         dispatch({ type: 'update_status_user', payload: { ...state.userStatus, tournament: tournaments } })
     }
     const tournaments = state.userStatus.tournament
-    console.log(tournaments)
-    const rows = tournaments.map(e => (<div className="tournament" key={e.id} onClick={() => handlerTour(e.id)}>{e.name}{admin(e.id, e.name, e.created_by)}</div>))
+     const rows = tournaments.map(e => (<div className="tournament" key={e.id} onClick={() => handlerTour(e.id)}>{e.name}{admin(e.id, e.name, e.created_by)}</div>))
     return (
         <div className="container_tournaments">
             {del && <Modal><TextInfoModal text={text} /></Modal>}

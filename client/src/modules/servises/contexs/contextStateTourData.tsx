@@ -9,6 +9,7 @@ export interface Participants {
     userID: number | null
 }
 interface DataTour {
+    id: number | null,
     nameTour: string,
     dateStart: string,
     dateFinish: string,
@@ -27,6 +28,7 @@ export const TourData = createContext<TourDataContext | null>(null);
 export const TourDataProvider: React.FC<TourDataProvider> = ({ children }) => {
 
     const [tour, setTour] = useState<DataTour>({
+        id: null,
         nameTour: '',
         dateStart: '',
         dateFinish: '',

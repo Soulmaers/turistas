@@ -51,6 +51,7 @@ export const useEditTour = () => {
 
             tourData?.setTour((prev) => ({
                 ...prev,
+                id: result.id,
                 nameTour: result.name,
                 dateStart: result.dateStart,
                 dateFinish: result.dateFinish,

@@ -5,7 +5,7 @@ const useAddTour = () => {
 
     const { state, dispatch } = useContext(MyContext);
     const addTour = async ({ ...props }) => {
-
+        console.log(props)
         try {
             const params = {
                 method: 'POST',
@@ -17,10 +17,19 @@ const useAddTour = () => {
             }
             const res = await fetch('http://localhost:3333/api/addTournaments', params)
             const result = await res.json()
+            let updateTournaments;
 
-            const updateTournaments = [...state.userStatus.tournament, result]
+            if (props.idTour) {
+                const updateTourIndex = state.userStatus.tournament.findIndex(e => e.id === props.idTour);
+                updateTournaments = updateTourIndex !== -1
+                    ? state.userStatus.tournament.map((tournament, index) =>
+                        index === updateTourIndex ? { ...tournament, ...result } : tournament)
+                    : [...state.userStatus.tournament, result];
+            } else {
+                updateTournaments = [...state.userStatus.tournament, result];
+            }
             dispatch({ type: 'update_status_user', payload: { ...state.userStatus, tournament: updateTournaments } })
-            return `Турнир ${result.name} создан.`
+            return !props.idTour ? `Турнир ${result.name} создан.` : `Турнир ${result.name} обновлён.`
         }
         catch (e) {
             console.log(e)
