@@ -1,0 +1,31 @@
+.select {
+    margin-left: 5px;
+    width: 40%;
+    color: #fff;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    padding: 2px;
+    box-sizing: border-box;
+    outline: none;
+    font-size: 0.8rem;
+}
+
+.option {
+    color: #4d4646
+}
+
+.weight {
+    margin-left: 5px;
+    width: 40%;
+    color: #fff;
+    background: transparent;
+    padding: 2px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    box-sizing: border-box;
+    outline: none;
+    font-size: 0.8rem;
+
+
+}

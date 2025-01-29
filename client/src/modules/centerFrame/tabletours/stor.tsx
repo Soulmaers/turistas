@@ -10,6 +10,6 @@ export const reglament =
 
 
 export const statusTour: { [key: number]: string } = {
-    1: '(Проводится)',
+    1: '(До окончания)',
     2: '(Завершен)'
 }

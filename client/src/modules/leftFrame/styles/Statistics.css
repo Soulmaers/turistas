@@ -50,5 +50,5 @@ input[type="checkbox"]::before {
     height: 14px;
     width: 14px;
     border-radius: 2px;
-    border: 1px solid gray;
+    border: 1px solid #4d4646;;
 }

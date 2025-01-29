@@ -5,16 +5,17 @@ import '../styles/AddCarTournament.css'
 
 interface TimeDisplayProps {
     status: number;
-    dateStart: string
+    dateStart: string;
+    dateFinish: string
 }
 
-const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart }) => {
+const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish }) => {
 
     const [time, setTime] = useState<string | null>(null);
 
     const calculaterTime = () => {
         const now = new Date();
-        const diff = Number(dateStart) - Math.floor(now.getTime() / 1000);
+        const diff = status === 0 ? Number(dateStart) - Math.floor(now.getTime() / 1000) : Number(dateFinish) - Math.floor(now.getTime() / 1000);
         if (diff > 0) {
             const secondsInMinute = 60;
             const minutesInHour = 60;
@@ -33,18 +34,18 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart }) => {
 
     }
     useEffect(() => {
-        if (status === 0) {
+        if (status === 0 || status === 1) {
             setTime(calculaterTime())
             const intervalId = setInterval(() => setTime(calculaterTime()), 1000);
             return () => clearInterval(intervalId); // Очистка интервала при размонтировании компонента
         } else {
             setTime(null); // Очищаем значение если статус не 0
         }
-    }, [status, dateStart]);
+    }, [status, dateStart, dateFinish]);
 
     return (
         <span className='status'>
-            {status === 0 ? `(Старт: ${time})` : statusTour[status]}
+            {status === 0 ? `(Старт: ${time})` : status === 1 ? `(Завершится через: ${time})` : statusTour[status]}
         </span>
     );
 }

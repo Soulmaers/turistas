@@ -1,0 +1,23 @@
+.container_table {
+    width: 90%;
+    color: #fff;
+}
+
+.styled_table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.styled_table th,
+.styled_table td {
+    border: 1px solid #fff;
+    /* Поля между ячейками */
+    padding: 8px;
+    /* Отступы внутри ячеек */
+    text-align: left;
+    /* Выравнивание текста */
+}
+
+.styled_table th {
+    text-align: center;
+}

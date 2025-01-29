@@ -2,6 +2,7 @@ import React from 'react'
 import { useContext } from 'react'
 import { MyContext, selectContent, selectReservours } from '../servises/contexs/contexts';
 import { ContextForm } from '../servises/contexs/contextCloseForm';
+import { FormCatch } from './modalCatch/components/FormCatch'
 import ModalAddTour from './modalCarTour/components/ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
 import AddCarTournament from './tabletours/components/AddCarTournament'
@@ -12,7 +13,7 @@ import './CenterFrame.css'
 const СenterFrame = () => {
 
     const { state } = useContext(MyContext); // Получаем состояние из контекста
-    const { activForm, stateModal } = useContext(ContextForm)
+    const { stateModal, catchForm } = useContext(ContextForm)
     const content = selectContent(state)
     const updateReservours = selectReservours(state)
     console.log('рендер')
@@ -31,6 +32,7 @@ const СenterFrame = () => {
         <div className='Center_frame'>
             {renderComponents()}
             {stateModal && <Modal><ModalAddTour /></Modal>}
+            {catchForm && <Modal><FormCatch /></Modal>}
         </div>
 
     )

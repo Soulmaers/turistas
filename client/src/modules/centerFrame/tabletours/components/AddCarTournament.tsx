@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import ViewUserBigFish from './ViewUserBigFish'
 import TimeDisplay from './TimeDisplay'
 import TableTournament from './TableToutnaments'
+import { AddCatch } from './AddCatch'
 import { ContextActiv } from '../../../servises/contexs/contextActivId'
 import { reglament } from '../stor'
 import '../styles/AddCarTournament.css'
@@ -18,10 +19,12 @@ const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
 
     const rows = reglament.map((e, index) => <li key={e + index} className="rows_reg">{e}</li>)
     return (<div className="card_tournament">
-        <div className="name">{name}<TimeDisplay status={Number(status)} dateStart={dateStart} /></div>
+        <div className='header_tournament_table'>
+            <div className="name">{name}<TimeDisplay status={Number(status)} dateStart={dateStart} dateFinish={dateFinish} /></div>
+            {Number(status) === 1 && <AddCatch />}</div>
         <div className="body_table">
             <div className="table_tournament">
-                {big_fish ? <TableTournament /> : <div className='questions'></div>}
+                {status ? <TableTournament /> : <div className='questions'></div>}
             </div>
             <ViewUserBigFish bigFish={big_fish} />
         </div>
