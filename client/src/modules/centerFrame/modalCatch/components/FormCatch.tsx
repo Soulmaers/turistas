@@ -2,48 +2,43 @@
 import { useState, useEffect, useRef, useContext } from 'react'
 import { ContextForm } from '../../../servises/contexs/contextCloseForm';
 import '../styles/FormCatch.css'
-import { timeDay } from '../stor';
+import { fishs, reservuors, typeFishing, baits, timeDay } from '../stor';
+import { Selects } from './Selects'
 import { IoSave } from "react-icons/io5";
 
 
 export const FormCatch = () => {
     const { dispatch: dispatchForm } = useContext(ContextForm)
-    const [timeDayKey, setTimeDayKey] = useState('')
+    const [info, setInfo] = useState('')
+    const [formState, setFormState] = useState({
+        'fishs': '',
+        'reservuors': '',
+        'typeFishing': '',
+        'baits': '',
+        'timeDay': '',
+        'weight': '',
+        'comment': ''
+    })
     const modalka = useRef<HTMLDivElement>(null)
+
+    console.log(formState)
     useEffect(() => {
 
         const findTimeDay = () => {
             const nowTime = new Date()
             const hours = nowTime.getHours()
             if (hours < 6) {
-                setTimeDayKey(timeDay[0]); // Ночь
+                setFormState((prev) => ({ ...prev, 'timeDay': '0' }))
             } else if (hours < 12) {
-                setTimeDayKey(timeDay[1]); // Утро
+                setFormState((prev) => ({ ...prev, 'timeDay': '1' }))
             } else if (hours < 18) {
-                setTimeDayKey(timeDay[2]); // День
+                setFormState((prev) => ({ ...prev, 'timeDay': '2' }))
             } else {
-                setTimeDayKey(timeDay[3]); // Вечер
+                setFormState((prev) => ({ ...prev, 'timeDay': '3' }))
             }
         }
 
         findTimeDay()
-
-        /*  if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(position => {
-                  console.log(position.coords.latitude,
-                      position.coords.longitude)
-                  //   setLocation({
-                  ////  latitude: position.coords.latitude,
-                  //  longitude: position.coords.longitude
-                  //});
-              },
-                  error => {
-                      //  setError(error.message);
-                  })
-  
-  
-  
-          }*/
 
 
         const handleClickOutside = (event: MouseEvent) => {
@@ -59,67 +54,48 @@ export const FormCatch = () => {
     }, [])
 
 
-
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const onlyNumbers = event.target.value.replace(/[^0-9]/g, '');
+        setFormState((prev) => ({ ...prev, 'weight': onlyNumbers }))
+    }
+    const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setFormState((prev) => ({ ...prev, 'comment': event.target.value }))
+    }
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, name: string) => {
+        setFormState((prev) => ({ ...prev, [name]: event.target.value }))
+    };
     const closeModal = () => {
         dispatchForm({ type: 'add_catch', payload: false })
+    }
+
+
+    const handlerStart = () => {
+        if (formState['fishs'] === '') {
+            setInfo('Выберите вид рыбы')
+            setTimeout(() => setInfo(''), 3000)
+        } else {
+            console.log(formState)
+        }
+
     }
     return (
         <div className="modal_add_tour" ref={modalka}>
             <div className="header_modal_tour">Карточка улова</div>
             <div className="body_modal_tour">
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Рыба</div>
-                    <select className="select">
-                        <option className='option' value=""></option>
-                        <option className='option' value="0">Лещ</option>
-                        <option className='option' value="1">Щука</option>
-                        <option className='option' value="2">Судак</option>
-                        <option className='option' value="3">Окунь</option>
-                        <option className='option' value="4">Форель</option>
-                        <option className='option' value="4">Другое</option>
-                    </select>
-                </div>
+                <Selects options={fishs} name={'Вид рыбы'} empty={true} selected={formState['fishs']} nameState={'fishs'} onChange={handleSelectChange} />
+
                 <div className="rows_card_tour">
                     <div className="name_car_tour">Вес (граммы)</div>
-                    <input className="weight" placeholder='введите вес рыбы' />
+                    <input className="weight" value={formState['weight']} placeholder='введите вес рыбы' onChange={handleInputChange} />
                 </div>
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Водоём</div>
-                    <select className="select">
-                        <option className='option' value=""></option>
-                        <option className='option' value="0">Финский залив (Соколинское)</option>
-                        <option className='option' value="1">река Волхов (Ленинградская область)</option>
-                        <option className='option' value="2">Ладожское озеро (Креницы)</option>
-                        <option className='option' value="3">Ладожское озеро (Шхеры)</option>
-                        <option className='option' value="4">река Ловать (Новгородская область)</option>
-                    </select>
-                </div>
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Тип ловли</div>
-                    <select className="select">
-                        <option className='option' value=""></option>
-                        <option className='option' value="0">Троллинг</option>
-                        <option className='option' value="1">Заброс с берега</option>
-                        <option className='option' value="2">Заброс с лодки</option>
-                    </select>
-                </div>
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Приманка</div>
-                    <select className="select">
-                        <option className='option' value=""></option>
-                        <option className='option' value="0">Мэпс 3</option>
-                        <option className='option' value="1">Хаски Джерк FT 120</option>
-                        <option className='option' value="2">Колебло</option>
-                        <option className='option' value="3">Резина</option>
-                    </select>
-                </div>
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Время суток</div>
-                    <span className="input_car_tour">{timeDayKey}</span>
-                </div>
+                <Selects options={reservuors} name={'Водоём'} empty={true} selected={formState['reservuors']} nameState={'reservuors'} onChange={handleSelectChange} />
+                <Selects options={typeFishing} name={'Тип ловли'} empty={true} selected={formState['typeFishing']} nameState={'typeFishing'} onChange={handleSelectChange} />
+                <Selects options={baits} name={'Приманка'} empty={true} selected={formState['baits']} nameState={'baits'} onChange={handleSelectChange} />
+                <Selects options={timeDay} name={'Время суток'} empty={false} selected={formState['timeDay']} nameState={'timeDay'} onChange={handleSelectChange} />
+
                 <div className="rows_card_tour">
                     <div className="name_car_tour">Комментарии</div>
-                    <textarea className="input_car_tour"></textarea>
+                    <textarea className="input_car_tour" value={formState['comment']} onChange={handleTextChange}></textarea>
                 </div>
                 <div className="rows_card_tour">
                     <div className="name_car_tour">Фото</div>
@@ -127,8 +103,8 @@ export const FormCatch = () => {
 
             </div>
             <div className="footer_modal_tour">
-                <div className="messageAlarm">{ }</div>
-                <IoSave className="start_tour" />
+                <div className="messageAlarm">{info}</div>
+                <IoSave className="start_tour" onClick={handlerStart} />
             </div>
         </div >
     )
