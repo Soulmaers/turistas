@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState, useContext } from 'react'
-import { MyContext } from '../../servises/contexs/contexts';
 import { ContextForm } from '../../servises/contexs/contextCloseForm';
 import { GiTrophy } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowUp, IoMdAddCircle } from "react-icons/io"
@@ -13,13 +12,17 @@ import Reservoors from './Reservoors'
 import RenderHeaderLeft from './HeadersLeft'
 import HistoryLogs from './HistoryLogs'
 
+import { useDispatch } from 'react-redux';
+import { updateReservours } from '../../../GlobalStor';
+
 import '../styles/LeftFrame.css'
 
 
 
 const LeftFrame = () => {
+    const dispatch = useDispatch();
     const { dispatch: dispatchForm } = useContext(ContextForm)
-    const { dispatch } = useContext(MyContext)
+
     const [subMenu, setSubMenu] = useState<null | string>(null)
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
         setSubMenu(subMenu === selectSubMenu ? null : selectSubMenu)
@@ -34,8 +37,7 @@ const LeftFrame = () => {
 
     }
     const changeStateReservour = (index: number | null, e: string | null) => {
-        dispatch({ type: 'update_reservours', payload: { index: index, text: e } })
-
+        dispatch(updateReservours({ index: index, text: e }))
     }
     const menuItems = [
         { label: 'Турниры', icon: <GiTrophy className="class_icon icon_button" />, component: <Tournaments />, key: 'tournaments' },

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import { MyContext } from '../../../servises/contexs/contexts';
 import { TourData, Participants } from '../../../servises/contexs/contextStateTourData'
 import { ContextForm } from '../../../servises/contexs/contextCloseForm';
 import Modal from '../../../servises/components/Modal'
@@ -9,16 +8,15 @@ import { IoSave } from "react-icons/io5";
 import UserInput from './UserInput';
 import DatePickerInput from './DatePickerInput';
 import '../styles/ModalAddTour.css';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../GlobalStor';
 
 
 const ModalAddTour = () => {
+    const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const tourData = useContext(TourData)
-
     const [dels, setDels] = useState<boolean>(false)
     const [text, setText] = useState<string>('')
-
-    const { state } = useContext(MyContext);
 
     const { dispatch: dispatchForm } = useContext(ContextForm)
     const [startDate, setStartDate] = useState<Date | null>(null);
@@ -61,9 +59,9 @@ const ModalAddTour = () => {
             dateStart: '',
             dateFinish: '',
             users: [{
-                name_user: state.userStatus.user?.name_user || '', // Защита от отсутствия данных
-                contactID: state.userStatus.user?.contactID || '',
-                userID: state.userStatus.user?.id || null // Или любое другое значение по умолчанию
+                name_user: userStatus.user?.name_user || '', // Защита от отсутствия данных
+                contactID: userStatus.user?.contactID || '',
+                userID: userStatus.user?.id || null // Или любое другое значение по умолчанию
             }]
         })
     };
@@ -77,7 +75,7 @@ const ModalAddTour = () => {
         if (tourData?.tour.users.length !== 0 && hasName && hasStartDate && hasFinishDate && hasUsers) {
             const startUnixTime = (new Date(startDate)).getTime() / 1000
             const finishUnixTime = (new Date(finishDate)).getTime() / 1000
-            const created_by = state.userStatus.user?.id
+            const created_by = userStatus.user?.id
             const users = tourData?.tour.users
             const idTour = tourData?.tour.id
             const res = await addTour({ idTour, name, startUnixTime, finishUnixTime, created_by, users })

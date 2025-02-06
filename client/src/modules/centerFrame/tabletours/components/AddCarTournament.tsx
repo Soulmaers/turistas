@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import ViewUserBigFish from './ViewUserBigFish'
 import TimeDisplay from './TimeDisplay'
 import TableTournament from './TableToutnaments'
@@ -11,6 +11,7 @@ import { Tournament } from '../../../form/components/Interface'
 
 
 const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
+
     const { idClickTour } = useContext(ContextActiv)
 
     const celevoys = data.find(e => e.id === idClickTour)

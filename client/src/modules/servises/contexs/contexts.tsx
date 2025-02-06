@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactNode, useReducer } from 'react';
 import { User } from '../../form/components/Interface'
 // Интерфейс для состояния контекста
-
+/*
 interface UpdateReservours {
     index: number | null,
     text: string | null
@@ -66,3 +66,4 @@ export const MyProvider: React.FC<MyProviderProps> = ({ children }) => {
 export const selectUserStatus = (state: MyContextType['state']) => state.userStatus;
 export const selectContent = (state: MyContextType['state']) => state.content;
 export const selectReservours = (state: MyContextType['state']) => state.updateReservours;
+*/

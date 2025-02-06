@@ -1,6 +1,5 @@
 import React from 'react'
 import { useContext } from 'react'
-import { MyContext, selectContent, selectReservours } from '../servises/contexs/contexts';
 import { ContextForm } from '../servises/contexs/contextCloseForm';
 import { FormCatch } from './modalCatch/components/FormCatch'
 import ModalAddTour from './modalCarTour/components/ModalAddTour'
@@ -9,22 +8,24 @@ import AddCarTournament from './tabletours/components/AddCarTournament'
 import Modal from '../servises/components/Modal'
 import './CenterFrame.css'
 
+import { useSelector } from 'react-redux';
+import { RootState } from '../../GlobalStor';
+
 
 const СenterFrame = () => {
 
-    const { state } = useContext(MyContext); // Получаем состояние из контекста
+    const content = useSelector((state: RootState) => state.slice.content);
+    const updateReservourss = useSelector((state: RootState) => state.slice.updateReservours);
+    const userStatus = useSelector((state: RootState) => state.slice.userStatus);
+
     const { stateModal, catchForm } = useContext(ContextForm)
-    const content = selectContent(state)
-    const updateReservours = selectReservours(state)
-    console.log('рендер')
     console.log(content)
-    console.log(state.userStatus.tournament)
     const renderComponents = () => {
-        if (updateReservours.index !== null) {
-            return <WiewCardReservours index={updateReservours.index} text={updateReservours.text} />
+        if (updateReservourss.index !== null) {
+            return <WiewCardReservours index={updateReservourss.index} text={updateReservourss.text} />
         }
         else {
-            return content !== null ? <AddCarTournament data={state.userStatus.tournament} /> : <div className="logo_center"></div> //{/*<div className="logo_center"></div>*/ }
+            return content !== null ? <AddCarTournament data={userStatus.tournament} /> : <div className="logo_center"></div>
         }
     }
 

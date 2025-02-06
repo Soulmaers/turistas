@@ -1,9 +1,12 @@
-import { useContext } from 'react'
-import { MyContext } from '../../servises/contexs/contexts';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { updateStatusUser, RootState } from '../../../GlobalStor'
 
 const useAddTour = () => {
 
-    const { state, dispatch } = useContext(MyContext);
+    const userStatus = useSelector((state: RootState) => state.slice.userStatus);
+    const dispatch = useDispatch()
+
     const addTour = async ({ ...props }) => {
         console.log(props)
         try {
@@ -20,15 +23,15 @@ const useAddTour = () => {
             let updateTournaments;
 
             if (props.idTour) {
-                const updateTourIndex = state.userStatus.tournament.findIndex(e => e.id === props.idTour);
+                const updateTourIndex = userStatus.tournament.findIndex(e => e.id === props.idTour);
                 updateTournaments = updateTourIndex !== -1
-                    ? state.userStatus.tournament.map((tournament, index) =>
+                    ? userStatus.tournament.map((tournament, index) =>
                         index === updateTourIndex ? { ...tournament, ...result } : tournament)
-                    : [...state.userStatus.tournament, result];
+                    : [...userStatus.tournament, result];
             } else {
-                updateTournaments = [...state.userStatus.tournament, result];
+                updateTournaments = [...userStatus.tournament, result];
             }
-            dispatch({ type: 'update_status_user', payload: { ...state.userStatus, tournament: updateTournaments } })
+            dispatch(updateStatusUser({ ...userStatus, tournament: updateTournaments }))
             return !props.idTour ? `Турнир ${result.name} создан.` : `Турнир ${result.name} обновлён.`
         }
         catch (e) {

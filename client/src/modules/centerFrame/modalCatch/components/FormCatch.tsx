@@ -17,7 +17,9 @@ export const FormCatch = () => {
         'baits': '',
         'timeDay': '',
         'weight': '',
-        'comment': ''
+        'comment': '',
+        'idTour': null,
+        'idUser': null
     })
     const modalka = useRef<HTMLDivElement>(null)
 
