@@ -1,6 +1,8 @@
 
-import { useState, useEffect, useRef, useContext } from 'react'
-import { ContextForm } from '../../../servises/contexs/contextCloseForm';
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../GlobalStor'
+import { add_catch } from '../../../../GlobalStor'
 import '../styles/FormCatch.css'
 import { fishs, reservuors, typeFishing, baits, timeDay } from '../stor';
 import { Selects } from './Selects'
@@ -8,7 +10,10 @@ import { IoSave } from "react-icons/io5";
 
 
 export const FormCatch = () => {
-    const { dispatch: dispatchForm } = useContext(ContextForm)
+    const user = useSelector((state: RootState) => state.slice.userStatus)
+    const idTour = useSelector((state: RootState) => state.slice.idClickTour)
+    const dispatch = useDispatch()
+    console.log(idTour)
     const [info, setInfo] = useState('')
     const [formState, setFormState] = useState({
         'fishs': '',
@@ -18,8 +23,8 @@ export const FormCatch = () => {
         'timeDay': '',
         'weight': '',
         'comment': '',
-        'idTour': null,
-        'idUser': null
+        'idTour': idTour,
+        'idUser': user?.user?.id
     })
     const modalka = useRef<HTMLDivElement>(null)
 
@@ -56,22 +61,21 @@ export const FormCatch = () => {
     }, [])
 
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const onlyNumbers = event.target.value.replace(/[^0-9]/g, '');
         setFormState((prev) => ({ ...prev, 'weight': onlyNumbers }))
-    }
-    const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    }, [])
+    const handleTextChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setFormState((prev) => ({ ...prev, 'comment': event.target.value }))
-    }
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, name: string) => {
+    }, [])
+    const handleSelectChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>, name: string) => {
         setFormState((prev) => ({ ...prev, [name]: event.target.value }))
-    };
-    const closeModal = () => {
-        dispatchForm({ type: 'add_catch', payload: false })
-    }
+    }, []);
+    const closeModal = useCallback(() => {
+        dispatch(add_catch(false))
+    }, [dispatch])
 
-
-    const handlerStart = () => {
+    const handlerStart = useCallback(() => {
         if (formState['fishs'] === '') {
             setInfo('Выберите вид рыбы')
             setTimeout(() => setInfo(''), 3000)
@@ -79,7 +83,7 @@ export const FormCatch = () => {
             console.log(formState)
         }
 
-    }
+    }, [])
     return (
         <div className="modal_add_tour" ref={modalka}>
             <div className="header_modal_tour">Карточка улова</div>

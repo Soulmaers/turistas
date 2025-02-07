@@ -1,6 +1,6 @@
 import React from 'react'
-import { useState, useContext } from 'react'
-import { ContextForm } from '../../servises/contexs/contextCloseForm';
+import { useState } from 'react'
+
 import { GiTrophy } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowUp, IoMdAddCircle } from "react-icons/io"
 import { FaChartGantt } from "react-icons/fa6"
@@ -13,7 +13,7 @@ import RenderHeaderLeft from './HeadersLeft'
 import HistoryLogs from './HistoryLogs'
 
 import { useDispatch } from 'react-redux';
-import { updateReservours } from '../../../GlobalStor';
+import { updateReservours, update_modal } from '../../../GlobalStor';
 
 import '../styles/LeftFrame.css'
 
@@ -21,7 +21,6 @@ import '../styles/LeftFrame.css'
 
 const LeftFrame = () => {
     const dispatch = useDispatch();
-    const { dispatch: dispatchForm } = useContext(ContextForm)
 
     const [subMenu, setSubMenu] = useState<null | string>(null)
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
@@ -33,8 +32,7 @@ const LeftFrame = () => {
 
     const addCardTour = () => {  //меняем стэйт по отображению модального окна
         console.log('окно?')
-        dispatchForm({ type: 'update_modal', payload: true })
-
+        dispatch(update_modal(true))
     }
     const changeStateReservour = (index: number | null, e: string | null) => {
         dispatch(updateReservours({ index: index, text: e }))

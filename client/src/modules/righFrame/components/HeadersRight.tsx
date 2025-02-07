@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-import { ContextForm } from '../../servises/contexs/contextCloseForm'
 
 import '../styles/HeadersRight.css'
 import { FaTrophy, FaStar } from "react-icons/fa";
@@ -7,19 +5,18 @@ import { FaFish } from "react-icons/fa6"
 import { IoSettingsSharp, IoLogOut } from "react-icons/io5"
 
 import { useSelector, useDispatch } from 'react-redux';
-import { updateContent, updateStatusUser, RootState } from '../../../GlobalStor';
-const RenderHeaderRight = () => {
+import { updateContent, updateStatusUser, RootState, controll_modal_form } from '../../../GlobalStor';
 
+
+const RenderHeaderRight = () => {
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const dispatch = useDispatch()
-    const { dispatch: dispatchForm } = useContext(ContextForm)
-
 
     const { name_user = "", trophys = 0, fishs = 0, stars = 0 } = userStatus.user || {};
 
     const onClick = () => {
         dispatch(updateContent(null))
-        dispatchForm({ type: 'controll_modal_form', payload: true })
+        dispatch(controll_modal_form(true))
         dispatch(updateStatusUser({ user: null, tournament: [] }))
     }
     return (

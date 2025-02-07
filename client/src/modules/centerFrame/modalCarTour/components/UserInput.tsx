@@ -1,6 +1,6 @@
 import React from 'react'
 import { useCallback } from 'react'
-import { Participants } from '../../../servises/contexs/contextStateTourData'
+import { Participants } from '../../../../GlobalStor'
 import { IoMdAddCircle, IoMdRemoveCircle } from "react-icons/io";
 import '../styles/UserInput.css'
 

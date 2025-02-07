@@ -1,6 +1,5 @@
 import React from 'react'
-import { useContext } from 'react'
-import { ContextForm } from '../servises/contexs/contextCloseForm';
+
 import { FormCatch } from './modalCatch/components/FormCatch'
 import ModalAddTour from './modalCarTour/components/ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
@@ -13,18 +12,18 @@ import { RootState } from '../../GlobalStor';
 
 
 const СenterFrame = () => {
-
     const content = useSelector((state: RootState) => state.slice.content);
     const updateReservourss = useSelector((state: RootState) => state.slice.updateReservours);
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
+    const stateModal = useSelector((state: RootState) => state.slice.stateModal);
+    const catchForm = useSelector((state: RootState) => state.slice.catchForm);
 
-    const { stateModal, catchForm } = useContext(ContextForm)
-    console.log(content)
     const renderComponents = () => {
         if (updateReservourss.index !== null) {
             return <WiewCardReservours index={updateReservourss.index} text={updateReservourss.text} />
         }
         else {
+            console.log(content)
             return content !== null ? <AddCarTournament data={userStatus.tournament} /> : <div className="logo_center"></div>
         }
     }

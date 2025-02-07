@@ -12,7 +12,7 @@ interface Props {
 export const Selects: React.FC<Props> = ({ options, name, empty, selected, nameState, onChange }) => {
 
     const option = useMemo(() => options.map(e => (<option key={e.text + e.value} className='option' value={e.value}>{e.text}</option>)), [options])
-    console.log('рендер селектов')
+
     return (
         <div className="rows_card_tour">
             <div className="name_car_tour">{name}</div>

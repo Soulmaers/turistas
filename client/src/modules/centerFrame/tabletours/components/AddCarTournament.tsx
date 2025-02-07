@@ -1,9 +1,11 @@
-import React, { useContext, useRef } from 'react'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, click_tour } from '../../../../GlobalStor'
 import ViewUserBigFish from './ViewUserBigFish'
 import TimeDisplay from './TimeDisplay'
 import TableTournament from './TableToutnaments'
 import { AddCatch } from './AddCatch'
-import { ContextActiv } from '../../../servises/contexs/contextActivId'
+
 import { reglament } from '../stor'
 import '../styles/AddCarTournament.css'
 
@@ -11,9 +13,14 @@ import { Tournament } from '../../../form/components/Interface'
 
 
 const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
+    const dispatch = useDispatch()
 
-    const { idClickTour } = useContext(ContextActiv)
-
+    const idClickTour = useSelector((state: RootState) => state.slice.idClickTour)
+    useEffect(() => {
+        if (!idClickTour) {
+            dispatch(click_tour(data[data.length - 1].id))
+        }
+    }, [])
     const celevoys = data.find(e => e.id === idClickTour)
     const celevoy = celevoys ? celevoys : data[data.length - 1]
     const { name, dateStart, dateFinish, status, big_fish } = celevoy

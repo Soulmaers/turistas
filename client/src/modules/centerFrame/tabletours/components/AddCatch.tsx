@@ -1,15 +1,14 @@
-import { useContext, useState } from 'react'
-import { ContextForm } from '../../../servises/contexs/contextCloseForm'
-
+import { useDispatch } from 'react-redux'
+import { add_catch } from '../../../../GlobalStor'
 import '../styles/AddCatch.css'
 import { IoMdAddCircle } from "react-icons/io"
 
 
 export const AddCatch = () => {
-    const { dispatch: dispatchForm } = useContext(ContextForm)
 
+    const dispatch = useDispatch()
     const handler = () => {
-        dispatchForm({ type: 'add_catch', payload: true })
+        dispatch(add_catch(true))
     }
     return (<div className="add_catch">Добавить улов <IoMdAddCircle className='add_catch_btn' onClick={handler} /></div>)
 }

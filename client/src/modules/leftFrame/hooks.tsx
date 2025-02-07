@@ -1,8 +1,10 @@
 
 
 import { useContext } from 'react'
-import { ContextForm } from '../servises/contexs/contextCloseForm'
-import { TourData } from '../servises/contexs/contextStateTourData'
+import { useDispatch, useSelector } from 'react-redux'
+import { update_modal, set_tour, RootState } from '../../GlobalStor'
+
+//import { TourData } from '../servises/contexs/contextStateTourData'
 export const useDeleteTour = () => {
 
     const deleteTour = async (id: number, name: string) => {
@@ -31,9 +33,9 @@ export const useDeleteTour = () => {
 
 
 export const useEditTour = () => {
-    const { stateModal, dispatch } = useContext(ContextForm)
-    const tourData = useContext(TourData)
+    const dispatch = useDispatch()
 
+    const tourData = useSelector((state: RootState) => state.slice.tour)
     const editFunc = async (id: number) => {
         const param = {
             method: 'POST',
@@ -46,17 +48,27 @@ export const useEditTour = () => {
             console.log('тут')
             const res = await fetch(`http://localhost:3333/api/getContentTour`, param)
             const result = await res.json()
-            dispatch({ type: 'update_modal', payload: true })
-            console.log(result)
+            dispatch(update_modal(true))
 
-            tourData?.setTour((prev) => ({
-                ...prev,
-                id: result.id,
-                nameTour: result.name,
-                dateStart: result.dateStart,
-                dateFinish: result.dateFinish,
-                users: result.users
-            }))
+            if (tourData) {
+                dispatch(set_tour({
+                    ...tourData,
+                    id: result.id,
+                    nameTour: result.name,
+                    dateStart: result.dateStart,
+                    dateFinish: result.dateFinish,
+                    users: result.users
+                }
+                ))
+            }
+            /* tourData?.setTour((prev) => ({
+                 ...prev,
+                 id: result.id,
+                 nameTour: result.name,
+                 dateStart: result.dateStart,
+                 dateFinish: result.dateFinish,
+                 users: result.users
+             }))*/
             return
         }
         catch (e) {

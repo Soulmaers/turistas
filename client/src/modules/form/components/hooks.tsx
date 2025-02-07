@@ -1,22 +1,19 @@
 import React from 'react'
 import { useState, useContext, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, set_tour } from '../../../GlobalStor';
 import { User } from './Interface'
-import { ContextForm } from '../../servises/contexs/contextCloseForm'
-import { TourData } from '../../servises/contexs/contextStateTourData'
 
 
-import { updateContent, updateStatusUser } from '../../../GlobalStor';
+
+import { updateContent, updateStatusUser, controll_modal_form } from '../../../GlobalStor';
 
 type UserResponce = User | null
 
 
 const useForm = () => {
-
     const dispatch = useDispatch()
-    const tourContext = useContext(TourData)
-
-    const { dispatch: dispatchForm } = useContext(ContextForm)
+    const tour = useSelector((state: RootState) => state.slice.tour)
     const [subField, setSubField] = useState<boolean>(true)
     const [errorMessage, setErrorMessage] = useState<string>('')
     const [getUser, setGetUser] = useState<boolean>(false)
@@ -38,7 +35,6 @@ const useForm = () => {
     const findUser = () => {
         const contactValue = contactRef.current ? contactRef.current.value.toString() : '';
         const nameValue = nameRef.current ? nameRef.current.value.trim() : '';
-        console.log(subField)
         // Проверка на некорректный ввод
         if (subField) {
             if (contactValue.length < 11) {
@@ -82,10 +78,14 @@ const useForm = () => {
                 }
 
                 dispatch(updateStatusUser(data))
-                tourContext?.setTour((prev) => ({ ...prev, users: [{ name_user: data.user?.name_user || '', contactID: data.user?.contactID || '', userID: data.user?.id || null }] }))
-
-                dispatchForm({ type: 'controll_modal_form', payload: false })
-
+                if (tour) {
+                    dispatch(set_tour({
+                        ...tour,
+                        users: [{ name_user: data.user?.name_user || '', contactID: data.user?.contactID || '', userID: data.user?.id || null }]
+                    }))
+                }
+                // tourContext?.setTour((prev) => ({ ...prev, users: [{ name_user: data.user?.name_user || '', contactID: data.user?.contactID || '', userID: data.user?.id || null }] }))
+                dispatch(controll_modal_form(false))
                 dispatch(updateContent(statusTour))
 
             }

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useState, useContext } from 'react'
-import { ContextForm } from './modules/servises/contexs/contextCloseForm';
 
+import { useSelector } from 'react-redux';
+import { RootState } from './GlobalStor';
 import LeftFrame from './modules/leftFrame/components/LeftFrame'
 import RightFrame from './modules/righFrame/components/RightFrame'
 import CenterFrame from './modules/centerFrame/CenterFrame'
@@ -13,10 +13,8 @@ import Modal from './modules/servises/components/Modal'
 import './App.css';
 
 function App() {
+  const activForm = useSelector((state: RootState) => state.slice.activForm)
 
-  const { activForm, dispatch } = useContext(ContextForm)
-  console.log(activForm)
-  console.log('рендер')
   return (
 
     <div className="App">

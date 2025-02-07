@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { ContextActiv } from '../../servises/contexs/contextActivId';
+import React, { useState } from 'react'
+
 import { useDeleteTour, useEditTour } from '../hooks'
 import Modal from '../../servises/components/Modal'
 import TextInfoModal from '../../servises/components/TextInfoModal'
@@ -8,7 +8,7 @@ import { MdDelete } from "react-icons/md";
 import { FaWrench } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { updateReservours, updateStatusUser, RootState } from '../../../GlobalStor';
+import { updateReservours, updateStatusUser, click_tour, RootState } from '../../../GlobalStor';
 
 const Tournaments = () => {
 
@@ -17,7 +17,6 @@ const Tournaments = () => {
 
     const [del, setDel] = useState(false)
     const [text, setText] = useState('')
-    const { dispatch: dispatchClickTour } = useContext(ContextActiv)
     const { deleteTour } = useDeleteTour()
     const { editFunc } = useEditTour()
 
@@ -27,7 +26,7 @@ const Tournaments = () => {
     }
 
     const handlerTour = (id: number) => {
-        dispatchClickTour({ type: 'click_tour', payload: id })
+        dispatch(click_tour(id))
         dispatch(updateReservours({ index: null, text: null }))
     }
     const deleteHandler = async (id: number, name: string) => {
