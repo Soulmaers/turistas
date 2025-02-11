@@ -1,6 +1,7 @@
 
 const { JobUsers } = require('../modules/JobUsers')
-
+const { GetContent } = require('../modules/GetContent')
+const { ProcessCatch } = require('../modules/ProcessCatch')
 
 exports.addTournament = async (req, res) => {
 
@@ -27,6 +28,62 @@ exports.addTournament = async (req, res) => {
     }
 }
 
+exports.getContent = async (req, res) => {
+    const [reservours, fishs, baits, timeDay, typeCatch] = await Promise.all([
+        GetContent.getReservours(),
+        GetContent.getFishs(),
+        GetContent.getBaits(),
+        GetContent.getTimeDay(),
+        GetContent.getTypeCatch()])
+    res.json({ reservours, fishs, baits, timeDay, typeCatch })
+}
+
+exports.setCatch = async (req, res) => {
+    const data = req.body.data
+    data.date = Math.floor((new Date().getTime()) / 1000)
+    const result = await ProcessCatch.setCatch(data)
+    res.json(result)
+}
+
+exports.getCatchs = async (req, res) => {
+    const idTour = req.body.idTour
+    const result = await ProcessCatch.getCatchs(idTour)
+    console.log(result)
+    const fishCategories = ["Лещ", "Щука", "Судак", "Окунь", "Форель", "Другое", "Всего"];
+
+
+    const data = [];
+
+    result.forEach(item => {
+        const { name_user, name } = item;
+        const fishType = fishCategories.includes(name) ? name : "Другое";
+
+        let userEntry = data.find(entry => entry.name_user === name_user);
+
+        if (!userEntry) {
+            userEntry = {
+                name_user: name_user,
+                "Лещ": 0,
+                "Щука": 0,
+                "Судак": 0,
+                "Окунь": 0,
+                "Форель": 0,
+                "Другое": 0,
+                "Всего": 0
+            };
+            data.push(userEntry);
+        }
+
+        userEntry[fishType]++;
+        userEntry["Всего"]++;
+    });
+
+
+    console.log(data)
+    res.json(data)
+}
+
+
 exports.getUserCheck = async (req, res) => {
     const { contactID, username } = req.body
 
@@ -50,7 +107,6 @@ exports.getUserCheck = async (req, res) => {
 }
 
 exports.deleteTour = async (req, res) => {
-    console.log('здесь')
     const id = req.body.id
     const instance = new JobUsers()
     const result = await instance.deleteTournament(id)

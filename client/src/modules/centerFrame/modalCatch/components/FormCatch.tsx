@@ -1,30 +1,46 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../GlobalStor'
-import { add_catch } from '../../../../GlobalStor'
+import { useSetCatch } from '../hooks/setCatch'
+import { RootState, add_catch, set_action_catch } from '../../../../GlobalStor'
+
 import '../styles/FormCatch.css'
-import { fishs, reservuors, typeFishing, baits, timeDay } from '../stor';
+
 import { Selects } from './Selects'
 import { IoSave } from "react-icons/io5";
 
 
+export interface Catch {
+    fishs: string;
+    reservuors: string;
+    typeFishing: string;
+    baits: string;
+    timeDay: string;
+    weight: string;
+    comment: string;
+    idTour: number | null;
+    idUser: number | undefined
+}
+
 export const FormCatch = () => {
+    const { setCatch } = useSetCatch()
     const user = useSelector((state: RootState) => state.slice.userStatus)
     const idTour = useSelector((state: RootState) => state.slice.idClickTour)
+    const dataContent = useSelector((state: RootState) => state.slice.dataContent)
+    const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
     const dispatch = useDispatch()
-    console.log(idTour)
-    const [info, setInfo] = useState('')
-    const [formState, setFormState] = useState({
-        'fishs': '',
-        'reservuors': '',
-        'typeFishing': '',
-        'baits': '',
-        'timeDay': '',
-        'weight': '',
-        'comment': '',
-        'idTour': idTour,
-        'idUser': user?.user?.id
+
+    const [info, setInfo] = useState<string>('')
+    const [formState, setFormState] = useState<Catch>({
+        fishs: '',
+        reservuors: '',
+        typeFishing: '',
+        baits: '',
+        timeDay: '',
+        weight: '',
+        comment: '',
+        idTour: idTour,
+        idUser: user?.user?.id
     })
     const modalka = useRef<HTMLDivElement>(null)
 
@@ -35,13 +51,13 @@ export const FormCatch = () => {
             const nowTime = new Date()
             const hours = nowTime.getHours()
             if (hours < 6) {
-                setFormState((prev) => ({ ...prev, 'timeDay': '0' }))
-            } else if (hours < 12) {
                 setFormState((prev) => ({ ...prev, 'timeDay': '1' }))
-            } else if (hours < 18) {
+            } else if (hours < 12) {
                 setFormState((prev) => ({ ...prev, 'timeDay': '2' }))
-            } else {
+            } else if (hours < 18) {
                 setFormState((prev) => ({ ...prev, 'timeDay': '3' }))
+            } else {
+                setFormState((prev) => ({ ...prev, 'timeDay': '4' }))
             }
         }
 
@@ -75,29 +91,40 @@ export const FormCatch = () => {
         dispatch(add_catch(false))
     }, [dispatch])
 
-    const handlerStart = useCallback(() => {
+    const handlerStart = async () => {
         if (formState['fishs'] === '') {
             setInfo('Выберите вид рыбы')
             setTimeout(() => setInfo(''), 3000)
         } else {
-            console.log(formState)
+            const mess = await setCatch(formState)
+            setInfo(mess)
+            dispatch(set_action_catch(actionCatch + 1))
+            setTimeout(() => {
+                setInfo('');
+                closeModal();
+            }, 3000)
         }
 
-    }, [])
+    }
+    const fishs = dataContent.fishs?.map(e => ({ value: e.id, text: e.name }))
+    const reservuors = dataContent.reservours?.map(e => ({ value: e.id, text: e.name }))
+    const baits = dataContent.baits?.map(e => ({ value: e.id, text: e.name }))
+    const timeDay = dataContent.timeDay?.map(e => ({ value: e.id, text: e.name }))
+    const typeCatch = dataContent.typeCatch?.map(e => ({ value: e.id, text: e.name }))
     return (
         <div className="modal_add_tour" ref={modalka}>
             <div className="header_modal_tour">Карточка улова</div>
             <div className="body_modal_tour">
-                <Selects options={fishs} name={'Вид рыбы'} empty={true} selected={formState['fishs']} nameState={'fishs'} onChange={handleSelectChange} />
+                <Selects options={fishs || []} name={'Вид рыбы'} empty={true} selected={formState['fishs']} nameState={'fishs'} onChange={handleSelectChange} />
 
                 <div className="rows_card_tour">
                     <div className="name_car_tour">Вес (граммы)</div>
                     <input className="weight" value={formState['weight']} placeholder='введите вес рыбы' onChange={handleInputChange} />
                 </div>
-                <Selects options={reservuors} name={'Водоём'} empty={true} selected={formState['reservuors']} nameState={'reservuors'} onChange={handleSelectChange} />
-                <Selects options={typeFishing} name={'Тип ловли'} empty={true} selected={formState['typeFishing']} nameState={'typeFishing'} onChange={handleSelectChange} />
-                <Selects options={baits} name={'Приманка'} empty={true} selected={formState['baits']} nameState={'baits'} onChange={handleSelectChange} />
-                <Selects options={timeDay} name={'Время суток'} empty={false} selected={formState['timeDay']} nameState={'timeDay'} onChange={handleSelectChange} />
+                <Selects options={reservuors || []} name={'Водоём'} empty={true} selected={formState['reservuors']} nameState={'reservuors'} onChange={handleSelectChange} />
+                <Selects options={typeCatch || []} name={'Тип ловли'} empty={true} selected={formState['typeFishing']} nameState={'typeFishing'} onChange={handleSelectChange} />
+                <Selects options={baits || []} name={'Приманка'} empty={true} selected={formState['baits']} nameState={'baits'} onChange={handleSelectChange} />
+                <Selects options={timeDay || []} name={'Время суток'} empty={false} selected={formState['timeDay']} nameState={'timeDay'} onChange={handleSelectChange} />
 
                 <div className="rows_card_tour">
                     <div className="name_car_tour">Комментарии</div>

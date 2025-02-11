@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import { useGetDataContent } from './modules/servises/hooks/getDataContent'
 import { useSelector } from 'react-redux';
 import { RootState } from './GlobalStor';
 import LeftFrame from './modules/leftFrame/components/LeftFrame'
@@ -13,6 +14,14 @@ import Modal from './modules/servises/components/Modal'
 import './App.css';
 
 function App() {
+  const { getContent } = useGetDataContent()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getContent();
+    };
+    fetchData();
+  }, [])
   const activForm = useSelector((state: RootState) => state.slice.activForm)
 
   return (

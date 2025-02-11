@@ -83,7 +83,6 @@ class JobUsers {
 
 
     async createTournament(id, name, startTime, finishTime, created_by) {
-        console.log(id)
         const status = 0;
         // Определяем SQL для проверки существования турнира
         const checkExistenceModel = `SELECT COUNT(*) as count FROM tournaments WHERE id = @id`;
@@ -100,7 +99,6 @@ class JobUsers {
                 .query(checkExistenceModel);
 
             const exists = existenceResult.recordset[0].count > 0;
-            console.log(exists)
             let result;
 
             if (exists) {
@@ -125,7 +123,6 @@ class JobUsers {
             }
 
             // Возвращаем созданную или обновленную запись
-            console.log()
             return result.recordset[0];
 
         } catch (e) {
@@ -182,7 +179,6 @@ class JobUsers {
 
 
     async deleteTournament(id) {
-        console.log(id)
         const post = `DELETE FROM tournaments WHERE id=@id`
 
         try {

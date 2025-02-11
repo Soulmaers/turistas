@@ -11,7 +11,7 @@ interface IndexProps {
 }
 const WiewCardReservours: React.FC<IndexProps> = ({ index, text }) => {
 
-    console.log('рендер')
+    console.log(index, text)
     return (
         <React.Fragment>
             <div className="title">{text}</div>

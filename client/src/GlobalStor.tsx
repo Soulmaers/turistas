@@ -7,6 +7,18 @@ interface UpdateReservours {
     text: string | null;
 }
 
+interface FishCatch {
+    'Лещ': number,
+    'Щука': number,
+    'Судак': number,
+    'Окунь': number,
+    'Форель': number,
+    'Другое': number,
+    'Всего': number,
+    name_user: string | null;
+
+}
+
 // Интерфейс для состояния
 interface MyState {
     content: number | null | undefined;
@@ -16,7 +28,16 @@ interface MyState {
     stateModal: boolean,
     catchForm: boolean,
     idClickTour: number | null
-    tour: DataTour
+    tour: DataTour,
+    dataContent: {
+        reservours: null | { name: string, discription: string, image: string, id: number }[],
+        fishs: null | { name: string, id: number }[],
+        baits: null | { name: string, id: number }[],
+        timeDay: null | { name: string, id: number }[],
+        typeCatch: null | { name: string, id: number }[],
+    }
+    catchs: FishCatch[],
+    actionCatch: number
 }
 
 export interface Participants {
@@ -49,7 +70,16 @@ const initialState: MyState = {
         dateStart: '',
         dateFinish: '',
         users: []
-    }
+    },
+    dataContent: {
+        reservours: null,
+        fishs: null,
+        baits: null,
+        timeDay: null,
+        typeCatch: null
+    },
+    catchs: [],
+    actionCatch: 0
 
 };
 
@@ -82,12 +112,21 @@ const slice = createSlice({
         set_tour: (state, action: PayloadAction<DataTour>) => {
             state.tour = action.payload;
         },
+        set_dataContent: (state, action: PayloadAction<{ reservours: null; fishs: null; baits: null; timeDay: null, typeCatch: null }>) => {
+            state.dataContent = action.payload;
+        },
+        set_catchs: (state, action: PayloadAction<FishCatch[]>) => {
+            state.catchs = action.payload;
+        },
+        set_action_catch: (state, action: PayloadAction<number>) => {
+            state.actionCatch = action.payload;
+        },
 
     },
 });
 
 // Экспортируем actions
-export const { updateContent, updateReservours, updateStatusUser, controll_modal_form, update_modal, add_catch, click_tour, set_tour } = slice.actions;
+export const { updateContent, updateReservours, updateStatusUser, controll_modal_form, update_modal, add_catch, click_tour, set_tour, set_dataContent, set_catchs, set_action_catch } = slice.actions;
 
 // Экспортируем редьюсер
 export const myReducer = slice.reducer;

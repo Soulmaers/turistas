@@ -18,12 +18,17 @@ const СenterFrame = () => {
     const stateModal = useSelector((state: RootState) => state.slice.stateModal);
     const catchForm = useSelector((state: RootState) => state.slice.catchForm);
 
+    console.log(content)
+    console.log(userStatus)
+    console.log(stateModal)
+    console.log(catchForm)
+    console.log(updateReservourss)
     const renderComponents = () => {
         if (updateReservourss.index !== null) {
             return <WiewCardReservours index={updateReservourss.index} text={updateReservourss.text} />
         }
         else {
-            console.log(content)
+            //  console.log(content)
             return content !== null ? <AddCarTournament data={userStatus.tournament} /> : <div className="logo_center"></div>
         }
     }

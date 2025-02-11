@@ -8,3 +8,7 @@ router.post('/api/addTournaments', controllers.addTournament)
 router.post('/api/user/check', controllers.getUserCheck)
 router.post('/api/deleteTour', controllers.deleteTour)
 router.post('/api/getContentTour', controllers.getContentTour)
+router.get('/api/getContent', controllers.getContent)
+router.post('/api/setCatch', controllers.setCatch)
+router.post('/api/getCatchs', controllers.getCatchs)
+

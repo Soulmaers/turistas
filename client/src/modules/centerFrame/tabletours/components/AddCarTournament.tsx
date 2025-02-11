@@ -32,7 +32,7 @@ const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
             {Number(status) === 1 && <AddCatch />}</div>
         <div className="body_table">
             <div className="table_tournament">
-                {status ? <TableTournament /> : <div className='questions'></div>}
+                {status ? <TableTournament idTour={celevoy.id} /> : <div className='questions'></div>}
             </div>
             <ViewUserBigFish bigFish={big_fish} />
         </div>
