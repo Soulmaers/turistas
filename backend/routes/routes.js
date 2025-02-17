@@ -11,4 +11,4 @@ router.post('/api/getContentTour', controllers.getContentTour)
 router.get('/api/getContent', controllers.getContent)
 router.post('/api/setCatch', controllers.setCatch)
 router.post('/api/getCatchs', controllers.getCatchs)
-
+router.post('/api/getStatusUser', controllers.getStatusUser)

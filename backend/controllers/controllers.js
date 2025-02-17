@@ -37,20 +37,24 @@ exports.getContent = async (req, res) => {
         GetContent.getTypeCatch()])
     res.json({ reservours, fishs, baits, timeDay, typeCatch })
 }
+exports.getStatusUser = async (req, res) => {
+    const id = req.body.id
+    const result = await ProcessCatch.getStatusUser(id)
+    res.json(result)
+}
+
 
 exports.setCatch = async (req, res) => {
     const data = req.body.data
     data.date = Math.floor((new Date().getTime()) / 1000)
-    const result = await ProcessCatch.setCatch(data)
-    res.json(result)
+    const [result, ok] = await Promise.all([ProcessCatch.setCatch(data), ProcessCatch.updateUserStatus(data)])
+    ok ? res.json(result) : res.json('Что-то пошло не так при обновлении статуса пользователя')
 }
 
 exports.getCatchs = async (req, res) => {
     const idTour = req.body.idTour
     const result = await ProcessCatch.getCatchs(idTour)
-    console.log(result)
     const fishCategories = ["Лещ", "Щука", "Судак", "Окунь", "Форель", "Другое", "Всего"];
-
 
     const data = [];
 
@@ -73,13 +77,10 @@ exports.getCatchs = async (req, res) => {
             };
             data.push(userEntry);
         }
-
         userEntry[fishType]++;
         userEntry["Всего"]++;
     });
 
-
-    console.log(data)
     res.json(data)
 }
 

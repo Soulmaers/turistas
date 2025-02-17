@@ -10,12 +10,10 @@ interface TableTournamentProps {
 }
 
 const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
-    console.log(idTour)
     const { getCatchs } = useGetCatchs()
     const catchs = useSelector((state: RootState) => state.slice.catchs)
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
     const dispatch = useDispatch()
-    console.log(actionCatch)
     useEffect(() => {
         console.log('юзэффект')
         const fetchData = async () => {

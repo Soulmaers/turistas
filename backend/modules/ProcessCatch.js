@@ -4,6 +4,37 @@ const { sql, connection } = require('../dbconfig')
 class ProcessCatch {
 
 
+    static async updateUserStatus(data) {
+        const idUser = data.idUser
+        const post = `UPDATE users SET fishs=fishs + 1 WHERE id=@id`
+
+        try {
+            const pool = await connection
+            await pool.request()
+                .input('id', idUser)
+                .query(post)
+            return 'Статус обновлен'
+        }
+        catch (e) {
+            console.log(e)
+            return null
+        }
+    }
+    static async getStatusUser(id) {
+        const post = `SELECT * FROM users WHERE id=@id`
+
+        try {
+            const pool = await connection
+            const result = await pool.request()
+                .input('id', id)
+                .query(post)
+            return result.recordset
+        }
+        catch (e) {
+            console.log(e)
+            return null
+        }
+    }
     static async setCatch(data) {
         const { idTour, idUser, fishs, reservuors, typeFishing, timeDay, baits, weight, comment, date } = data
 
@@ -61,7 +92,6 @@ class ProcessCatch {
             const res = await pool.request()
                 .input('idTour', idTour)
                 .query(post)
-            console.log(res.recordset)
             return res.recordset
         }
         catch (e) {

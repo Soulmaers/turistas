@@ -1,18 +1,32 @@
 
 import '../styles/HeadersRight.css'
+import { useEffect } from 'react';
 import { FaTrophy, FaStar } from "react-icons/fa";
 import { FaFish } from "react-icons/fa6"
 import { IoSettingsSharp, IoLogOut } from "react-icons/io5"
-
 import { useSelector, useDispatch } from 'react-redux';
 import { updateContent, updateStatusUser, RootState, controll_modal_form } from '../../../GlobalStor';
-
+import { useGetStatusUser } from '../hooks/getStatusUser'
 
 const RenderHeaderRight = () => {
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
+    const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
     const dispatch = useDispatch()
 
+    const { getStatusUser } = useGetStatusUser()
     const { name_user = "", trophys = 0, fishs = 0, stars = 0 } = userStatus.user || {};
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const id = userStatus.user?.id
+            if (id !== undefined) {
+                const data = await getStatusUser(id)
+                dispatch(updateStatusUser({ ...userStatus, user: data[0] }))
+            }
+        }
+        if (userStatus.user) fetchData()
+
+    }, [userStatus.user?.id, actionCatch])
 
     const onClick = () => {
         dispatch(updateContent(null))

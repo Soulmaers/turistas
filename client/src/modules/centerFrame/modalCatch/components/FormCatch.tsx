@@ -19,10 +19,13 @@ export interface Catch {
     weight: string;
     comment: string;
     idTour: number | null;
-    idUser: number | undefined
+    idUser: number | undefined;
+    urlFoto: null | File
 }
 
 export const FormCatch = () => {
+    const [timeFile, setTimeFile] = useState<string>('')
+    const fileInputRef = useRef<HTMLInputElement>(null)
     const { setCatch } = useSetCatch()
     const user = useSelector((state: RootState) => state.slice.userStatus)
     const idTour = useSelector((state: RootState) => state.slice.idClickTour)
@@ -40,7 +43,8 @@ export const FormCatch = () => {
         weight: '',
         comment: '',
         idTour: idTour,
-        idUser: user?.user?.id
+        idUser: user?.user?.id,
+        urlFoto: null
     })
     const modalka = useRef<HTMLDivElement>(null)
 
@@ -91,6 +95,20 @@ export const FormCatch = () => {
         dispatch(add_catch(false))
     }, [dispatch])
 
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files && event.target.files[0];
+        console.log(file);
+        if (file?.name) {
+            const imageUrl = URL.createObjectURL(file);
+            setTimeFile(imageUrl);
+            setFormState((prev) => ({ ...prev, urlFoto: file }));
+        }
+    };
+    const handleButtonClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
     const handlerStart = async () => {
         if (formState['fishs'] === '') {
             setInfo('Выберите вид рыбы')
@@ -132,8 +150,21 @@ export const FormCatch = () => {
                 </div>
                 <div className="rows_card_tour">
                     <div className="name_car_tour">Фото</div>
+                    <input type="file" id="image" ref={fileInputRef} name="image" accept="image/*" style={{ display: 'none' }} onChange={handleImageChange} />
+                    <div className="button_load" onClick={handleButtonClick}>Загрузить фото</div>
                 </div>
-
+                {formState.urlFoto && (
+                    <div
+                        style={{
+                            width: '200px',
+                            height: '200px',
+                            backgroundImage: `url(${timeFile})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center'
+                        }}
+                    />
+                )}
             </div>
             <div className="footer_modal_tour">
                 <div className="messageAlarm">{info}</div>

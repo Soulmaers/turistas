@@ -33,3 +33,19 @@
 textarea {
     resize: none;
 }
+
+.button_load {
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid #fff;
+    padding: 2px 5px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin-left: 20px;
+}
+
+.button_load:active {
+    background-color: #fff;
+    color: #4d4646;
+    border: 1px solid #4d4646;
+}
