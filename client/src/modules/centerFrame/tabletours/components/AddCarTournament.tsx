@@ -23,22 +23,22 @@ const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
     }, [])
     const celevoys = data.find(e => e.id === idClickTour)
     const celevoy = celevoys ? celevoys : data[data.length - 1]
-    const { name, dateStart, dateFinish, status, big_fish } = celevoy
-
+    const { name, dateStart, dateFinish, status } = celevoy
+    console.log(celevoy)
     const rows = reglament.map((e, index) => <li key={e + index} className="rows_reg">{e}</li>)
     return (<div className="card_tournament">
         <div className='header_tournament_table'>
-            <div className="name">{name}<TimeDisplay status={Number(status)} dateStart={dateStart} dateFinish={dateFinish} /></div>
+            <div className="name">{name}{status !== null ? <TimeDisplay status={Number(status)} dateStart={dateStart} dateFinish={dateFinish} /> : <div className=''>Нет созданных турниров</div>}</div>
             {Number(status) === 1 && <AddCatch />}</div>
         <div className="body_table">
             <div className="table_tournament">
                 {status ? <TableTournament idTour={celevoy.id} /> : <div className='questions'></div>}
             </div>
-            <ViewUserBigFish bigFish={big_fish} />
+            <ViewUserBigFish />
         </div>
         <div className="footer_tour">
             <div className="name_reg">Регламент</div>
-            {rows}</div>
+            {status ? rows : ''}</div>
     </div>)
 }
 

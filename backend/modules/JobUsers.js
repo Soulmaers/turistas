@@ -83,7 +83,9 @@ class JobUsers {
 
 
     async createTournament(id, name, startTime, finishTime, created_by) {
-        const status = 0;
+        const nowData = Math.floor((new Date().getTime()) / 1000)
+        const status = nowData > Number(finishTime) ? 2 : nowData > Number(startTime) ? 1 : 0
+
         // Определяем SQL для проверки существования турнира
         const checkExistenceModel = `SELECT COUNT(*) as count FROM tournaments WHERE id = @id`;
         // Определяем SQL для обновления турнира

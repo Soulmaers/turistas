@@ -12,6 +12,14 @@ const updateStatusTournaments = async () => {
 }
 
 
+
+const formatData = (data) => {
+    const date = new Date(data * 1000);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = date.toLocaleDateString('ru-RU', options);
+    return formattedDate
+}
 module.exports = {
-    updateStatusTournaments
+    updateStatusTournaments,
+    formatData
 }

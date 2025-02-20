@@ -1,6 +1,6 @@
 .card_tournament {
     width: 95%;
-    height: 95%;
+    height: 98%;
     background-color: #5db350;
     border-radius: 5px;
     display: flex;
@@ -34,7 +34,7 @@
 
 .body_table {
     width: 98%;
-    height: 65%;
+    height: 73%;
     background-color: #4d4646;
     ;
     border-radius: 5px;
@@ -84,11 +84,10 @@
 }
 
 .table_tournament {
-    width: 100%;
-    height: 100%;
+    width: 70%;
+    height: 80%;
     display: flex;
     justify-content: center;
-    margin-top: 50px;
 }
 
 .header_tournament_table {

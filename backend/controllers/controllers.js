@@ -2,9 +2,11 @@
 const { JobUsers } = require('../modules/JobUsers')
 const { GetContent } = require('../modules/GetContent')
 const { ProcessCatch } = require('../modules/ProcessCatch')
+const { formatData } = require('../servises/servisFunction')
+const multer = require('multer');
+const path = require('path')
 
 exports.addTournament = async (req, res) => {
-
     try {
         const instance = new JobUsers()
         const { idTour, name, startUnixTime, finishUnixTime, users, created_by } = req.body
@@ -43,13 +45,68 @@ exports.getStatusUser = async (req, res) => {
     res.json(result)
 }
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const destinationPath = path.join(__dirname, '../../client/public/images/');
+        cb(null, destinationPath);
+    },
+    filename: (req, file, cb) => {
+        const filename = Date.now() + path.extname(file.originalname);
+        cb(null, filename);
+    }
+});
+
+const setFoto = multer({ storage: storage }).single('image');
+
+
 
 exports.setCatch = async (req, res) => {
-    const data = req.body.data
-    data.date = Math.floor((new Date().getTime()) / 1000)
-    const [result, ok] = await Promise.all([ProcessCatch.setCatch(data), ProcessCatch.updateUserStatus(data)])
-    ok ? res.json(result) : res.json('Что-то пошло не так при обновлении статуса пользователя')
-}
+    try {
+        const re = await new Promise((resolve, reject) => {
+            setFoto(req, res, async (err) => {
+                if (err) {
+                    console.error('Ошибка при загрузке файла:', err);
+                    return reject(err); // reject промис в случае ошибки
+                }
+                resolve('ok'); // resolve промис, когда файл успешно загружен
+            });
+        });
+
+        const data = req.body;
+        console.log(re);
+
+        const formState = {
+            fishs: data.fishs,
+            reservuors: data.reservuors,
+            typeFishing: data.typeFishing,
+            baits: data.baits,
+            timeDay: data.timeDay,
+            weight: data.weight,
+            comment: data.comment,
+            idTour: Number(data.idTour),
+            idUser: Number(data.idUser),
+            urlFoto: req.file?.filename || null,
+            date: Math.floor((new Date().getTime()) / 1000)
+        };
+
+        const [result, ok] = await Promise.all([
+            ProcessCatch.setCatch(formState),
+            ProcessCatch.updateUserStatus(formState)
+        ]);
+
+        if (ok) {
+            res.json(result);
+        } else {
+            res.status(500).json('Что-то пошло не так при обновлении статуса пользователя'); // Отправляем статус ошибки
+        }
+
+    } catch (error) {
+        console.error('Произошла общая ошибка:', error);
+        res.json('Что-то пошло не так при обработке запроса'); // Отправляем статус ошибки
+    }
+};
+
+
 
 exports.getCatchs = async (req, res) => {
     const idTour = req.body.idTour
@@ -58,9 +115,11 @@ exports.getCatchs = async (req, res) => {
 
     const data = [];
 
+
     result.forEach(item => {
-        const { name_user, name } = item;
-        const fishType = fishCategories.includes(name) ? name : "Другое";
+        //  console.log(item)
+        const { name_user, name_fish } = item;
+        const fishType = fishCategories.includes(name_fish) ? name_fish : "Другое";
 
         let userEntry = data.find(entry => entry.name_user === name_user);
 
@@ -81,7 +140,23 @@ exports.getCatchs = async (req, res) => {
         userEntry["Всего"]++;
     });
 
-    res.json(data)
+    const maxWeightObject = result.length === 0 ? null : result.reduce((max, current) => {
+        return Number(current.weight) > Number(max.weight) ? current : max;
+    }, result[0]);
+
+    const bigFish = maxWeightObject && maxWeightObject.weight !== '' ? {
+        name_user: maxWeightObject.name_user,
+        name_fish: maxWeightObject.name_fish,
+        name_reservour: maxWeightObject.name_reservour,
+        name_type: maxWeightObject.name_type,
+        name_bait: maxWeightObject.name_bait,
+        name_day: maxWeightObject.name_day,
+        weight: maxWeightObject.weight,
+        foto_user: maxWeightObject.foto,
+        urlFoto: maxWeightObject.urlFoto,
+        data: formatData(maxWeightObject.data)
+    } : null;
+    res.json({ data, bigFish })
 }
 
 

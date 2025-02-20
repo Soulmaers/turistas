@@ -5,14 +5,11 @@ import { Catch } from '../components/FormCatch'
 
 
 export const useSetCatch = () => {
-    const setCatch = async (data: Catch) => {
+    const setCatch = async (formData: FormData) => {
+        console.log(formData)
         const params = {
             method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-
-            },
-            body: JSON.stringify({ data })
+            body: formData
         }
         const res = await fetch('http://localhost:3333/api/setCatch', params)
         return await res.json()

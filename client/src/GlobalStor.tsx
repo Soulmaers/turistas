@@ -19,6 +19,18 @@ interface FishCatch {
 
 }
 
+export interface BigFish {
+    name_user: string,
+    name_fish: string,
+    name_reservour: string,
+    name_type: string,
+    name_bait: string,
+    name_day: string,
+    weight: string,
+    foto_user: string,
+    data: string,
+    urlFoto: null | {}
+}
 // Интерфейс для состояния
 interface MyState {
     content: number | null | undefined;
@@ -37,7 +49,9 @@ interface MyState {
         typeCatch: null | { name: string, id: number }[],
     }
     catchs: FishCatch[],
-    actionCatch: number
+    actionCatch: number,
+    bigFish: null | BigFish,
+    urlFoto: null | string
 }
 
 export interface Participants {
@@ -79,8 +93,9 @@ const initialState: MyState = {
         typeCatch: null
     },
     catchs: [],
-    actionCatch: 0
-
+    actionCatch: 0,
+    bigFish: null,
+    urlFoto: null
 };
 
 // Создаем slice
@@ -121,12 +136,19 @@ const slice = createSlice({
         set_action_catch: (state, action: PayloadAction<number>) => {
             state.actionCatch = action.payload;
         },
+        set_bigfish: (state, action: PayloadAction<null | BigFish>) => {
+            state.bigFish = action.payload;
+        },
+        set_urlFoto: (state, action: PayloadAction<null | string>) => {
+            state.urlFoto = action.payload;
+        },
+
 
     },
 });
 
 // Экспортируем actions
-export const { updateContent, updateReservours, updateStatusUser, controll_modal_form, update_modal, add_catch, click_tour, set_tour, set_dataContent, set_catchs, set_action_catch } = slice.actions;
+export const { updateContent, updateReservours, updateStatusUser, controll_modal_form, update_modal, add_catch, click_tour, set_tour, set_dataContent, set_catchs, set_action_catch, set_bigfish, set_urlFoto } = slice.actions;
 
 // Экспортируем редьюсер
 export const myReducer = slice.reducer;

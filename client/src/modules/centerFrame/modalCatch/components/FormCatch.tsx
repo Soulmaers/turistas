@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useSetCatch } from '../hooks/setCatch'
-import { RootState, add_catch, set_action_catch } from '../../../../GlobalStor'
+import { RootState, add_catch, set_action_catch, set_urlFoto } from '../../../../GlobalStor'
 
 import '../styles/FormCatch.css'
 
@@ -24,7 +24,7 @@ export interface Catch {
 }
 
 export const FormCatch = () => {
-    const [timeFile, setTimeFile] = useState<string>('')
+    const [timeFile, setTimeFile] = useState<string | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
     const { setCatch } = useSetCatch()
     const user = useSelector((state: RootState) => state.slice.userStatus)
@@ -101,6 +101,8 @@ export const FormCatch = () => {
         if (file?.name) {
             const imageUrl = URL.createObjectURL(file);
             setTimeFile(imageUrl);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
             setFormState((prev) => ({ ...prev, urlFoto: file }));
         }
     };
@@ -110,17 +112,45 @@ export const FormCatch = () => {
         }
     };
     const handlerStart = async () => {
+        console.log(formState)
         if (formState['fishs'] === '') {
             setInfo('Выберите вид рыбы')
-            setTimeout(() => setInfo(''), 3000)
+            setTimeout(() => setInfo(''), 2000)
+        }
+        else if (formState.weight !== '' && !formState.urlFoto) {
+            setInfo('Добавьте фото улова')
+            setTimeout(() => setInfo(''), 2000)
         } else {
-            const mess = await setCatch(formState)
+
+            const formData = new FormData();
+
+            formData.append('fishs', formState.fishs);
+            formData.append('reservuors', formState.reservuors);
+            formData.append('typeFishing', formState.typeFishing);
+            formData.append('baits', formState.baits);
+            formData.append('timeDay', formState.timeDay);
+            formData.append('weight', formState.weight);
+            formData.append('comment', formState.comment);
+            formData.append('idTour', String(formState.idTour)); // Преобразуем в строку
+            formData.append('idUser', String(formState.idUser));
+
+            if (formState.urlFoto) {
+                formData.append('urlFoto', formState.urlFoto.name);
+                formData.append('image', formState.urlFoto);  //  "images" - MUST match your server!
+            }
+            const mess = await setCatch(formData)
+            console.log(mess)
             setInfo(mess)
             dispatch(set_action_catch(actionCatch + 1))
+            dispatch(set_urlFoto(timeFile))
             setTimeout(() => {
                 setInfo('');
                 closeModal();
-            }, 3000)
+
+            }, 300)
+            setTimeout(() => {
+                dispatch(set_urlFoto(null))
+            }, 5000)
         }
 
     }

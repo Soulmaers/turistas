@@ -36,17 +36,17 @@ class ProcessCatch {
         }
     }
     static async setCatch(data) {
-        const { idTour, idUser, fishs, reservuors, typeFishing, timeDay, baits, weight, comment, date } = data
+        const { idTour, idUser, fishs, reservuors, typeFishing, timeDay, baits, weight, comment, date, urlFoto } = data
 
         const res = reservuors ? Number(reservuors) : 0
         const type = typeFishing ? Number(typeFishing) : 0
         const bait = baits ? Number(baits) : 0
-        const post = `INSERT INTO catch(idTournament, idUser, idFish,idReservour,idTypeCatch,idTimeDay,idBait,weight,comment,data)
-          VALUES (@idTour, @idUser, @fishs, @reservuors, @typeFishing, @timeDay, @baits, @weight, @comment, @date)`
+        const post = `INSERT INTO catch(idTournament, idUser, idFish,idReservour,idTypeCatch,idTimeDay,idBait,weight,comment,data,urlFoto)
+           VALUES (@idTour, @idUser, @fishs, @reservuors, @typeFishing, @timeDay, @baits, @weight, @comment, @date,@urlFoto)`
 
         try {
             const pool = await connection
-            await pool.request()
+            const result = await pool.request()
                 .input('idTour', idTour)
                 .input('idUser', idUser)
                 .input('fishs', Number(fishs))
@@ -57,6 +57,7 @@ class ProcessCatch {
                 .input('weight', weight)
                 .input('comment', comment)
                 .input('date', date)
+                .input('urlFoto', urlFoto)
                 .query(post)
             return 'Улов добавлен'
         }
@@ -65,6 +66,7 @@ class ProcessCatch {
             return 'Что-то пошло не так'
         }
     }
+
 
     static async getCatchs(idTour) {
         const post = `
@@ -75,14 +77,30 @@ class ProcessCatch {
             c.idTypeCatch,
             c.idTimeDay,
             c.idBait,
-            t.name_user,
-            f.name
+            c.data,
+            u.name_user,
+            u.foto,
+            f.name as name_fish,
+            c.weight,
+            c.urlFoto,
+            r.name AS name_reservour,
+                t.name AS name_type,
+                   b.name AS name_bait,
+                   d.name as name_day
         FROM 
             catch c
         INNER JOIN 
-            users t ON c.idUser = t.id
+            users u ON c.idUser = u.id
                INNER JOIN 
+            reservours r ON c.idReservour = r.id
+                 INNER JOIN 
             fishs f ON c.idFish = f.id
+                   INNER JOIN 
+            type_catch t ON c.idTypeCatch = t.id
+                   INNER JOIN 
+            baits b ON c.idBait = b.id
+                    INNER JOIN 
+            time_day d ON c.idTimeDay = d.id
         WHERE 
             c.idTournament = @idTour
     `;

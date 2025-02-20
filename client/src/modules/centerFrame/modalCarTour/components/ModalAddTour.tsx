@@ -31,7 +31,6 @@ const ModalAddTour = () => {
 
     useEffect(() => {
         if (nameInputRef.current) nameInputRef.current.value = tourData?.nameTour || '';
-        console.log(tourData)
         setStartDate(tourData?.nameTour === '' ? null : new Date(Number(tourData?.dateStart) * 1000))
         setFinishDate(tourData?.nameTour === '' ? null : new Date(Number(tourData?.dateFinish) * 1000))
     }, [])

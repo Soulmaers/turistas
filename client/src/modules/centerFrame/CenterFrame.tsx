@@ -23,7 +23,7 @@ const СenterFrame = () => {
             return <WiewCardReservours index={updateReservourss.index} text={updateReservourss.text} />
         }
         else {
-            //  console.log(content)
+            console.log(content)
             return content !== null ? <AddCarTournament data={userStatus.tournament} /> : <div className="logo_center"></div>
         }
     }

@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState, set_catchs } from '../../../../GlobalStor'
+import { RootState, set_catchs, set_bigfish } from '../../../../GlobalStor'
 import React, { useEffect } from 'react'
 import { useGetCatchs } from '../hooks/getCatchs'
 import '../styles/TableTournaments.css'
@@ -18,7 +18,9 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
         console.log('юзэффект')
         const fetchData = async () => {
             const data = await getCatchs(idTour);
-            dispatch(set_catchs((data)))
+            console.log(data)
+            dispatch(set_catchs((data.data)))
+            dispatch(set_bigfish(data.bigFish))
         };
         fetchData();
     }, [idTour, actionCatch])
