@@ -1,0 +1,47 @@
+.container_table_history {
+    width: 98%;
+    height: 100%;
+    background-color: #4d4646;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    border-radius: 10px 10px 0 0;
+    box-sizing: border-box;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.card_list_history {
+    width: 100%;
+    height: 93%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+.rows_list_catch {
+    cursor: pointer;
+}
+
+.rows_list_catch:hover {
+    background-color: #fff;
+    color: #4d4646;
+}
+
+td.delete_catch {
+    text-align: center;
+}
+
+.icon_del {
+    color: rgb(184, 22, 22)
+}
+
+.icon_fish_foto {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}

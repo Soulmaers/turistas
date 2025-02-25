@@ -13,7 +13,7 @@ import RenderHeaderLeft from './HeadersLeft'
 import HistoryLogs from './HistoryLogs'
 
 import { useDispatch } from 'react-redux';
-import { updateReservours, update_modal } from '../../../GlobalStor';
+import { updateReservours, update_modal, set_historyWiew } from '../../../GlobalStor';
 
 import '../styles/LeftFrame.css'
 
@@ -34,20 +34,18 @@ const LeftFrame = () => {
         console.log('окно?')
         dispatch(update_modal(true))
     }
-    const changeStateReservour = (index: number | null, e: string | null) => {
-        dispatch(updateReservours({ index: index, text: e }))
-    }
+
     const menuItems = [
         { label: 'Турниры', icon: <GiTrophy className="class_icon icon_button" />, component: <Tournaments />, key: 'tournaments' },
         { label: 'Статистика', icon: <FaChartGantt className="class_icon icon_button" />, component: <Statistics />, key: 'stata' },
-        { label: 'Водоёмы', icon: <FaWater className="class_icon icon_button" />, component: <Reservoors changeStateReservour={changeStateReservour} />, key: 'reservoors' },
+        { label: 'Водоёмы', icon: <FaWater className="class_icon icon_button" />, component: <Reservoors />, key: 'reservoors' },
         { label: 'Журнал', icon: <FaBookOpen className="class_icon icon_button" />, component: <HistoryLogs />, key: 'history' }
 
     ]
 
     return (
         <div className="Left_frame">
-            <RenderHeaderLeft changeStateReservour={changeStateReservour} />
+            <RenderHeaderLeft />
             <div className="wrapper">
                 <div className="wrapper_navi">
                     {menuItems.map(e =>

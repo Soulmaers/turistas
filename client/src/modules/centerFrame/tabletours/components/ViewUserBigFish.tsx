@@ -11,17 +11,28 @@ import { useSelector } from "react-redux"
 const ViewUserBigFish = () => {
     const [image, setImage] = useState<string | null>(null)
     const bigFish = useSelector((state: RootState) => state.slice.bigFish)
-    const urlFoto = useSelector((state: RootState) => state.slice.urlFoto)
-    console.log(bigFish)
+
     useEffect(() => {
-        const imageURL = urlFoto ? `url(${urlFoto}` : bigFish ? `url(${require(`../../../../../public/images/${bigFish.urlFoto}`)})` : null
-        setImage(imageURL)
-    }, [bigFish])
+        if (bigFish) {
+            const imageUrl = require(`../../../../../public/images/${bigFish.urlFoto}`);
+            const img = new Image();
+            img.src = imageUrl;
+
+            img.onload = () => {
+                const imageURL = `url(${imageUrl})`;
+                setImage(imageURL);
+            };
+
+            img.onerror = () => {
+                console.error('Error loading image:', imageUrl);
+                setImage(null); // Или можно задать значение по умолчанию
+            };
+        }
+    }, [bigFish]);
 
     const back = !bigFish ? { backgroundImage: `url(${whatRound})` } : { backgroundImage: `url(${require(`../assets/${bigFish.foto_user}`)}` };
     const margin = !bigFish ? { marginTop: '60px' } : {}
     const iconStyles = { ...back, ...margin }
-    console.log(bigFish?.urlFoto)
     return (
         <div className="wins_card">
             <div className='title_bigFish'>BIG FISH</div>

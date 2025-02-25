@@ -24,7 +24,6 @@ const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
     const celevoys = data.find(e => e.id === idClickTour)
     const celevoy = celevoys ? celevoys : data[data.length - 1]
     const { name, dateStart, dateFinish, status } = celevoy
-    console.log(celevoy)
     const rows = reglament.map((e, index) => <li key={e + index} className="rows_reg">{e}</li>)
     return (<div className="card_tournament">
         <div className='header_tournament_table'>

@@ -3,8 +3,8 @@ import { User } from './modules/form/components/Interface';
 
 // Интерфейс для UpdateReservours
 interface UpdateReservours {
-    index: number | null;
-    text: string | null;
+    index: number;
+    text: string;
 }
 
 interface FishCatch {
@@ -29,7 +29,7 @@ export interface BigFish {
     weight: string,
     foto_user: string,
     data: string,
-    urlFoto: null | {}
+    urlFoto: null | {} | string
 }
 // Интерфейс для состояния
 interface MyState {
@@ -51,7 +51,9 @@ interface MyState {
     catchs: FishCatch[],
     actionCatch: number,
     bigFish: null | BigFish,
-    urlFoto: null | string
+    urlFoto: null | string,
+    catchsList: [] | BigFish[],
+    historyWiew: string
 }
 
 export interface Participants {
@@ -72,7 +74,7 @@ interface DataTour {
 // Начальное состояние
 const initialState: MyState = {
     content: null,
-    updateReservours: { index: null, text: null },
+    updateReservours: { index: 0, text: '' },
     userStatus: { user: null, tournament: [] },
     activForm: true,
     stateModal: false,
@@ -95,7 +97,9 @@ const initialState: MyState = {
     catchs: [],
     actionCatch: 0,
     bigFish: null,
-    urlFoto: null
+    urlFoto: null,
+    catchsList: [],
+    historyWiew: 'tournaments'
 };
 
 // Создаем slice
@@ -142,13 +146,36 @@ const slice = createSlice({
         set_urlFoto: (state, action: PayloadAction<null | string>) => {
             state.urlFoto = action.payload;
         },
+        set_catchsList: (state, action: PayloadAction<[] | BigFish[]>) => {
+            state.catchsList = action.payload;
+        },
+        set_historyWiew: (state, action: PayloadAction<string>) => {
+            state.historyWiew = action.payload;
+        },
+
 
 
     },
 });
 
 // Экспортируем actions
-export const { updateContent, updateReservours, updateStatusUser, controll_modal_form, update_modal, add_catch, click_tour, set_tour, set_dataContent, set_catchs, set_action_catch, set_bigfish, set_urlFoto } = slice.actions;
+export const { updateContent,
+    updateReservours,
+    updateStatusUser,
+    controll_modal_form,
+    update_modal,
+    add_catch,
+    click_tour,
+    set_tour,
+    set_dataContent,
+    set_catchs,
+    set_action_catch,
+    set_bigfish,
+    set_urlFoto,
+    set_catchsList,
+    set_historyWiew
+} = slice.actions;
+
 
 // Экспортируем редьюсер
 export const myReducer = slice.reducer;

@@ -1,13 +1,17 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../../GlobalStor'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, set_historyWiew, updateReservours } from '../../../GlobalStor'
 import '../styles/Reservoors.css'
 
-interface ChangeProps {
-    changeStateReservour: (index: number, e: string) => void
-}
-const Reservoors: React.FC<ChangeProps> = ({ changeStateReservour }) => {
+
+const Reservoors = () => {
     const dataContent = useSelector((state: RootState) => state.slice.dataContent)
+
+    const dispatch = useDispatch()
+    const changeStateReservour = (index: number, e: string) => {
+        dispatch(set_historyWiew('reservoors'))
+        dispatch(updateReservours({ index: index, text: e }))
+    }
     const rows = dataContent.reservours?.map((e, index) => <div key={index} className="reservour" onClick={() => changeStateReservour(index, e.name)}>{e.name}</div>)
 
     return (

@@ -62,7 +62,7 @@ const setFoto = multer({ storage: storage }).single('image');
 
 exports.setCatch = async (req, res) => {
     try {
-        const re = await new Promise((resolve, reject) => {
+        await new Promise((resolve, reject) => {
             setFoto(req, res, async (err) => {
                 if (err) {
                     console.error('Ошибка при загрузке файла:', err);
@@ -73,7 +73,6 @@ exports.setCatch = async (req, res) => {
         });
 
         const data = req.body;
-        console.log(re);
 
         const formState = {
             fishs: data.fishs,
@@ -93,7 +92,7 @@ exports.setCatch = async (req, res) => {
             ProcessCatch.setCatch(formState),
             ProcessCatch.updateUserStatus(formState)
         ]);
-
+        console.log(result)
         if (ok) {
             res.json(result);
         } else {
@@ -107,7 +106,26 @@ exports.setCatch = async (req, res) => {
 };
 
 
-
+exports.getCatchsList = async (req, res) => {
+    const idTour = req.body.id
+    console.time('fetch')
+    const result = await ProcessCatch.getCatchs(idTour)
+    console.timeEnd('fetch')
+    const data = result.map(e => {
+        return {
+            name_user: e.name_user,
+            name_reservour: e.name_reservour,
+            name_fish: e.name_fish,
+            name_day: e.name_day,
+            name_type: e.name_type,
+            name_bait: e.name_bait,
+            weight: e.weight,
+            data: e.data,
+            urlFoto: e.urlFoto
+        }
+    })
+    res.json(data)
+}
 exports.getCatchs = async (req, res) => {
     const idTour = req.body.idTour
     const result = await ProcessCatch.getCatchs(idTour)

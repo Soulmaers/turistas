@@ -48,9 +48,7 @@ export const FormCatch = () => {
     })
     const modalka = useRef<HTMLDivElement>(null)
 
-    console.log(formState)
     useEffect(() => {
-
         const findTimeDay = () => {
             const nowTime = new Date()
             const hours = nowTime.getHours()
@@ -139,18 +137,13 @@ export const FormCatch = () => {
                 formData.append('image', formState.urlFoto);  //  "images" - MUST match your server!
             }
             const mess = await setCatch(formData)
-            console.log(mess)
             setInfo(mess)
-            dispatch(set_action_catch(actionCatch + 1))
-            dispatch(set_urlFoto(timeFile))
             setTimeout(() => {
                 setInfo('');
+                dispatch(set_action_catch(actionCatch + 1))
                 closeModal();
+            }, 1000)
 
-            }, 300)
-            setTimeout(() => {
-                dispatch(set_urlFoto(null))
-            }, 5000)
         }
 
     }

@@ -34,7 +34,6 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish
 
     }
     useEffect(() => {
-        console.log(status)
         if (status === 0 || status === 1) {
             setTime(calculaterTime())
             const intervalId = setInterval(() => setTime(calculaterTime()), 1000);

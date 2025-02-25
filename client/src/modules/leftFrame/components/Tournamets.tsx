@@ -8,7 +8,7 @@ import { MdDelete } from "react-icons/md";
 import { FaWrench } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { updateReservours, updateStatusUser, click_tour, RootState } from '../../../GlobalStor';
+import { updateReservours, updateStatusUser, click_tour, set_historyWiew, RootState } from '../../../GlobalStor';
 
 const Tournaments = () => {
 
@@ -26,8 +26,10 @@ const Tournaments = () => {
     }
 
     const handlerTour = (id: number) => {
+
         dispatch(click_tour(id))
-        dispatch(updateReservours({ index: null, text: null }))
+        dispatch(set_historyWiew('tournaments'))
+        //  dispatch(updateReservours({ index: null, text: null }))
     }
     const deleteHandler = async (id: number, name: string) => {
         setTimeout(() => setDel(false), 1000)

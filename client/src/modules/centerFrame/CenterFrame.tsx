@@ -5,6 +5,7 @@ import ModalAddTour from './modalCarTour/components/ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
 import AddCarTournament from './tabletours/components/AddCarTournament'
 import Modal from '../servises/components/Modal'
+import { HistoryList } from './history/components/HistoryList'
 import './CenterFrame.css'
 
 import { useSelector } from 'react-redux';
@@ -17,15 +18,20 @@ const СenterFrame = () => {
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const stateModal = useSelector((state: RootState) => state.slice.stateModal);
     const catchForm = useSelector((state: RootState) => state.slice.catchForm);
+    const historyWiew = useSelector((state: RootState) => state.slice.historyWiew);
 
     const renderComponents = () => {
-        if (updateReservourss.index !== null) {
-            return <WiewCardReservours index={updateReservourss.index} text={updateReservourss.text} />
+        switch (historyWiew) {
+            case 'tournaments':
+                return content !== null ? <AddCarTournament data={userStatus.tournament} /> : <div className="logo_center"></div>
+            case 'reservoors':
+                return <WiewCardReservours index={updateReservourss?.index} text={updateReservourss?.text} />
+            case 'stata':
+                break;
+            case 'history':
+                return <HistoryList data={userStatus.tournament} />
         }
-        else {
-            console.log(content)
-            return content !== null ? <AddCarTournament data={userStatus.tournament} /> : <div className="logo_center"></div>
-        }
+
     }
 
     return (

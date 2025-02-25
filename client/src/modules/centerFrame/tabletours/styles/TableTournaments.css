@@ -1,11 +1,17 @@
 .container_table {
     width: 90%;
     color: #fff;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* для Firefox */
+    -ms-overflow-style: none;
+    /* для Internet Explorer и Edge */
 }
 
 .styled_table {
     width: 100%;
     border-collapse: collapse;
+
 }
 
 .styled_table th,
