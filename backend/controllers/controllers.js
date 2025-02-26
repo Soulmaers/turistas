@@ -107,12 +107,15 @@ exports.setCatch = async (req, res) => {
 
 
 exports.getCatchsList = async (req, res) => {
-    const idTour = req.body.id
+
     console.time('fetch')
-    const result = await ProcessCatch.getCatchs(idTour)
+    const result = await ProcessCatch.getAllCatchs()
     console.timeEnd('fetch')
     const data = result.map(e => {
         return {
+            idCatch: e.id,
+            idTournament: e.idTournament,
+            idUser: e.idUser,
             name_user: e.name_user,
             name_reservour: e.name_reservour,
             name_fish: e.name_fish,
@@ -127,6 +130,7 @@ exports.getCatchsList = async (req, res) => {
     res.json(data)
 }
 exports.getCatchs = async (req, res) => {
+    console.log('запрос уловов со статичтикой')
     const idTour = req.body.idTour
     const result = await ProcessCatch.getCatchs(idTour)
     const fishCategories = ["Лещ", "Щука", "Судак", "Окунь", "Форель", "Другое", "Всего"];
@@ -177,6 +181,14 @@ exports.getCatchs = async (req, res) => {
     res.json({ data, bigFish })
 }
 
+exports.deleteCatch = async (req, res) => {
+    const id = req.body.id
+    const idUser = req.body.idUser
+    const [result1, result2] = await Promise.all([ProcessCatch.deleteCatch(id), ProcessCatch.minusFish(idUser)])
+    console.log(result1, result2)
+    const result = result1 & result2 ? 'Улов удалён' : 'Что-то пошло не так'
+    res.json(result)
+}
 
 exports.getUserCheck = async (req, res) => {
     const { contactID, username } = req.body

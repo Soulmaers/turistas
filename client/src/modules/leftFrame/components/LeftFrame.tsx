@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { GiTrophy } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowUp, IoMdAddCircle } from "react-icons/io"
@@ -12,19 +12,21 @@ import Reservoors from './Reservoors'
 import RenderHeaderLeft from './HeadersLeft'
 import HistoryLogs from './HistoryLogs'
 
-import { useDispatch } from 'react-redux';
-import { updateReservours, update_modal, set_historyWiew } from '../../../GlobalStor';
+import { useDispatch, useSelector } from 'react-redux';
+import { update_modal, set_subMenu, RootState } from '../../../GlobalStor';
 
 import '../styles/LeftFrame.css'
 
 
 
-const LeftFrame = () => {
-    const dispatch = useDispatch();
 
-    const [subMenu, setSubMenu] = useState<null | string>(null)
+const LeftFrame = () => {
+    const dispatch = useDispatch()
+    const subMenu = useSelector((state: RootState) => state.slice.subMenu);
+
+
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
-        setSubMenu(subMenu === selectSubMenu ? null : selectSubMenu)
+        dispatch(set_subMenu(subMenu === selectSubMenu ? null : selectSubMenu))
     }
     const getIconsArrow = (selectSubMenu: string) => { //Меняем иконку стрелки
         return subMenu === selectSubMenu ? <IoIosArrowUp className="class_icon" /> : < IoIosArrowDown className="class_icon" />
@@ -42,7 +44,7 @@ const LeftFrame = () => {
         { label: 'Журнал', icon: <FaBookOpen className="class_icon icon_button" />, component: <HistoryLogs />, key: 'history' }
 
     ]
-
+    console.log(subMenu)
     return (
         <div className="Left_frame">
             <RenderHeaderLeft />

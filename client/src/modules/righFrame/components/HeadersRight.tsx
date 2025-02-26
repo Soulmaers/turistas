@@ -1,14 +1,16 @@
 
 import '../styles/HeadersRight.css'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FaTrophy, FaStar } from "react-icons/fa";
 import { FaFish } from "react-icons/fa6"
 import { IoSettingsSharp, IoLogOut } from "react-icons/io5"
 import { useSelector, useDispatch } from 'react-redux';
-import { updateContent, updateStatusUser, RootState, controll_modal_form } from '../../../GlobalStor';
+import { updateContent, updateStatusUser, RootState, controll_modal_form, resetAll, set_subMenu } from '../../../GlobalStor';
 import { useGetStatusUser } from '../hooks/getStatusUser'
 
+
 const RenderHeaderRight = () => {
+
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
     const dispatch = useDispatch()
@@ -29,9 +31,7 @@ const RenderHeaderRight = () => {
     }, [userStatus.user?.id, actionCatch])
 
     const onClick = () => {
-        dispatch(updateContent(null))
-        dispatch(controll_modal_form(true))
-        dispatch(updateStatusUser({ user: null, tournament: [] }))
+        dispatch(resetAll())
     }
     return (
         <div className="header_admin_container">

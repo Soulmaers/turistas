@@ -84,7 +84,6 @@ const useForm = () => {
                         users: [{ name_user: data.user?.name_user || '', contactID: data.user?.contactID || '', userID: data.user?.id || null }]
                     }))
                 }
-                // tourContext?.setTour((prev) => ({ ...prev, users: [{ name_user: data.user?.name_user || '', contactID: data.user?.contactID || '', userID: data.user?.id || null }] }))
                 dispatch(controll_modal_form(false))
                 dispatch(updateContent(statusTour))
 

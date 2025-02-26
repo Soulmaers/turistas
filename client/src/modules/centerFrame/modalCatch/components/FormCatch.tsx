@@ -142,7 +142,7 @@ export const FormCatch = () => {
                 setInfo('');
                 dispatch(set_action_catch(actionCatch + 1))
                 closeModal();
-            }, 1000)
+            }, 1500)
 
         }
 

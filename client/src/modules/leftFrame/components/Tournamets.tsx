@@ -26,10 +26,8 @@ const Tournaments = () => {
     }
 
     const handlerTour = (id: number) => {
-
         dispatch(click_tour(id))
         dispatch(set_historyWiew('tournaments'))
-        //  dispatch(updateReservours({ index: null, text: null }))
     }
     const deleteHandler = async (id: number, name: string) => {
         setTimeout(() => setDel(false), 1000)

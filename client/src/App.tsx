@@ -14,15 +14,18 @@ import Modal from './modules/servises/components/Modal'
 import './App.css';
 
 function App() {
+
+  const activForm = useSelector((state: RootState) => state.slice.activForm)
   const { getContent } = useGetDataContent()
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('старт')
       await getContent();
     };
     fetchData();
-  }, [])
-  const activForm = useSelector((state: RootState) => state.slice.activForm)
+  }, [activForm])
+
 
   return (
 

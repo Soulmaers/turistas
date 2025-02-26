@@ -17,12 +17,12 @@ const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
 
     const idClickTour = useSelector((state: RootState) => state.slice.idClickTour)
     useEffect(() => {
-        if (!idClickTour) {
-            dispatch(click_tour(data[data.length - 1].id))
-        }
-    }, [])
+        dispatch(click_tour(data[data.length - 1].id))
+    }, [data])
+
     const celevoys = data.find(e => e.id === idClickTour)
     const celevoy = celevoys ? celevoys : data[data.length - 1]
+
     const { name, dateStart, dateFinish, status } = celevoy
     const rows = reglament.map((e, index) => <li key={e + index} className="rows_reg">{e}</li>)
     return (<div className="card_tournament">

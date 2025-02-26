@@ -1,16 +1,25 @@
 
 import '../styles/HistoryList.css'
-import { RootState } from '../../../../GlobalStor';
-import { useSelector } from 'react-redux';
+import { RootState, set_deleteForm, set_deleteIdCatch, ExtendedBigFish } from '../../../../GlobalStor';
+import { useSelector, useDispatch } from 'react-redux';
 import { formatUnixTime } from '../servises'
 import { FaTimes } from "react-icons/fa";
 import { Tournament } from '../../../form/components/Interface'
-
+import { useEffect } from 'react';
 
 export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
+
+    const dispatch = useDispatch()
     const catchsList = useSelector((state: RootState) => state.slice.catchsList);
     const idClickTour = useSelector((state: RootState) => state.slice.idClickTour)
     const celevoys = data.find(e => e.id === idClickTour)
+    console.log(catchsList)
+
+
+    const handler = (catchItem: ExtendedBigFish) => {
+        dispatch(set_deleteForm(true))
+        dispatch(set_deleteIdCatch(catchItem))
+    }
     const rows = catchsList.map(e => {
         const time = formatUnixTime(Number(e.data))
         let imageUrl = e.urlFoto ? require(`../../../../../public/images/${e.urlFoto}`) : 'Без фото'
@@ -26,7 +35,7 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
             <td className='icon_fish_foto' style={{
                 backgroundImage: `url(${imageUrl})`,
             }}></td>
-            <td className='delete_catch' ><FaTimes className='icon_del' /></td>
+            <td className='delete_catch' ><FaTimes className='icon_del' onClick={() => handler(e)} /></td>
         </tr>
     })
 

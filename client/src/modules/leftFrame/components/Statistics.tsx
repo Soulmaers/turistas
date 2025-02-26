@@ -1,15 +1,15 @@
 import React from 'react'
 
 import '../styles/Statistics.css'
+import { useSelector, useDispatch } from 'react-redux';
+
+import { set_historyWiew, click_tour, RootState } from '../../../GlobalStor';
+
 
 const Statistics = () => {
+    const userStatus = useSelector((state: RootState) => state.slice.userStatus);
+    const userID = userStatus?.user?.id
 
-    const sotTour = [
-        'Рыболовный турнир сезон 2024',
-        'Рыболовный турнир сезон 2023',
-        'Рыболовный турнир сезон 2022',
-        'Рыболовный турнир сезон 2021'
-    ]
 
     const sotUser = [
         'Леха',
@@ -26,11 +26,13 @@ const Statistics = () => {
         'река Ловать (Новгородская область)'
     ];
 
-
-    const rowsTour = sotTour.map((e, index) => <div key={index} className="checkbox_item rows_list object_list">
-        <input className="object_checks" type="checkbox" id={e + index} />
-        <label className="label_check" htmlFor={e + index}>{e}</label>
-    </div>)
+    console.log(userStatus.tournament)
+    const tournaments = userStatus.tournament.map((e, index) => <div key={index} className="checkbox_item rows_list object_list">
+        <input className="object_checks" type="checkbox" id={e.name + index} />
+        <label className="label_check" htmlFor={e.name + index}>{e.name}</label>
+    </div>
+    )
+    console.log(tournaments)
 
     const rowsUser = sotUser.map((e, index) => <div key={index} className="checkbox_item rows_list object_list">
         <input className="object_checks" type="checkbox" id={e + index} />
@@ -43,19 +45,15 @@ const Statistics = () => {
     </div>)
 
 
-    return (
-        <div className="container_statistics">
-            <div className="stat_name">Турниры</div>
-            {rowsTour}
-            <div className="stat_name">Участники</div>
-            {rowsUser}
-            <div className="stat_name">Водоёмы</div>
-            {rowsReservours}
+    return (<div className="container_statistics">
+        <div className="stat_name">Турниры</div>
+        {tournaments}
+        <div className="stat_name">Участники</div>
+        {rowsUser}
+        <div className="stat_name">Водоёмы</div>
+        {rowsReservours}
+    </div>)
 
-        </div>
-
-
-    )
 }
 
 

@@ -11,7 +11,6 @@ import { useSelector } from "react-redux"
 const ViewUserBigFish = () => {
     const [image, setImage] = useState<string | null>(null)
     const bigFish = useSelector((state: RootState) => state.slice.bigFish)
-
     useEffect(() => {
         if (bigFish) {
             const imageUrl = require(`../../../../../public/images/${bigFish.urlFoto}`);
@@ -27,6 +26,9 @@ const ViewUserBigFish = () => {
                 console.error('Error loading image:', imageUrl);
                 setImage(null); // Или можно задать значение по умолчанию
             };
+        }
+        else {
+            setImage(null)
         }
     }, [bigFish]);
 

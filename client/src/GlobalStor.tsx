@@ -31,6 +31,11 @@ export interface BigFish {
     data: string,
     urlFoto: null | {} | string
 }
+export interface ExtendedBigFish extends BigFish {
+    idUser: number;
+    idTournament: number;
+    idCatch: number
+}
 // Интерфейс для состояния
 interface MyState {
     content: number | null | undefined;
@@ -52,8 +57,11 @@ interface MyState {
     actionCatch: number,
     bigFish: null | BigFish,
     urlFoto: null | string,
-    catchsList: [] | BigFish[],
-    historyWiew: string
+    catchsList: [] | ExtendedBigFish[],
+    historyWiew: string,
+    subMenu: null | string,
+    deleteForm: boolean,
+    deleteIdCatch: null | ExtendedBigFish
 }
 
 export interface Participants {
@@ -99,7 +107,10 @@ const initialState: MyState = {
     bigFish: null,
     urlFoto: null,
     catchsList: [],
-    historyWiew: 'tournaments'
+    subMenu: null,
+    historyWiew: 'tournaments',
+    deleteForm: false,
+    deleteIdCatch: null
 };
 
 // Создаем slice
@@ -146,12 +157,34 @@ const slice = createSlice({
         set_urlFoto: (state, action: PayloadAction<null | string>) => {
             state.urlFoto = action.payload;
         },
-        set_catchsList: (state, action: PayloadAction<[] | BigFish[]>) => {
+        set_catchsList: (state, action: PayloadAction<[] | ExtendedBigFish[]>) => {
             state.catchsList = action.payload;
         },
         set_historyWiew: (state, action: PayloadAction<string>) => {
             state.historyWiew = action.payload;
         },
+        set_subMenu: (state, action: PayloadAction<null | string>) => {
+            state.subMenu = action.payload;
+        },
+        resetAll: (state) => {
+            return initialState;
+        },
+        set_deleteForm: (state, action: PayloadAction<boolean>) => {
+            state.deleteForm = action.payload;
+        },
+        set_deleteIdCatch: (state, action: PayloadAction<null | ExtendedBigFish>) => {
+            state.deleteIdCatch = action.payload;
+        },
+        deleteCatch: (state, action: PayloadAction<number>) => {
+            const idToDelete = action.payload;
+            // 1. Удаление из массива уловов
+            state.catchsList = state.catchsList.filter(catchItem => catchItem.idCatch !== idToDelete);
+
+            // 2. Обновление количества уловов пользователя (предполагаем, что каждый улов принадлежит одному пользователю)
+            if (state.userStatus.user) state.userStatus.user.fishs -= 1;
+
+        },
+
 
 
 
@@ -173,7 +206,12 @@ export const { updateContent,
     set_bigfish,
     set_urlFoto,
     set_catchsList,
-    set_historyWiew
+    set_historyWiew,
+    set_subMenu,
+    resetAll,
+    set_deleteForm,
+    set_deleteIdCatch,
+    deleteCatch
 } = slice.actions;
 
 
