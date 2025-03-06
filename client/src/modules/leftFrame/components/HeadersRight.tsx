@@ -6,7 +6,7 @@ import { FaFish } from "react-icons/fa6"
 import { IoSettingsSharp, IoLogOut } from "react-icons/io5"
 import { useSelector, useDispatch } from 'react-redux';
 import { updateContent, updateStatusUser, RootState, controll_modal_form, resetAll, set_subMenu } from '../../../GlobalStor';
-import { useGetStatusUser } from '../hooks/getStatusUser'
+import { useGetStatusUser } from '../../righFrame/hooks/getStatusUser'
 
 
 const RenderHeaderRight = () => {

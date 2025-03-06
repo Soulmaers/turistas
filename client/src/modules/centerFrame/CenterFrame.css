@@ -1,5 +1,5 @@
 .Center_frame {
-    width: 63%;
+    width: 83%;
     height: 100%;
     background-color: #5db350;
     border-radius: 5px;
@@ -21,4 +21,63 @@
     background-size: cover;
     border-radius: 5px;
     border: 1px solid #fff;
+}
+
+@media (width<900px) {
+    .Center_frame {
+        width: 76%
+    }
+
+    .history_header th {
+        font-size: 0.7rem
+    }
+
+    .rows_list_catch {
+        font-size: 0.7rem
+    }
+
+    .container_table_history {
+        border-radius: 5px;
+    }
+
+    .stat_name {
+        font-size: 0.9rem
+    }
+
+    .title,
+    .bans {
+        font-size: 1rem
+    }
+
+    .bans {
+        padding: 1px;
+    }
+
+    .discription_bans {
+        font-size: 0.7rem;
+        margin-left: 2px;
+    }
+
+    .title {
+        width: 99%
+    }
+
+    .body_reservours {
+        width: 99%
+    }
+
+    .image_reservour {
+        width: 49%;
+        height: 80%
+    }
+
+    .bans_card {
+        width: 49%;
+        height: 99%;
+        border: none;
+    }
+
+    .norma {
+        display: none
+    }
 }

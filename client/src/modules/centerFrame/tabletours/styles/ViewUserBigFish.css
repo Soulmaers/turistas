@@ -21,6 +21,17 @@
 
 }
 
+.icon {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    border: 1px solid #fff;
+}
+
 .title_bigFish {
     color: #fff;
     font-size: 1.5rem;

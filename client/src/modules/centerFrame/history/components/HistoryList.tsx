@@ -45,7 +45,7 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
         </div>
         <div className="container_table_history">
             <table className='styled_table'>
-                <thead><tr>
+                <thead><tr className="history_header">
                     <th>Участник</th>
                     <th>Водоём</th>
                     <th>Вид рыбы</th>

@@ -1,6 +1,5 @@
 import React from 'react'
 import DiscriptionBigFish from './DiscriptionBigFish'
-import l from '../../../righFrame/assets/l.webp'
 import whatRound from '../../what-round.png'
 import '../styles/ViewUserBigFish.css'
 import { RootState } from "../../../../GlobalStor"
@@ -31,7 +30,6 @@ const ViewUserBigFish = () => {
             setImage(null)
         }
     }, [bigFish]);
-
     const back = !bigFish ? { backgroundImage: `url(${whatRound})` } : { backgroundImage: `url(${require(`../assets/${bigFish.foto_user}`)}` };
     const margin = !bigFish ? { marginTop: '60px' } : {}
     const iconStyles = { ...back, ...margin }

@@ -25,7 +25,7 @@
   z-index: 1;
 }
 
-.Body {
+.body {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -58,4 +58,13 @@
 
 .App-link {
   color: #61dafb;
+}
+
+@media (width<900px) {
+  .body {
+
+    width: 99%;
+    height: 99%;
+  }
+
 }

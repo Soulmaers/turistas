@@ -27,3 +27,23 @@
 .styled_table th {
     text-align: center;
 }
+
+@media (width<900px) {
+    .container_table {
+        width: 100%
+    }
+
+    .styled_table th {
+        font-weight: 300;
+    }
+
+    .styled_table {
+        font-size: 0.8rem
+    }
+
+    .styled_table th,
+    .styled_table td {
+        padding: 5px;
+    }
+
+}

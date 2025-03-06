@@ -10,6 +10,8 @@ import Tournaments from './Tournamets'
 import Statistics from './Statistics'
 import Reservoors from './Reservoors'
 import RenderHeaderLeft from './HeadersLeft'
+import RenderHeaderRight from './HeadersRight'
+
 import HistoryLogs from './HistoryLogs'
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -50,6 +52,7 @@ const LeftFrame = () => {
     return (
         <div className="Left_frame">
             <RenderHeaderLeft />
+            <RenderHeaderRight />
             <div className="wrapper">
                 <div className="wrapper_navi">
                     {menuItems.map(e =>

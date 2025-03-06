@@ -22,7 +22,7 @@ const WiewCheckTitle: React.FC<PropCheckbox> = ({ prop, propId, state, func }) =
         <label className="label_check" htmlFor={propId.length !== 0 ? propId[index] + index : e + index}>{e}</label>
     </div>)
 
-    return <div>{rows}</div>
+    return <div className="wrap_options">{rows}</div>
 }
 
 

@@ -129,3 +129,93 @@
         transform: rotate(0deg);
     }
 }
+
+@media (width<900px) {
+    .wrapper {
+        height: 80%;
+        padding: 5px 0;
+    }
+
+    .title_name {
+        font-size: 0.8rem;
+    }
+
+    .btn {
+        padding: 2px;
+    }
+
+    .class_icon {
+        width: 15px;
+        height: 15px
+    }
+
+    .Header_container {
+        height: 40px;
+    }
+
+    .header_admin_container {
+        height: 30px;
+        padding: 5px;
+    }
+
+    .login {
+        font-size: 0.7rem;
+    }
+
+    .trophy_all,
+    .fish_icon,
+    .star_icon,
+    .settings_icon,
+    .exit,
+    .numbers {
+        font-size: 0.7rem;
+    }
+
+    .exit {
+        width: '';
+        height: ''
+    }
+
+    .create_btn_tour {
+        right: 15%
+    }
+
+    input[type="checkbox"]:checked::before {
+        content: "\2713";
+        font-size: 12px;
+        display: block;
+        font-weight: bold;
+        height: 12px;
+        width: 12px;
+        color: rgba(6, 28, 71, 1);
+        ;
+        text-align: center;
+        line-height: 12px;
+    }
+
+    input[type="checkbox"]::before {
+        content: "";
+        display: block;
+        height: 12px;
+        width: 12px;
+        border-radius: 2px;
+        border: 1px solid #4d4646;
+        ;
+    }
+
+    .label_check {
+        font-size: 0.7rem;
+    }
+
+    .container_statistics {
+        height: 190px;
+        overflow-y: auto;
+        scrollbar-width: none;
+        /* для Firefox */
+        -ms-overflow-style: none;
+    }
+
+    .reservour {
+        font-size: 0.7rem
+    }
+}

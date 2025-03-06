@@ -101,3 +101,85 @@
     border: 1px solid #fff;
     box-sizing: border-box;
 }
+
+@media (width<900px) {
+    .footer_tour {
+        display: none;
+    }
+
+    .card_tournament {
+        width: 99%;
+    }
+
+    .body_table {
+        width: 100%;
+        height: 90%;
+        padding: 5px;
+        flex-direction: column;
+    }
+
+    .icon {
+        width: 120px;
+        height: 120px;
+    }
+
+    .icon_foto_fish {
+        width: 67px;
+        height: 112px;
+    }
+
+    .discription_big_fish {
+        padding: 0;
+    }
+
+    .text_bigfish {
+        margin: 2px;
+        font-size: 0.7rem;
+    }
+
+    .header_tournament_table {
+        width: 100%;
+        margin-bottom: 2px;
+    }
+
+    .Left_frame {
+        width: 23%
+    }
+
+    .title_bigFish {
+        font-size: 1rem;
+        position: absolute;
+        top: -5px;
+        left: 50%
+    }
+
+    .name {
+        font-size: 1rem;
+    }
+
+    .Body {
+        width: 99%;
+        height: 99%
+    }
+
+    .table_tournament {
+        width: 90%;
+    }
+
+    .wins_card {
+        padding: 2px 0;
+        width: 90%;
+        flex-direction: row;
+        border: none;
+        border-top: 1px solid #fff;
+        position: relative;
+        justify-content: space-between;
+    }
+
+
+
+    .log_big {
+        width: 45%;
+    }
+
+}

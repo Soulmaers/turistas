@@ -6,7 +6,7 @@ import { RootState } from './GlobalStor';
 import LeftFrame from './modules/leftFrame/components/LeftFrame'
 import RightFrame from './modules/righFrame/components/RightFrame'
 import CenterFrame from './modules/centerFrame/CenterFrame'
-import Footer from './modules/centerFrame/Footer'
+
 
 import Form from './modules/form/components/Form'
 import Modal from './modules/servises/components/Modal'
@@ -31,12 +31,10 @@ function App() {
 
     <div className="App">
       {activForm && <Modal><Form /></Modal>}
-      <div className="Body">
+      <div className="body">
         <LeftFrame />
         <CenterFrame />
-        <RightFrame />
       </div>
-      <Footer />
     </div>
 
   );
