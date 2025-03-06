@@ -14,8 +14,8 @@ import { Tournament } from '../../../form/components/Interface'
 
 const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
     const dispatch = useDispatch()
-
     const idClickTour = useSelector((state: RootState) => state.slice.idClickTour)
+
     useEffect(() => {
         dispatch(click_tour(data[data.length - 1].id))
     }, [data])

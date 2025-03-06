@@ -137,7 +137,6 @@ exports.getCatchs = async (req, res) => {
 
     const data = [];
 
-
     result.forEach(item => {
         //  console.log(item)
         const { name_user, name_fish } = item;

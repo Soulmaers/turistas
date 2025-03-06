@@ -10,7 +10,8 @@ const config = {
     password: 'Alex',
     options: {
         trustServerCertificate: true,
-        encrypt: false
+        encrypt: false,
+        requestTimeout: 30000
     }
 };
 

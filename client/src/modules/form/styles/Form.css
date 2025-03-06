@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'Akrobat';
+    src: url('../../../fonts/Akrobat-SemiBold.otf') format('opentype');
+    font-weight: 400;
+    /* Вес для ExtraBold */
+    font-style: normal;
+}
+
+
 .form_card {
     width: 350px;
     max-height: 250px;
@@ -62,6 +71,7 @@
 }
 
 .button_form {
+    font-family: Akrobat;
     margin: 10px auto;
     max-width: 120px;
     padding: 2px 5px;

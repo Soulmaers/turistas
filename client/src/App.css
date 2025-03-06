@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Akrobat';
+  src: url('./fonts/Akrobat-SemiBold.otf') format('opentype');
+  font-weight: 400;
+  /* Вес для ExtraBold */
+  font-style: normal;
+}
+
 .App {
   width: 100%;
   height: 100vh;
@@ -6,7 +14,7 @@
   align-items: center;
   justify-content: space-around;
   background-color: #4d4646;
-  font-family: Arial Narrow, sans-serif
+  font-family: Akrobat;
 }
 
 .popup_backgroud {
@@ -44,6 +52,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+  font-family: Akrobat;
   color: white;
 }
 

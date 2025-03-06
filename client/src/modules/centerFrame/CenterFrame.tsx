@@ -5,6 +5,7 @@ import { FormDelCatch } from './history/components/FormDelCatch'
 import ModalAddTour from './modalCarTour/components/ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
 import AddCarTournament from './tabletours/components/AddCarTournament'
+import { StatisticCard } from './tabletours/components/StatisticCard'
 import Modal from '../servises/components/Modal'
 import { HistoryList } from './history/components/HistoryList'
 import './CenterFrame.css'
@@ -21,7 +22,6 @@ const СenterFrame = () => {
     const stateModal = useSelector((state: RootState) => state.slice.stateModal);
     const catchForm = useSelector((state: RootState) => state.slice.catchForm);
     const historyWiew = useSelector((state: RootState) => state.slice.historyWiew);
-
     const renderComponents = () => {
         switch (historyWiew) {
             case 'tournaments':
@@ -29,7 +29,7 @@ const СenterFrame = () => {
             case 'reservoors':
                 return <WiewCardReservours index={updateReservourss?.index} text={updateReservourss?.text} />
             case 'stata':
-                break;
+                return <StatisticCard />
             case 'history':
                 return <HistoryList data={userStatus.tournament} />
         }

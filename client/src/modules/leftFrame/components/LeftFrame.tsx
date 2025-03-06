@@ -13,7 +13,7 @@ import RenderHeaderLeft from './HeadersLeft'
 import HistoryLogs from './HistoryLogs'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { update_modal, set_subMenu, RootState } from '../../../GlobalStor';
+import { update_modal, set_subMenu, set_historyWiew, RootState } from '../../../GlobalStor';
 
 import '../styles/LeftFrame.css'
 
@@ -27,6 +27,8 @@ const LeftFrame = () => {
 
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
         dispatch(set_subMenu(subMenu === selectSubMenu ? null : selectSubMenu))
+        console.log(selectSubMenu)
+        if (selectSubMenu === 'stata') dispatch(set_historyWiew(selectSubMenu))
     }
     const getIconsArrow = (selectSubMenu: string) => { //Меняем иконку стрелки
         return subMenu === selectSubMenu ? <IoIosArrowUp className="class_icon" /> : < IoIosArrowDown className="class_icon" />

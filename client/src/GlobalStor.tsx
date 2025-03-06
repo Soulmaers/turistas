@@ -18,6 +18,16 @@ interface FishCatch {
     name_user: string | null;
 
 }
+export interface UserData {
+    name_user: string;
+    "Лещ": number;
+    "Щука": number;
+    "Судак": number;
+    "Окунь": number;
+    "Форель": number;
+    "Другое": number;
+    "Всего": number;
+}
 
 export interface BigFish {
     name_user: string,
@@ -61,7 +71,9 @@ interface MyState {
     historyWiew: string,
     subMenu: null | string,
     deleteForm: boolean,
-    deleteIdCatch: null | ExtendedBigFish
+    deleteIdCatch: null | ExtendedBigFish,
+    allCatchs: ExtendedBigFish[],
+    staticData: UserData[]
 }
 
 export interface Participants {
@@ -110,7 +122,9 @@ const initialState: MyState = {
     subMenu: null,
     historyWiew: 'tournaments',
     deleteForm: false,
-    deleteIdCatch: null
+    deleteIdCatch: null,
+    allCatchs: [],
+    staticData: []
 };
 
 // Создаем slice
@@ -179,10 +193,14 @@ const slice = createSlice({
             const idToDelete = action.payload;
             // 1. Удаление из массива уловов
             state.catchsList = state.catchsList.filter(catchItem => catchItem.idCatch !== idToDelete);
-
             // 2. Обновление количества уловов пользователя (предполагаем, что каждый улов принадлежит одному пользователю)
             if (state.userStatus.user) state.userStatus.user.fishs -= 1;
-
+        },
+        setAllCatchs: (state, action: PayloadAction<ExtendedBigFish[]>) => {
+            state.allCatchs = action.payload;
+        },
+        set_static: (state, action: PayloadAction<UserData[]>) => {
+            state.staticData = action.payload;
         },
 
 
@@ -211,7 +229,9 @@ export const { updateContent,
     resetAll,
     set_deleteForm,
     set_deleteIdCatch,
-    deleteCatch
+    deleteCatch,
+    setAllCatchs,
+    set_static
 } = slice.actions;
 
 
