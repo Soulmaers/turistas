@@ -1,4 +1,4 @@
-.container_tournaments {
+.container_history {
     width: 100%;
     margin: 5px 0;
     color: #fff;
@@ -15,4 +15,18 @@
 .tournament:hover {
     color: gray;
     background-color: #fff;
+}
+
+
+@media (width<400px) {
+    .container_history {
+        border: 1px solid #fff;
+        position: absolute;
+        bottom: 50px;
+        width: 24%;
+        right: 5px;
+        background-color: #4d4646;
+    }
+
+
 }

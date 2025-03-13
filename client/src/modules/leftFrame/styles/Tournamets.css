@@ -22,3 +22,16 @@
     position: absolute;
     font-size: 0.9rem;
 }
+
+@media (width<400px) {
+    .container_tournaments {
+        border: 1px solid #fff;
+        position: absolute;
+        bottom: 50px;
+        width: 35%;
+        left: 5px;
+        background-color: #4d4646;
+    }
+
+
+}

@@ -23,3 +23,13 @@
     box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
 }
+
+@media (width<400px) {
+    .modal_window {
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: absolute;
+    }
+
+}

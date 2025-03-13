@@ -9,7 +9,7 @@ import UserInput from './UserInput';
 import DatePickerInput from './DatePickerInput';
 import '../styles/ModalAddTour.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, update_modal, set_tour } from '../../../../GlobalStor';
+import { RootState, update_modal, set_tour, set_bigfish } from '../../../../GlobalStor';
 
 
 const ModalAddTour = () => {
@@ -67,6 +67,7 @@ const ModalAddTour = () => {
                     userID: userStatus.user?.id || null // Или любое другое значение по умолчанию
                 }]
             }))
+
         }
 
     };
@@ -84,6 +85,8 @@ const ModalAddTour = () => {
             const users = tourData?.users
             const idTour = tourData?.id
             const res = await addTour({ idTour, name, startUnixTime, finishUnixTime, created_by, users })
+            console.log(res)
+            dispatch(set_bigfish(null))
             setTimeout(() => (setDels(false), closeModal()), 1000)
             setDels(true)
             setText(res)

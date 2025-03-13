@@ -81,3 +81,28 @@
         display: none
     }
 }
+
+@media (width<400px) {
+    .Center_frame {
+        width: 100%;
+        height: 88%
+    }
+
+    .body_reservours {
+        flex-direction: column;
+    }
+
+    .bans_card {
+        width: 80%;
+    }
+
+    .history_header th {
+        font-size: 0.5rem;
+        font-weight: 300;
+    }
+
+    .rows_list_catch {
+        font-size: 0.5rem;
+        font-weight: 300;
+    }
+}

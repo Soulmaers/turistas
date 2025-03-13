@@ -16,3 +16,13 @@
     color: gray;
     background-color: #fff;
 }
+
+@media (width<400px) {
+    .container_reservoors {
+        border: 1px solid #fff;
+        position: absolute;
+        bottom: 50px;
+        width: 44%;
+        background-color: #4d4646;
+    }
+}

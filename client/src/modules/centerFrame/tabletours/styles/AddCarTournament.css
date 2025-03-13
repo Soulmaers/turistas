@@ -183,3 +183,50 @@
     }
 
 }
+
+@media (width<400px) {
+
+    .body_table {
+        height: 98%
+    }
+
+    .table_tournament {
+        width: 100%;
+        height: 50%;
+    }
+
+    .wins_card {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .mobile_icon {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 5px;
+        box-sizing: border-box;
+        margin-top: 20px;
+    }
+
+    .log_big {
+        width: 75%;
+    }
+
+    .title_bigFish {
+        left: 46%
+    }
+
+    .text_bigfish {
+        font-size: 0.9rem;
+    }
+
+    .modal_add_tour {
+        width: 350px;
+        height: 60vh
+    }
+
+}

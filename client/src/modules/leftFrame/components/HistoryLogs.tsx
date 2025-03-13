@@ -19,7 +19,7 @@ const HistoryLogs = () => {
     }
     const tournaments = userStatus.tournament.map(e => <div key={e.id} className="tournament" onClick={() => handler(e.id, e.created_by)}>{e.name}</div>)
     return (
-        <div className="container_tournaments">
+        <div className="container_history">
             {tournaments}
         </div>
 

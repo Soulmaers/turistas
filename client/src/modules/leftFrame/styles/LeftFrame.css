@@ -10,9 +10,13 @@
     justify-content: space-between;
 }
 
+.component_contents {
+    width: 100%;
+}
+
 .wrapper {
     width: 100%;
-    height: 83%;
+    height: 79%;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -130,9 +134,17 @@
     }
 }
 
+.high_header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 20%;
+}
+
 @media (width<900px) {
     .wrapper {
-        height: 80%;
+        height: 79%;
         padding: 5px 0;
     }
 
@@ -218,4 +230,68 @@
     .reservour {
         font-size: 0.7rem
     }
+}
+
+@media (width<400px) {
+    .high_header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2px;
+        height: auto
+    }
+
+    .header_admin_container {
+        width: 64%
+    }
+
+    .Header_container {
+        width: 35%;
+        height: 30px
+    }
+
+    .wrapper {
+        height: auto;
+        padding: 2px 0;
+    }
+
+    .wrapper_navi {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .component_contents {
+        width: 24%;
+    }
+
+    .btn {
+        border: none;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .component_contents:nth-child(n+2) {
+        border-left: 1px solid #fff;
+    }
+
+    .class_icon {
+        display: none;
+    }
+
+    .create_btn_tour {
+        right: 5px;
+    }
+
+    .container_statistics {
+        border: 1px solid #fff;
+        position: absolute;
+        bottom: 60px;
+        width: 90%;
+        right: 20px;
+        height: auto;
+        background-color: #4d4646;
+    }
+
 }

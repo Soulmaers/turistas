@@ -245,3 +245,9 @@
     font-weight: bold;
     font-size: 0.944rem;
 }
+
+@media (width<900px) {
+    .modal_add_tour {
+        height: 90vh
+    }
+}
