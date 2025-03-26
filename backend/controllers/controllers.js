@@ -45,9 +45,20 @@ exports.getStatusUser = async (req, res) => {
     res.json(result)
 }
 
+exports.uploades = async (req, res) => {
+    const nameFile = req.body.nameImage
+
+    console.log(nameFile)
+    const filePath = path.join(__dirname, `../uploades/${nameFile}`);
+    //  const filePath = path.join(uploadsDir, nameFile);
+    res.sendFile(filePath)
+}
+
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const destinationPath = path.join(__dirname, '../../client/public/images/');
+        //    const destinationPath = path.join(__dirname, '../../client/public/images/');
+        const destinationPath = path.join(__dirname, '../uploades/');
         cb(null, destinationPath);
     },
     filename: (req, file, cb) => {
@@ -61,33 +72,65 @@ const setFoto = multer({ storage: storage }).single('image');
 
 
 exports.updateCatch = async (req, res) => {
-    const data = req.body.data
-    console.log(data)
-    const mess = await ProcessCatch.updateCatch(data)
-    const result = await ProcessCatch.getCatch(data.idCatch)
-    const catchOne = result.map(e => {
-        return {
-            idCatch: e.id,
-            idTournament: e.idTournament,
-            idUser: e.idUser,
-            name_user: e.name_user,
-            name_reservour: e.name_reservour,
-            name_fish: e.name_fish,
-            id_fish: e.idFish,
-            id_type: e.idTypeCatch,
-            id_timeday: e.idTimeDay,
-            id_baits: e.idBait,
-            id_reservour: e.idReservour,
-            name_day: e.name_day,
-            name_type: e.name_type,
-            name_bait: e.name_bait,
-            weight: e.weight,
-            data: e.data,
-            urlFoto: e.urlFoto
-        }
-    })
-    console.log(catchOne)
-    res.json({ mess: mess, catch: catchOne[0] })
+    try {
+        await new Promise((resolve, reject) => {
+            setFoto(req, res, async (err) => {
+                if (err) {
+                    console.error('Ошибка при загрузке файла:', err);
+                    return reject(err); // reject промис в случае ошибки
+                }
+                resolve('ok'); // resolve промис, когда файл успешно загружен
+            });
+        });
+
+
+        const data = req.body;
+
+        const formState = {
+            fishs: data.fishs,
+            reservuors: data.reservuors,
+            typeFishing: data.typeFishing,
+            baits: data.baits,
+            timeDay: data.timeDay,
+            weight: data.weight,
+            comment: data.comment,
+            idTour: Number(data.idTour),
+            idUser: Number(data.idUser),
+            urlFoto: req.file?.filename || null,
+            date: Math.floor((new Date().getTime()) / 1000),
+            idCatch: Number(data.idCatch)
+        };
+
+
+        const mess = await ProcessCatch.updateCatch(formState)
+        const result = await ProcessCatch.getCatch(formState.idCatch)
+        const catchOne = result.map(e => {
+            return {
+                idCatch: e.id,
+                idTournament: e.idTournament,
+                idUser: e.idUser,
+                name_user: e.name_user,
+                name_reservour: e.name_reservour,
+                name_fish: e.name_fish,
+                id_fish: e.idFish,
+                id_type: e.idTypeCatch,
+                id_timeday: e.idTimeDay,
+                id_baits: e.idBait,
+                id_reservour: e.idReservour,
+                name_day: e.name_day,
+                name_type: e.name_type,
+                name_bait: e.name_bait,
+                weight: e.weight,
+                data: e.data,
+                urlFoto: e.urlFoto
+            }
+        })
+        console.log(catchOne)
+        res.json({ mess: mess, catch: catchOne[0] })
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 exports.setCatch = async (req, res) => {
@@ -101,6 +144,7 @@ exports.setCatch = async (req, res) => {
                 resolve('ok'); // resolve промис, когда файл успешно загружен
             });
         });
+
 
         const data = req.body;
 

@@ -5,7 +5,7 @@ import { useSetCatch } from '../hooks/setCatch'
 import { RootState, add_catch, set_action_catch, set_catch, set_catchsList, set_urlFoto } from '../../../../GlobalStor'
 import { ExtendedBigFish } from '../../../../GlobalStor'
 import '../styles/FormCatch.css'
-
+import { useGetImages } from '../../tabletours/hooks/getImages'
 import { Selects } from './Selects'
 import { IoSave } from "react-icons/io5";
 
@@ -21,10 +21,14 @@ export interface Catch {
     comment: string;
     idTour: number | null;
     idUser: number | undefined;
-    urlFoto: string | null | File | undefined
+    urlFoto: string | null;
+    image: File | null
 }
 
 export const FormCatch = () => {
+
+
+    const { getImage } = useGetImages()
     const [timeFile, setTimeFile] = useState<string | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
     const { setCatch, updateCatch } = useSetCatch()
@@ -48,7 +52,8 @@ export const FormCatch = () => {
         idTour: catchOne.idTournament || idTour,
         idUser: catchOne.idUser || user?.user?.id,
         idCatch: catchOne.idCatch || null,
-        urlFoto: typeof catchOne.urlFoto === 'string' || catchOne.urlFoto instanceof File ? catchOne.urlFoto : null
+        urlFoto: catchOne?.urlFoto || null,
+        image: null
     })
     const modalka = useRef<HTMLDivElement>(null)
 
@@ -68,7 +73,14 @@ export const FormCatch = () => {
             }
         }
         if (catchOne.name_day === '') findTimeDay()
-
+        if (catchOne.urlFoto) {
+            const gets = async () => {
+                if (catchOne.urlFoto) {
+                    setTimeFile(await getImage(catchOne.urlFoto))
+                }
+            }
+            gets()
+        }
 
         const handleClickOutside = (event: MouseEvent) => {
             if (modalka.current && !modalka.current.contains(event.target as Node)) {
@@ -105,7 +117,7 @@ export const FormCatch = () => {
             setTimeFile(imageUrl);
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            setFormState((prev) => ({ ...prev, urlFoto: file }));
+            setFormState((prev) => ({ ...prev, image: file, urlFoto: file?.name }));
         }
     };
     const handleButtonClick = () => {
@@ -125,30 +137,29 @@ export const FormCatch = () => {
             return; // Прерываем выполнение функции, если валидация не прошла
         } else {
             let mess: null | { mess: string, catch: ExtendedBigFish } = null
+
+            const formData = new FormData();
+            formData.append('fishs', formState.fishs.toString());
+            formData.append('reservuors', formState.reservuors.toString());
+            formData.append('typeFishing', formState.typeFishing.toString());
+            formData.append('baits', formState.baits.toString());
+            formData.append('timeDay', formState.timeDay.toString());
+            formData.append('weight', formState.weight);
+            formData.append('comment', formState.comment);
+            formData.append('idTour', String(formState.idTour)); // Преобразуем в строку
+            formData.append('idUser', String(formState.idUser));
+
+            if (formState.urlFoto && formState.image) { // Проверка на null
+                formData.append('urlFoto', formState.urlFoto);
+                formData.append('image', formState.image);
+            }
+
             if (catchOne.idCatch !== 0) {
-                formState.idCatch = catchOne.idCatch
-                mess = await updateCatch(formState)
+
+                formData.append('idCatch', String(catchOne.idCatch));
+                mess = await updateCatch(formData)
             }
             else {
-                const formData = new FormData();
-                formData.append('fishs', formState.fishs.toString());
-                formData.append('reservuors', formState.reservuors.toString());
-                formData.append('typeFishing', formState.typeFishing.toString());
-                formData.append('baits', formState.baits.toString());
-                formData.append('timeDay', formState.timeDay.toString());
-                formData.append('weight', formState.weight);
-                formData.append('comment', formState.comment);
-                formData.append('idTour', String(formState.idTour)); // Преобразуем в строку
-                formData.append('idUser', String(formState.idUser));
-
-                if (formState.urlFoto) { // Проверка на null
-                    if (typeof formState.urlFoto === 'string') {
-                        formData.append('urlFoto', formState.urlFoto);
-                    } else {
-                        formData.append('urlFoto', formState.urlFoto.name);
-                        formData.append('image', formState.urlFoto);  //  "images" - MUST match your server!
-                    }
-                }
                 mess = await setCatch(formData)
 
             }
@@ -235,7 +246,7 @@ export const FormCatch = () => {
                         style={{
                             width: '200px',
                             height: '200px',
-                            backgroundImage: timeFile ? `url(${timeFile})` : require(`../../../../../public/images/${formState.urlFoto}`),
+                            backgroundImage: `url(${timeFile})`,
                             backgroundSize: 'contain',
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center'

@@ -6,30 +6,31 @@ import { RootState } from "../../../../GlobalStor"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useResizeWindow } from '../../../servises/hooks/getDataContent'
-
+import { useGetImages } from '../hooks/getImages'
 
 const ViewUserBigFish = () => {
     const { windowWidth } = useResizeWindow()
-
+    const { getImage } = useGetImages()
     const [image, setImage] = useState<string | null>(null)
     const bigFish = useSelector((state: RootState) => state.slice.bigFish)
 
     useEffect(() => {
-        if (bigFish) {
-            const imageUrl = require(`../../../../../public/images/${bigFish.urlFoto}`);
-            const img = new Image();
-            img.src = imageUrl;
-
-            img.onload = () => {
-                const imageURL = `url(${imageUrl})`;
-                setImage(imageURL);
+        if (bigFish?.urlFoto) {
+            const fetchImage = async () => {
+                if (bigFish?.urlFoto) {
+                    console.log(bigFish);
+                    try {
+                        const result = await getImage(bigFish.urlFoto);
+                        setImage(`url(${result})`)
+                        // Здесь вы можете использовать результат, который вернули getImage
+                    } catch (error) {
+                        console.error('Ошибка при получении изображения:', error);
+                    }
+                }
             };
-
-            img.onerror = () => {
-                console.error('Error loading image:', imageUrl);
-                setImage(null); // Или можно задать значение по умолчанию
-            };
+            fetchImage();
         }
+
         else {
             setImage(null)
         }

@@ -15,13 +15,10 @@ export const useSetCatch = () => {
         return mess
     }
 
-    const updateCatch = async (data: Catch) => {
+    const updateCatch = async (formData: FormData) => {
         const params = {
             method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({ data })
+            body: formData
         }
         const res = await fetch('http://localhost:3333/api/updateCatch', params)
         return await res.json()

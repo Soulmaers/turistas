@@ -15,3 +15,5 @@ router.post('/api/getCatchs', controllers.getCatchs)
 router.post('/api/getStatusUser', controllers.getStatusUser)
 router.get('/api/getCatchsList', controllers.getCatchsList)
 router.post('/api/deleteCatch', controllers.deleteCatch)
+router.post('/api/uploades', controllers.uploades)
+

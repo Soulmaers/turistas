@@ -39,7 +39,7 @@ export interface BigFish {
     weight: string,
     foto_user: string,
     data: string,
-    urlFoto: null | {} | string
+    urlFoto: null | string//null | {} | string
 }
 export interface ExtendedBigFish extends BigFish {
     idUser: number;

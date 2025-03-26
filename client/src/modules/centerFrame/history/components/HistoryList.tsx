@@ -5,10 +5,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { formatUnixTime } from '../servises'
 import { FaTimes } from "react-icons/fa";
 import { Tournament } from '../../../form/components/Interface'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useGetImages } from '../../tabletours/hooks/getImages'
 
 export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
-
+    const { getImage } = useGetImages()
+    const [rows, setRows] = useState<JSX.Element[]>([]);
     const dispatch = useDispatch()
     const catchsList = useSelector((state: RootState) => state.slice.catchsList);
     const idClickTour = useSelector((state: RootState) => state.slice.idClickTour)
@@ -46,25 +48,35 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
             id_type: e.id_type
         }))
     }
-    const rows = catchsList.map(e => {
-        const time = formatUnixTime(Number(e.data))
-        let imageUrl = e.urlFoto ? require(`../../../../../public/images/${e.urlFoto}`) : 'Без фото'
-        return <tr className='rows_list_catch' key={e.data}>
-            <td>{e.name_user}</td>
-            <td>{e.name_reservour}</td>
-            <td>{e.name_fish}</td>
-            <td>{e.name_day}</td>
-            <td>{e.name_type}</td>
-            <td>{e.name_bait}</td>
-            <td>{e.weight}</td>
-            <td className='edit' onClick={(() => editHandler(e))}>{time}</td>
-            <td className='icon_fish_foto' style={{
-                backgroundImage: `url(${imageUrl})`,
-            }}></td>
-            <td className='delete_catch' onClick={() => handler(e)}><FaTimes className='icon_del' /></td>
-        </tr>
-    })
+    useEffect(() => {
+        const fetchRows = async () => {
+            const newRows = await Promise.all(
+                catchsList.map(async e => {
+                    const time = formatUnixTime(Number(e.data));
+                    let imageUrl = e.urlFoto ? await getImage(e.urlFoto) : 'Без фото';
+                    return (
+                        <tr className='rows_list_catch' key={e.data}>
+                            <td>{e.name_user}</td>
+                            <td>{e.name_reservour}</td>
+                            <td>{e.name_fish}</td>
+                            <td>{e.name_day}</td>
+                            <td>{e.name_type}</td>
+                            <td>{e.name_bait}</td>
+                            <td>{e.weight}</td>
+                            <td className='edit' onClick={() => editHandler(e)}>{time}</td>
+                            <td className='icon_fish_foto' style={{
+                                backgroundImage: `url(${imageUrl})`,
+                            }}></td>
+                            <td className='delete_catch' onClick={() => handler(e)}><FaTimes className='icon_del' /></td>
+                        </tr>
+                    );
+                })
+            );
+            setRows(newRows); // Обновляем состояние с полученными строками
+        };
 
+        fetchRows(); // Вызовем асинхронную функцию
+    }, [catchsList]); // Зависимость по catchsList
     return <div className="card_list_history">
         <div className='header_tournament_table'>
             <div className="name">{celevoys?.name}</div>
