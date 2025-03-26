@@ -5,21 +5,14 @@ import '../styles/ViewUserBigFish.css'
 import { RootState } from "../../../../GlobalStor"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import { useResizeWindow } from '../../../servises/hooks/getDataContent'
 
 
 const ViewUserBigFish = () => {
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const { windowWidth } = useResizeWindow()
+
     const [image, setImage] = useState<string | null>(null)
     const bigFish = useSelector((state: RootState) => state.slice.bigFish)
-
-
-    useEffect(() => {
-        const handleResize = () => setWindowWidth(window.innerWidth);
-
-        window.addEventListener('resize', handleResize);
-        // Удаляем обработчик при размонтировании
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     useEffect(() => {
         if (bigFish) {

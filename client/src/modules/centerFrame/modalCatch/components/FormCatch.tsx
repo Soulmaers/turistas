@@ -2,8 +2,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useSetCatch } from '../hooks/setCatch'
-import { RootState, add_catch, set_action_catch, set_urlFoto } from '../../../../GlobalStor'
-
+import { RootState, add_catch, set_action_catch, set_catch, set_catchsList, set_urlFoto } from '../../../../GlobalStor'
+import { ExtendedBigFish } from '../../../../GlobalStor'
 import '../styles/FormCatch.css'
 
 import { Selects } from './Selects'
@@ -11,22 +11,25 @@ import { IoSave } from "react-icons/io5";
 
 
 export interface Catch {
-    fishs: string;
-    reservuors: string;
-    typeFishing: string;
-    baits: string;
-    timeDay: string;
+    idCatch: null | number
+    fishs: string | number;
+    reservuors: string | number;
+    typeFishing: string | number;
+    baits: string | number;
+    timeDay: string | number;
     weight: string;
     comment: string;
     idTour: number | null;
     idUser: number | undefined;
-    urlFoto: null | File
+    urlFoto: string | null | File | undefined
 }
 
 export const FormCatch = () => {
     const [timeFile, setTimeFile] = useState<string | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
-    const { setCatch } = useSetCatch()
+    const { setCatch, updateCatch } = useSetCatch()
+    const catchsList = useSelector((state: RootState) => state.slice.catchsList);
+    const catchOne = useSelector((state: RootState) => state.slice.catch);
     const user = useSelector((state: RootState) => state.slice.userStatus)
     const idTour = useSelector((state: RootState) => state.slice.idClickTour)
     const dataContent = useSelector((state: RootState) => state.slice.dataContent)
@@ -35,18 +38,20 @@ export const FormCatch = () => {
 
     const [info, setInfo] = useState<string>('')
     const [formState, setFormState] = useState<Catch>({
-        fishs: '',
-        reservuors: '',
-        typeFishing: '',
-        baits: '',
-        timeDay: '',
-        weight: '',
+        fishs: catchOne.id_fish,
+        reservuors: catchOne.id_reservour,
+        typeFishing: catchOne.id_type,
+        baits: catchOne.id_baits,
+        timeDay: catchOne.id_timeday,
+        weight: catchOne.weight,
         comment: '',
-        idTour: idTour,
-        idUser: user?.user?.id,
-        urlFoto: null
+        idTour: catchOne.idTournament || idTour,
+        idUser: catchOne.idUser || user?.user?.id,
+        idCatch: catchOne.idCatch || null,
+        urlFoto: typeof catchOne.urlFoto === 'string' || catchOne.urlFoto instanceof File ? catchOne.urlFoto : null
     })
     const modalka = useRef<HTMLDivElement>(null)
+
 
     useEffect(() => {
         const findTimeDay = () => {
@@ -62,8 +67,7 @@ export const FormCatch = () => {
                 setFormState((prev) => ({ ...prev, 'timeDay': '4' }))
             }
         }
-
-        findTimeDay()
+        if (catchOne.name_day === '') findTimeDay()
 
 
         const handleClickOutside = (event: MouseEvent) => {
@@ -77,6 +81,7 @@ export const FormCatch = () => {
         };
 
     }, [])
+
 
 
     const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +100,6 @@ export const FormCatch = () => {
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
-        console.log(file);
         if (file?.name) {
             const imageUrl = URL.createObjectURL(file);
             setTimeFile(imageUrl);
@@ -110,62 +114,112 @@ export const FormCatch = () => {
         }
     };
     const handlerStart = async () => {
-        console.log(formState)
         if (formState['fishs'] === '') {
             setInfo('Выберите вид рыбы')
             setTimeout(() => setInfo(''), 2000)
+            return; // Прерываем выполнение функции, если валидация не прошла
         }
         else if (formState.weight !== '' && !formState.urlFoto) {
             setInfo('Добавьте фото улова')
             setTimeout(() => setInfo(''), 2000)
+            return; // Прерываем выполнение функции, если валидация не прошла
         } else {
-
-            const formData = new FormData();
-
-            formData.append('fishs', formState.fishs);
-            formData.append('reservuors', formState.reservuors);
-            formData.append('typeFishing', formState.typeFishing);
-            formData.append('baits', formState.baits);
-            formData.append('timeDay', formState.timeDay);
-            formData.append('weight', formState.weight);
-            formData.append('comment', formState.comment);
-            formData.append('idTour', String(formState.idTour)); // Преобразуем в строку
-            formData.append('idUser', String(formState.idUser));
-
-            if (formState.urlFoto) {
-                formData.append('urlFoto', formState.urlFoto.name);
-                formData.append('image', formState.urlFoto);  //  "images" - MUST match your server!
+            let mess: null | { mess: string, catch: ExtendedBigFish } = null
+            if (catchOne.idCatch !== 0) {
+                formState.idCatch = catchOne.idCatch
+                mess = await updateCatch(formState)
             }
-            const mess = await setCatch(formData)
-            setInfo(mess)
+            else {
+                const formData = new FormData();
+                formData.append('fishs', formState.fishs.toString());
+                formData.append('reservuors', formState.reservuors.toString());
+                formData.append('typeFishing', formState.typeFishing.toString());
+                formData.append('baits', formState.baits.toString());
+                formData.append('timeDay', formState.timeDay.toString());
+                formData.append('weight', formState.weight);
+                formData.append('comment', formState.comment);
+                formData.append('idTour', String(formState.idTour)); // Преобразуем в строку
+                formData.append('idUser', String(formState.idUser));
+
+                if (formState.urlFoto) { // Проверка на null
+                    if (typeof formState.urlFoto === 'string') {
+                        formData.append('urlFoto', formState.urlFoto);
+                    } else {
+                        formData.append('urlFoto', formState.urlFoto.name);
+                        formData.append('image', formState.urlFoto);  //  "images" - MUST match your server!
+                    }
+                }
+                mess = await setCatch(formData)
+
+            }
+
+            if (mess) {
+                setInfo(mess?.mess)
+                if (mess?.catch) {
+                    const object = catchsList.map(e => {
+                        if (mess?.catch && e.idCatch === mess.catch.idCatch) {
+                            return { ...mess.catch }
+                        }
+                        else {
+                            return e
+                        }
+                    })
+                    console.log(object)
+                    dispatch(set_catchsList(object))
+                }
+
+            }
+
+
             setTimeout(() => {
                 setInfo('');
                 dispatch(set_action_catch(actionCatch + 1))
+                dispatch(set_catch({
+                    name_user: '',
+                    name_fish: '',
+                    name_reservour: '',
+                    name_type: '',
+                    name_bait: '',
+                    name_day: '',
+                    weight: '',
+                    foto_user: '',
+                    data: '',
+                    urlFoto: null,
+                    idUser: 0,
+                    idTournament: 0,
+                    idCatch: 0,
+                    id_baits: 0,
+                    id_fish: 0,
+                    id_reservour: 0,
+                    id_timeday: 0,
+                    id_type: 0
+                }))
                 closeModal();
             }, 1500)
 
         }
-
     }
-    const fishs = dataContent.fishs?.map(e => ({ value: e.id, text: e.name }))
-    const reservuors = dataContent.reservours?.map(e => ({ value: e.id, text: e.name }))
-    const baits = dataContent.baits?.map(e => ({ value: e.id, text: e.name }))
-    const timeDay = dataContent.timeDay?.map(e => ({ value: e.id, text: e.name }))
-    const typeCatch = dataContent.typeCatch?.map(e => ({ value: e.id, text: e.name }))
+    const fishs = dataContent.fishs?.map(e => ({ value: e.id, text: e.name })) ?? []
+    const reservuors = dataContent.reservours?.map(e => ({ value: e.id, text: e.name })) ?? []
+    const baits = dataContent.baits?.map(e => ({ value: e.id, text: e.name })) ?? []
+    const timeDay = dataContent.timeDay?.map(e => ({ value: e.id, text: e.name })) ?? []
+    const typeCatch = dataContent.typeCatch?.map(e => ({ value: e.id, text: e.name })) ?? []
+    console.log(catchOne.urlFoto)
+    console.log(formState.urlFoto)
     return (
         <div className="modal_add_tour" ref={modalka}>
             <div className="header_modal_tour">Карточка улова</div>
             <div className="body_modal_tour">
-                <Selects options={fishs || []} name={'Вид рыбы'} empty={true} selected={formState['fishs']} nameState={'fishs'} onChange={handleSelectChange} />
+                <Selects options={fishs || []} name={'Вид рыбы'} empty={true} selected={formState['fishs'].toString()} nameState={'fishs'} onChange={handleSelectChange} />
 
                 <div className="rows_card_tour">
                     <div className="name_car_tour">Вес (граммы)</div>
                     <input className="weight" value={formState['weight']} placeholder='введите вес рыбы' onChange={handleInputChange} />
                 </div>
-                <Selects options={reservuors || []} name={'Водоём'} empty={true} selected={formState['reservuors']} nameState={'reservuors'} onChange={handleSelectChange} />
-                <Selects options={typeCatch || []} name={'Тип ловли'} empty={true} selected={formState['typeFishing']} nameState={'typeFishing'} onChange={handleSelectChange} />
-                <Selects options={baits || []} name={'Приманка'} empty={true} selected={formState['baits']} nameState={'baits'} onChange={handleSelectChange} />
-                <Selects options={timeDay || []} name={'Время суток'} empty={false} selected={formState['timeDay']} nameState={'timeDay'} onChange={handleSelectChange} />
+                <Selects options={reservuors || []} name={'Водоём'} empty={true} selected={formState['reservuors'].toString()} nameState={'reservuors'} onChange={handleSelectChange} />
+                <Selects options={typeCatch || []} name={'Тип ловли'} empty={true} selected={formState['typeFishing'].toString()} nameState={'typeFishing'} onChange={handleSelectChange} />
+                <Selects options={baits || []} name={'Приманка'} empty={true} selected={formState['baits'].toString()} nameState={'baits'} onChange={handleSelectChange} />
+                <Selects options={timeDay || []} name={'Время суток'} empty={false} selected={formState['timeDay'].toString()} nameState={'timeDay'} onChange={handleSelectChange} />
 
                 <div className="rows_card_tour">
                     <div className="name_car_tour">Комментарии</div>
@@ -181,7 +235,7 @@ export const FormCatch = () => {
                         style={{
                             width: '200px',
                             height: '200px',
-                            backgroundImage: `url(${timeFile})`,
+                            backgroundImage: timeFile ? `url(${timeFile})` : require(`../../../../../public/images/${formState.urlFoto}`),
                             backgroundSize: 'contain',
                             backgroundRepeat: 'no-repeat',
                             backgroundPosition: 'center'

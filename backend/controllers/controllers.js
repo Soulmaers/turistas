@@ -60,6 +60,36 @@ const setFoto = multer({ storage: storage }).single('image');
 
 
 
+exports.updateCatch = async (req, res) => {
+    const data = req.body.data
+    console.log(data)
+    const mess = await ProcessCatch.updateCatch(data)
+    const result = await ProcessCatch.getCatch(data.idCatch)
+    const catchOne = result.map(e => {
+        return {
+            idCatch: e.id,
+            idTournament: e.idTournament,
+            idUser: e.idUser,
+            name_user: e.name_user,
+            name_reservour: e.name_reservour,
+            name_fish: e.name_fish,
+            id_fish: e.idFish,
+            id_type: e.idTypeCatch,
+            id_timeday: e.idTimeDay,
+            id_baits: e.idBait,
+            id_reservour: e.idReservour,
+            name_day: e.name_day,
+            name_type: e.name_type,
+            name_bait: e.name_bait,
+            weight: e.weight,
+            data: e.data,
+            urlFoto: e.urlFoto
+        }
+    })
+    console.log(catchOne)
+    res.json({ mess: mess, catch: catchOne[0] })
+}
+
 exports.setCatch = async (req, res) => {
     try {
         await new Promise((resolve, reject) => {
@@ -94,14 +124,14 @@ exports.setCatch = async (req, res) => {
         ]);
         console.log(result)
         if (ok) {
-            res.json(result);
+            res.json({ mess: result, catch: null });
         } else {
-            res.status(500).json('Что-то пошло не так при обновлении статуса пользователя'); // Отправляем статус ошибки
+            res.json({ mess: 'Ошибка', catch: null });
         }
 
     } catch (error) {
         console.error('Произошла общая ошибка:', error);
-        res.json('Что-то пошло не так при обработке запроса'); // Отправляем статус ошибки
+        res.json({ mess: 'Ошибка', catch: null });
     }
 };
 
@@ -119,6 +149,11 @@ exports.getCatchsList = async (req, res) => {
             name_user: e.name_user,
             name_reservour: e.name_reservour,
             name_fish: e.name_fish,
+            id_fish: e.idFish,
+            id_type: e.idTypeCatch,
+            id_timeday: e.idTimeDay,
+            id_baits: e.idBait,
+            id_reservour: e.idReservour,
             name_day: e.name_day,
             name_type: e.name_type,
             name_bait: e.name_bait,

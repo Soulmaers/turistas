@@ -23,7 +23,7 @@
 
 }
 
-.rows_list_catch {
+.edit {
     cursor: pointer;
 }
 
@@ -34,6 +34,7 @@
 
 td.delete_catch {
     text-align: center;
+    cursor: pointer;
 }
 
 .icon_del {

@@ -44,7 +44,12 @@ export interface BigFish {
 export interface ExtendedBigFish extends BigFish {
     idUser: number;
     idTournament: number;
-    idCatch: number
+    idCatch: number;
+    id_baits: number
+    id_fish: number
+    id_reservour: number,
+    id_timeday: number,
+    id_type: number
 }
 // Интерфейс для состояния
 interface MyState {
@@ -56,6 +61,7 @@ interface MyState {
     catchForm: boolean,
     idClickTour: number | null
     tour: DataTour,
+    catch: ExtendedBigFish,
     dataContent: {
         reservours: null | { name: string, discription: string, image: string, id: number }[],
         fishs: null | { name: string, id: number }[],
@@ -73,7 +79,8 @@ interface MyState {
     deleteForm: boolean,
     deleteIdCatch: null | ExtendedBigFish,
     allCatchs: ExtendedBigFish[],
-    staticData: UserData[]
+    staticData: UserData[],
+    deleteFormTour: boolean
 }
 
 export interface Participants {
@@ -107,6 +114,26 @@ const initialState: MyState = {
         dateFinish: '',
         users: []
     },
+    catch: {
+        name_user: '',
+        name_fish: '',
+        name_reservour: '',
+        name_type: '',
+        name_bait: '',
+        name_day: '',
+        weight: '',
+        foto_user: '',
+        data: '',
+        urlFoto: null,
+        idUser: 0,
+        idTournament: 0,
+        idCatch: 0,
+        id_baits: 0,
+        id_fish: 0,
+        id_reservour: 0,
+        id_timeday: 0,
+        id_type: 0
+    },
     dataContent: {
         reservours: null,
         fishs: null,
@@ -124,7 +151,8 @@ const initialState: MyState = {
     deleteForm: false,
     deleteIdCatch: null,
     allCatchs: [],
-    staticData: []
+    staticData: [],
+    deleteFormTour: false
 };
 
 // Создаем slice
@@ -156,6 +184,9 @@ const slice = createSlice({
         set_tour: (state, action: PayloadAction<DataTour>) => {
             state.tour = action.payload;
         },
+        set_catch: (state, action: PayloadAction<ExtendedBigFish>) => {
+            state.catch = action.payload;
+        },
         set_dataContent: (state, action: PayloadAction<{ reservours: null; fishs: null; baits: null; timeDay: null, typeCatch: null }>) => {
             state.dataContent = action.payload;
         },
@@ -186,6 +217,10 @@ const slice = createSlice({
         set_deleteForm: (state, action: PayloadAction<boolean>) => {
             state.deleteForm = action.payload;
         },
+        set_deleteFormTour: (state, action: PayloadAction<boolean>) => {
+            state.deleteFormTour = action.payload;
+        },
+
         set_deleteIdCatch: (state, action: PayloadAction<null | ExtendedBigFish>) => {
             state.deleteIdCatch = action.payload;
         },
@@ -218,6 +253,7 @@ export const { updateContent,
     add_catch,
     click_tour,
     set_tour,
+    set_catch,
     set_dataContent,
     set_catchs,
     set_action_catch,
@@ -231,7 +267,8 @@ export const { updateContent,
     set_deleteIdCatch,
     deleteCatch,
     setAllCatchs,
-    set_static
+    set_static,
+    set_deleteFormTour
 } = slice.actions;
 
 

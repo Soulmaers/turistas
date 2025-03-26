@@ -2,6 +2,7 @@ import React from 'react'
 
 import { FormCatch } from './modalCatch/components/FormCatch'
 import { FormDelCatch } from './history/components/FormDelCatch'
+import { FormDeleteTour } from '../leftFrame/components/FormDeleteTour'
 import ModalAddTour from './modalCarTour/components/ModalAddTour'
 import WiewCardReservours from './reservours/components/WiewCardReservours'
 import AddCarTournament from './tabletours/components/AddCarTournament'
@@ -16,6 +17,7 @@ import { RootState } from '../../GlobalStor';
 
 const СenterFrame = () => {
     const deleteForm = useSelector((state: RootState) => state.slice.deleteForm);
+    const deleteFormTour = useSelector((state: RootState) => state.slice.deleteFormTour);
     const content = useSelector((state: RootState) => state.slice.content);
     const updateReservourss = useSelector((state: RootState) => state.slice.updateReservours);
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
@@ -42,6 +44,7 @@ const СenterFrame = () => {
             {stateModal && <Modal><ModalAddTour /></Modal>}
             {catchForm && <Modal><FormCatch /></Modal>}
             {deleteForm && <Modal><FormDelCatch /></Modal>}
+            {deleteFormTour && <Modal><FormDeleteTour /></Modal>}
         </div>
 
     )

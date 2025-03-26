@@ -1,6 +1,6 @@
 
 import '../styles/HistoryList.css'
-import { RootState, set_deleteForm, set_deleteIdCatch, ExtendedBigFish } from '../../../../GlobalStor';
+import { RootState, set_deleteForm, add_catch, set_catch, set_deleteIdCatch, ExtendedBigFish } from '../../../../GlobalStor';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatUnixTime } from '../servises'
 import { FaTimes } from "react-icons/fa";
@@ -20,6 +20,32 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
         dispatch(set_deleteForm(true))
         dispatch(set_deleteIdCatch(catchItem))
     }
+
+    const editHandler = (e: ExtendedBigFish) => {
+        console.log(e)
+        dispatch(add_catch(true))
+
+        dispatch(set_catch({
+            name_user: e.name_user,
+            name_fish: e.name_fish,
+            name_reservour: e.name_reservour,
+            name_type: e.name_type,
+            name_bait: e.name_bait,
+            name_day: e.name_day,
+            weight: e.weight,
+            foto_user: e.foto_user,
+            data: e.data,
+            urlFoto: e.urlFoto,
+            idUser: e.idUser,
+            idTournament: e.idTournament,
+            idCatch: e.idCatch,
+            id_baits: e.id_baits,
+            id_fish: e.id_fish,
+            id_reservour: e.id_reservour,
+            id_timeday: e.id_timeday,
+            id_type: e.id_type
+        }))
+    }
     const rows = catchsList.map(e => {
         const time = formatUnixTime(Number(e.data))
         let imageUrl = e.urlFoto ? require(`../../../../../public/images/${e.urlFoto}`) : 'Без фото'
@@ -31,11 +57,11 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
             <td>{e.name_type}</td>
             <td>{e.name_bait}</td>
             <td>{e.weight}</td>
-            <td>{time}</td>
+            <td className='edit' onClick={(() => editHandler(e))}>{time}</td>
             <td className='icon_fish_foto' style={{
                 backgroundImage: `url(${imageUrl})`,
             }}></td>
-            <td className='delete_catch' ><FaTimes className='icon_del' onClick={() => handler(e)} /></td>
+            <td className='delete_catch' onClick={() => handler(e)}><FaTimes className='icon_del' /></td>
         </tr>
     })
 

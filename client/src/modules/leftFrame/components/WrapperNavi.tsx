@@ -18,7 +18,6 @@ export const WrapperNavi = () => {
     const dispatch = useDispatch()
     const subMenu = useSelector((state: RootState) => state.slice.subMenu);
 
-
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
         dispatch(set_subMenu(subMenu === selectSubMenu ? null : selectSubMenu))
         console.log(selectSubMenu)
