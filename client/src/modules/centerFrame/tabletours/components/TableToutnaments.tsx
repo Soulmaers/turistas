@@ -16,7 +16,9 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     const dispatch = useDispatch()
     useEffect(() => {
         const fetchData = async () => {
+            console.log(idTour)
             const data = await getCatchs(idTour);
+            console.log(data)
             dispatch(set_catchs((data.data)))
             dispatch(set_bigfish(data.bigFish))
         };

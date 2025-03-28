@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState, click_tour } from '../../../../GlobalStor'
+import { RootState, click_tour, set_bigfish } from '../../../../GlobalStor'
 import ViewUserBigFish from './ViewUserBigFish'
 import TimeDisplay from './TimeDisplay'
 import TableTournament from './TableToutnaments'
@@ -22,8 +22,9 @@ const AddCarTournament: React.FC<{ data: Tournament[] }> = ({ data }) => {
 
     const celevoys = data.find(e => e.id === idClickTour)
     const celevoy = celevoys ? celevoys : data[data.length - 1]
-
+    console.log(celevoy)
     const { name, dateStart, dateFinish, status } = celevoy
+    if (!status) dispatch(set_bigfish(null))
     const rows = reglament.map((e, index) => <li key={e + index} className="rows_reg">{e}</li>)
     return (<div className="card_tournament">
         <div className='header_tournament_table'>
