@@ -246,8 +246,13 @@
     font-size: 0.944rem;
 }
 
-@media (width<900px) {
+@media (width<950px) {
     .modal_add_tour {
         height: 90vh
+    }
+
+    .input_car_tour,
+    .input_card_tour_picker {
+        border: 1px solid rgba(255, 255, 255, 0.7)
     }
 }

@@ -142,7 +142,7 @@
     height: 20%;
 }
 
-@media (width<900px) {
+@media (width<950px) {
     .wrapper {
         height: 79%;
         padding: 5px 0;
@@ -192,28 +192,6 @@
         right: 15%
     }
 
-    input[type="checkbox"]:checked::before {
-        content: "\2713";
-        font-size: 12px;
-        display: block;
-        font-weight: bold;
-        height: 12px;
-        width: 12px;
-        color: rgba(6, 28, 71, 1);
-        ;
-        text-align: center;
-        line-height: 12px;
-    }
-
-    input[type="checkbox"]::before {
-        content: "";
-        display: block;
-        height: 12px;
-        width: 12px;
-        border-radius: 2px;
-        border: 1px solid #4d4646;
-        ;
-    }
 
     .label_check {
         font-size: 0.7rem;
@@ -227,39 +205,67 @@
         -ms-overflow-style: none;
     }
 
-    .reservour {
-        font-size: 0.7rem
-    }
 }
 
-@media (width<400px) {
+@media (width<440px) {
+    .label_check {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-left: 5px;
+    }
+
     .high_header {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        padding: 2px;
-        height: auto
+        position: fixed;
+        height: 40px;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: #2D6D4B;
     }
 
     .header_admin_container {
-        width: 64%
+        width: 45%;
+        height: 40px;
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
     }
 
     .Header_container {
-        width: 35%;
-        height: 30px
+        width: 55%;
+        height: 40px;
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
     }
 
     .wrapper {
-        height: auto;
-        padding: 2px 0;
+        position: fixed;
+        height: 45px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border: none;
+        border-radius: 0;
+        background-color: #2D6D4B;
+    }
+
+    .wrapper_account {
+        background-color: transparent;
+        border: none;
+        border-radius: 0
     }
 
     .wrapper_navi {
         width: 100%;
         flex-direction: row;
         justify-content: space-around;
+        background-color: transparent;
+        border-radius: 0
     }
 
     .component_contents {
@@ -281,7 +287,7 @@
     }
 
     .create_btn_tour {
-        right: 5px;
+        right: -2px;
     }
 
     .container_statistics {
@@ -294,4 +300,17 @@
         background-color: #4d4646;
     }
 
+    .title_name {
+        font-size: 1.1rem;
+    }
+
+
+    .exit,
+    .fish_icon,
+    .login,
+    .numbers,
+    .settings_icon,
+    .star_icon {
+        font-size: 1.15rem;
+    }
 }

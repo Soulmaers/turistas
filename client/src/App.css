@@ -12,9 +12,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
   background-color: #4d4646;
   font-family: Akrobat;
+
 }
 
 .popup_backgroud {
@@ -29,8 +29,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 97%;
-  height: 90vh;
+  width: 98%;
+  height: 99vh;
 }
 
 .App-logo {
@@ -69,11 +69,20 @@
 
 }
 
-@media (width<400px) {
+@media (width<440px) {
   .body {
+    height: 97vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%
   }
+
+  .App {
+    position: fixed;
+    top: 0;
+    left: 0
+  }
+
 
 }

@@ -16,7 +16,7 @@ export const useProcessList = (userId: number | undefined) => {
                 method: 'GET'
             };
             try {
-                const res = await fetch('http://localhost:3333/api/getCatchsList', param);
+                const res = await fetch('/api/getCatchsList', param);
                 const data: ExtendedBigFish[] = await res.json();
                 console.log(data)
                 const idTournamments = userStatus.tournament.map(e => e.id)

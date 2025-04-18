@@ -134,6 +134,7 @@ exports.updateCatch = async (req, res) => {
 }
 
 exports.setCatch = async (req, res) => {
+    console.log('тут')
     try {
         await new Promise((resolve, reject) => {
             setFoto(req, res, async (err) => {
@@ -147,7 +148,7 @@ exports.setCatch = async (req, res) => {
 
 
         const data = req.body;
-
+        console.log(data)
         const formState = {
             fishs: data.fishs,
             reservuors: data.reservuors,
@@ -277,6 +278,7 @@ exports.getUserCheck = async (req, res) => {
         const user = await instance.getUser(contactID)
         if (user) {
             const tournament = await instance.getTournaments(user.id)
+            // console.log({ user, tournament })
             res.json({ user, tournament })
         }
         else {

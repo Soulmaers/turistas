@@ -12,7 +12,7 @@ export const useDeleteCatch = () => {
             },
             body: JSON.stringify({ id, idUser })
         }
-        const res = await fetch('http://localhost:3333/api/deleteCatch', params)
+        const res = await fetch('/api/deleteCatch', params)
         const data = await res.json()
         return data
     }

@@ -17,26 +17,27 @@ import { update_modal, set_subMenu, set_historyWiew, RootState } from '../../../
 export const WrapperNavi = () => {
     const dispatch = useDispatch()
     const subMenu = useSelector((state: RootState) => state.slice.subMenu);
-
+    const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
+
+        if (userStatus.tournament.length === 0) return
         dispatch(set_subMenu(subMenu === selectSubMenu ? null : selectSubMenu))
-        console.log(selectSubMenu)
         if (selectSubMenu === 'stata') dispatch(set_historyWiew(selectSubMenu))
     }
     const getIconsArrow = (selectSubMenu: string) => { //Меняем иконку стрелки
         return subMenu === selectSubMenu ? <IoIosArrowUp className="class_icon" /> : < IoIosArrowDown className="class_icon" />
     }
 
-    const addCardTour = () => {  //меняем стэйт по отображению модального окна
-        console.log('окно?')
+    const addCardTour = (event: React.MouseEvent<SVGElement>) => {  //меняем стэйт по отображению модального окна
+        event.stopPropagation();
         dispatch(update_modal(true))
     }
 
     const menuItems = [
-        { label: 'Турниры', icon: <GiTrophy className="class_icon icon_button" />, component: <Tournaments />, key: 'tournaments' },
-        { label: 'Статистика', icon: <FaChartGantt className="class_icon icon_button" />, component: <Statistics />, key: 'stata' },
-        { label: 'Водоёмы', icon: <FaWater className="class_icon icon_button" />, component: <Reservoors />, key: 'reservoors' },
-        { label: 'Журнал', icon: <FaBookOpen className="class_icon icon_button" />, component: <HistoryLogs />, key: 'history' }
+        { label: 'ТУРНИРЫ', icon: <GiTrophy className="class_icon icon_button" />, component: <Tournaments />, key: 'tournaments' },
+        { label: 'СТАТИСТИКА', icon: <FaChartGantt className="class_icon icon_button" />, component: <Statistics />, key: 'stata' },
+        { label: 'ВОДОЁМЫ', icon: <FaWater className="class_icon icon_button" />, component: <Reservoors />, key: 'reservoors' },
+        { label: 'ЖУРНАЛ', icon: <FaBookOpen className="class_icon icon_button" />, component: <HistoryLogs />, key: 'history' }
 
     ]
 

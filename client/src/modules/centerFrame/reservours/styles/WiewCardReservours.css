@@ -33,3 +33,9 @@
     border-radius: 5px;
     border: 1px solid #fff;
 }
+
+@media (width<440px) {
+    .body_reservours {
+        height: 92%
+    }
+}

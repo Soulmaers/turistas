@@ -24,12 +24,15 @@
     box-sizing: border-box;
 }
 
-@media (width<400px) {
+@media (width<440px) {
     .modal_window {
-        top: 30%;
+        /*  top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        position: absolute;
+        position: absolute;*/
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
 }

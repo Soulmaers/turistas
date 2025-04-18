@@ -28,7 +28,7 @@
     text-align: center;
 }
 
-@media (width<900px) {
+@media (width<950px) {
     .container_table {
         width: 100%
     }

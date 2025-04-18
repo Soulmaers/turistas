@@ -9,7 +9,7 @@ export const useGetDataContent = () => {
         const params = {
             method: 'GET'
         }
-        const result = await fetch('http://localhost:3333/api/getContent', params)
+        const result = await fetch('/api/getContent', params)
         const data = await result.json()
 
         dispatch(set_dataContent(data))
@@ -22,7 +22,7 @@ export const useResizeWindow = () => {
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     useEffect(() => {
-        const handleResize = () => setWindowWidth(window.innerWidth);
+        const handleResize = () => setTimeout(() => setWindowWidth(window.innerWidth), 100);
 
         window.addEventListener('resize', handleResize);
         // Удаляем обработчик при размонтировании

@@ -80,7 +80,8 @@ interface MyState {
     deleteIdCatch: null | ExtendedBigFish,
     allCatchs: ExtendedBigFish[],
     staticData: UserData[],
-    deleteFormTour: boolean
+    deleteFormTour: boolean,
+    profil: boolean
 }
 
 export interface Participants {
@@ -152,7 +153,8 @@ const initialState: MyState = {
     deleteIdCatch: null,
     allCatchs: [],
     staticData: [],
-    deleteFormTour: false
+    deleteFormTour: false,
+    profil: false
 };
 
 // Создаем slice
@@ -237,6 +239,9 @@ const slice = createSlice({
         set_static: (state, action: PayloadAction<UserData[]>) => {
             state.staticData = action.payload;
         },
+        set_profil: (state, action: PayloadAction<boolean>) => {
+            state.profil = action.payload;
+        },
 
 
 
@@ -245,7 +250,7 @@ const slice = createSlice({
 });
 
 // Экспортируем actions
-export const { updateContent,
+export const {
     updateReservours,
     updateStatusUser,
     controll_modal_form,
@@ -268,7 +273,8 @@ export const { updateContent,
     deleteCatch,
     setAllCatchs,
     set_static,
-    set_deleteFormTour
+    set_deleteFormTour,
+    set_profil
 } = slice.actions;
 
 

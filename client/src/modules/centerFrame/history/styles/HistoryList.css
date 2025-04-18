@@ -46,3 +46,9 @@ td.delete_catch {
     background-size: contain;
     background-position: center;
 }
+
+@media (width<440px) {
+    .card_list_history {
+        height: 98%
+    }
+}

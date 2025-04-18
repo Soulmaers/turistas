@@ -7,7 +7,7 @@ const config = {
     server: 'localhost', // Или '127.0.0.1', или 'localhost\имя_экземпляра'
     database: 'turistas', // Имя вашей базы данных
     user: 'sa',
-    password: 'Alex',
+    password: 'Alexsi-2',
     options: {
         trustServerCertificate: true,
         encrypt: false,

@@ -95,3 +95,38 @@
         transform: rotate(0deg);
     }
 }
+
+@media (width<950px) {
+    .exit {
+        font-size: 0.7rem
+    }
+}
+
+@media (width<440px) {
+    .login {
+        cursor: pointer;
+    }
+
+    .trophy_all {
+        background-image: url('../../../assets/icon_cup.webp');
+        height: 20.9px;
+        min-width: 25.6px;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    .fish_all {
+        background-image: url('../../../assets/icon_fish.webp');
+        height: 20.9px;
+        min-width: 13.3px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        margin: 0 2px;
+    }
+
+    .number {
+        font-size: 1.2rem;
+        padding-bottom: 2px;
+    }
+
+}

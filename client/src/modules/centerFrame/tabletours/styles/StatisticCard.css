@@ -5,3 +5,17 @@
 .table_tournament_stata {
     width: 98%
 }
+
+
+
+@media (width<440px) {
+
+    .wrap_options:nth-child(6) {
+        display: flex;
+        flex-wrap: wrap;
+
+    }
+
+
+
+}

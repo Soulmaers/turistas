@@ -18,7 +18,7 @@ export const useDeleteTour = () => {
 
         try {
             console.log('тут')
-            const res = await fetch(`http://localhost:3333/api/deleteTour`, param)
+            const res = await fetch(`/api/deleteTour`, param)
             const result = await res.json()
             return `Турнир ${name} удалён.`
         }
@@ -46,7 +46,7 @@ export const useEditTour = () => {
         }
         try {
             console.log('тут')
-            const res = await fetch(`http://localhost:3333/api/getContentTour`, param)
+            const res = await fetch(`/api/getContentTour`, param)
             const result = await res.json()
             dispatch(update_modal(true))
 

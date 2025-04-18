@@ -23,8 +23,14 @@ input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
     background-color: #fff;
+    outline: none;
+    border: none;
+    /* Явно отключаем обводку */
+    border-radius: 0;
+    /* Явно отключаем радиус */
 
 }
+
 
 input[type="checkbox"]:checked {
     background-color: #fff;
@@ -49,6 +55,64 @@ input[type="checkbox"]::before {
     display: block;
     height: 14px;
     width: 14px;
+
     border-radius: 2px;
-    border: 1px solid #4d4646;;
+    border: 1px solid #4d4646;
+    ;
+}
+
+@media (width<950px) {
+    .object_checks {
+        width: 12px;
+        height: 12px;
+    }
+
+    input[type="checkbox"]:checked::before {
+        content: "\2713";
+        font-size: 12px;
+        display: block;
+        font-weight: bold;
+        height: 12px;
+        width: 12px;
+        color: rgba(6, 28, 71, 1);
+        ;
+        text-align: center;
+        line-height: 12px;
+
+    }
+
+    input[type="checkbox"]::before {
+        content: "";
+        display: block;
+        height: 12px;
+        width: 12px;
+
+        /* border-radius: 2px;
+        border: 1px solid #4d4646;
+        ;*/
+    }
+
+    /*
+    input[type="checkbox"]:checked::before {
+        content: "\2713";
+        font-size: 12px;
+        display: block;
+        font-weight: bold;
+        height: 12px;
+        width: 12px;
+        color: rgba(6, 28, 71, 1);
+        ;
+        text-align: center;
+        line-height: 12px;
+    }
+
+    input[type="checkbox"]::before {
+        content: "";
+        display: block;
+        height: 12px;
+        width: 12px;
+        border-radius: 2px;
+        border: 1px solid #4d4646;
+        ;
+    }*/
 }

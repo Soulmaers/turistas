@@ -35,13 +35,13 @@ const ViewUserBigFish = () => {
             setImage(null)
         }
     }, [bigFish]);
-    const back = !bigFish ? { backgroundImage: `url(${whatRound})` } : { backgroundImage: `url(${require(`../assets/${bigFish.foto_user}`)}` };
+    const back = !bigFish ? { backgroundImage: `url(${whatRound})` } : (bigFish.foto_user ? { backgroundImage: `url(${require(`../assets/${bigFish.foto_user}`)}` } : null);
     const margin = !bigFish ? { marginTop: '60px' } : {}
     const iconStyles = { ...back, ...margin }
 
 
 
-    const isMobile = windowWidth < 400;
+    const isMobile = windowWidth < 440;
     return (
         <div className="wins_card">
             <div className='title_bigFish'>BIG FISH</div>

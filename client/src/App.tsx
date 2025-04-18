@@ -19,6 +19,7 @@ function App() {
   const { getContent } = useGetDataContent()
 
 
+
   useEffect(() => {
     const fetchData = async () => {
       await getContent();
@@ -26,11 +27,11 @@ function App() {
     fetchData();
   }, [activForm])
 
-  const isMobile = windowWidth < 400;
+  const isMobile = windowWidth < 440;
   return (
 
     <div className="App">
-      {activForm && <Modal><Form /></Modal>}
+      {activForm && <Modal style={{ top: '50%' }}><Form /></Modal>}
       <div className="body">
         {!isMobile && <LeftFrame />}
         {isMobile && <HeaderMobile />}

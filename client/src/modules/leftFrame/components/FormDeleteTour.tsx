@@ -49,9 +49,11 @@ export const FormDeleteTour = () => {
         const result = await deleteTour(nameTour?.id, nameTour?.name)
         setDel(true)
         setText(result)
+        console.log(userStatus.tournament)
         const tournaments = userStatus.tournament.filter(e => e.id !== idClickTour)
+        console.log(tournaments)
         dispatch(updateStatusUser({ ...userStatus, tournament: tournaments }))
-
+        // if (tournaments.length === 0) dispatch(updateContent(null))
 
         setTimeout(() => {
             setDel(false)
@@ -60,7 +62,7 @@ export const FormDeleteTour = () => {
 
     }
     return <div className="body_del" ref={modalka}>
-        {del && <Modal><TextInfoModal text={text} /></Modal>}
+        {del && <Modal style={{ top: '50%' }}><TextInfoModal text={text} /></Modal>}
         <div className="header_del">Удалить турнир?</div>
         <div className="center_del_tour">
             {nameTour?.name}

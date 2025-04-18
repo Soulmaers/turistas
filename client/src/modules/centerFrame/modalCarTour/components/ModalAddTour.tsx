@@ -27,7 +27,6 @@ const ModalAddTour = () => {
     const { addTour } = useAddTour()
     const nameInputRef = useRef<HTMLInputElement>(null);
     const modalka = useRef<HTMLDivElement>(null)
-    console.log(tourData)
 
     useEffect(() => {
         if (nameInputRef.current) nameInputRef.current.value = tourData?.nameTour || '';
@@ -102,7 +101,7 @@ const ModalAddTour = () => {
     };
     return (
         <>
-            {dels && <Modal><TextInfoModal text={text} /></Modal>}
+            {dels && <Modal style={{ top: '50%' }}><TextInfoModal text={text} /></Modal>}
             <div className="modal_add_tour" ref={modalka}>
                 <div className="header_modal_tour">Карточка турнира</div>
                 <div className="body_modal_tour">

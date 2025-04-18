@@ -39,7 +39,8 @@ export const FormCatch = () => {
     const dataContent = useSelector((state: RootState) => state.slice.dataContent)
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
     const dispatch = useDispatch()
-
+    console.log(user.tournament[user.tournament.length - 1].id)
+    console.log('тур')
     const [info, setInfo] = useState<string>('')
     const [formState, setFormState] = useState<Catch>({
         fishs: catchOne.id_fish,
@@ -49,7 +50,7 @@ export const FormCatch = () => {
         timeDay: catchOne.id_timeday,
         weight: catchOne.weight,
         comment: '',
-        idTour: catchOne.idTournament || idTour,
+        idTour: catchOne.idTournament || idTour || user.tournament[user.tournament.length - 1].id,
         idUser: catchOne.idUser || user?.user?.id,
         idCatch: catchOne.idCatch || null,
         urlFoto: catchOne?.urlFoto || null,
@@ -149,6 +150,7 @@ export const FormCatch = () => {
             formData.append('idTour', String(formState.idTour)); // Преобразуем в строку
             formData.append('idUser', String(formState.idUser));
 
+            console.log(formData)
             if (formState.urlFoto && formState.image) { // Проверка на null
                 formData.append('urlFoto', formState.urlFoto);
                 formData.append('image', formState.image);
@@ -160,6 +162,8 @@ export const FormCatch = () => {
                 mess = await updateCatch(formData)
             }
             else {
+                console.log(formState)
+                setInfo('ждем')
                 mess = await setCatch(formData)
 
             }
@@ -215,8 +219,7 @@ export const FormCatch = () => {
     const baits = dataContent.baits?.map(e => ({ value: e.id, text: e.name })) ?? []
     const timeDay = dataContent.timeDay?.map(e => ({ value: e.id, text: e.name })) ?? []
     const typeCatch = dataContent.typeCatch?.map(e => ({ value: e.id, text: e.name })) ?? []
-    console.log(catchOne.urlFoto)
-    console.log(formState.urlFoto)
+
     return (
         <div className="modal_add_tour" ref={modalka}>
             <div className="header_modal_tour">Карточка улова</div>

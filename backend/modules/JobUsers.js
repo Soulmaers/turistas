@@ -42,7 +42,14 @@ class JobUsers {
         try {
             const pool = await connection;
             const result = await pool.request().input('id', idUser).query(postModel);
-            return result.recordset
+            // Проверяем, есть ли записи в результате
+            const tournaments = result.recordset;
+            // Если все записи содержат null, возвращаем пустой массив
+            if (tournaments.length === 0 ||
+                tournaments.every(tournament => Object.values(tournament).every(value => value === null))) {
+                return [];
+            }
+            return tournaments;
         } catch (e) {
             console.log(e);
             return []; // Возвращаем пустые значения в случае ошибки

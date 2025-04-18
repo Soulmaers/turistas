@@ -4,7 +4,7 @@ import { useProcessList } from '../hooks/ProcessListCatch'
 import { useSelector, useDispatch } from 'react-redux';
 import { useResizeWindow } from '../../servises/hooks/getDataContent'
 import { set_historyWiew, click_tour, set_subMenu, RootState } from '../../../GlobalStor';
-
+import Modal from '../../servises/components/Modal'
 const HistoryLogs = () => {
 
     const { windowWidth } = useResizeWindow()
@@ -17,15 +17,17 @@ const HistoryLogs = () => {
         sortList(id, creater)
         dispatch(click_tour(id))
         dispatch(set_historyWiew('history'))
-        if (windowWidth < 400) dispatch(set_subMenu(null))
+        if (windowWidth < 440) dispatch(set_subMenu(null))
     }
     const tournaments = userStatus.tournament.map(e => <div key={e.id} className="tournament" onClick={() => handler(e.id, e.created_by)}>{e.name}</div>)
     return (
-        <div className="container_history">
-            {tournaments}
-        </div>
-
-
+        windowWidth < 440 ?
+            <Modal style={{ top: '50%' }}><div className="container_history">
+                {tournaments}
+            </div></Modal> :
+            <div className="container_history">
+                {tournaments}
+            </div>
     )
 }
 

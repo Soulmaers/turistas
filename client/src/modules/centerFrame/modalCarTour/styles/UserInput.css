@@ -35,3 +35,11 @@
     margin-left: 10px;
     width: 50%;
 }
+
+@media (width<950px) {
+
+
+    .input_user_value {
+        border: 1px solid rgba(255, 255, 255, 0.7)
+    }
+}

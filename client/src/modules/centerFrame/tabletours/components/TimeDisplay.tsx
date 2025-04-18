@@ -42,6 +42,7 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish
             setTime(null); // Очищаем значение если статус не 0
         }
     }, [status, dateStart, dateFinish]);
+
     return (
         <span className='status'>
             {status === 0 ? `(Старт: ${time})` : status === 1 ? `(Завершится через: ${time})` : statusTour[status]}

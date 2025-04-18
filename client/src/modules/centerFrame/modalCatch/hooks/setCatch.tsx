@@ -6,11 +6,12 @@ import { Catch } from '../components/FormCatch'
 
 export const useSetCatch = () => {
     const setCatch = async (formData: FormData) => {
+        console.log(formData)
         const params = {
             method: 'POST',
             body: formData
         }
-        const res = await fetch('http://localhost:3333/api/setCatch', params)
+        const res = await fetch('/api/setCatch', params)
         const mess = await res.json()
         return mess
     }
@@ -20,7 +21,7 @@ export const useSetCatch = () => {
             method: 'POST',
             body: formData
         }
-        const res = await fetch('http://localhost:3333/api/updateCatch', params)
+        const res = await fetch('/api/updateCatch', params)
         return await res.json()
     }
 

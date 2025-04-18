@@ -48,7 +48,7 @@
     }
 }
 
-@media (width<900px) {
+@media (width<950px) {
     .add_catch {
         font-size: 1rem;
         width: 30%;
@@ -63,7 +63,7 @@
     }
 }
 
-@media (width<400px) {
+@media (width<440px) {
     .add_catch {
         font-size: 0.8rem;
         width: 30%

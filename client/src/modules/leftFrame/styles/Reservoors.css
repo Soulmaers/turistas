@@ -17,12 +17,13 @@
     background-color: #fff;
 }
 
-@media (width<400px) {
+@media (width<440px) {
     .container_reservoors {
-        border: 1px solid #fff;
-        position: absolute;
-        bottom: 50px;
-        width: 44%;
+        width: 250px;
         background-color: #4d4646;
+    }
+
+    .reservour {
+        font-size: 1rem;
     }
 }

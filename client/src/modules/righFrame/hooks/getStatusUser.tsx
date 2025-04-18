@@ -10,7 +10,7 @@ export const useGetStatusUser = () => {
             },
             body: JSON.stringify({ id })
         }
-        const result = await fetch('http://localhost:3333/api/getStatusUser', params)
+        const result = await fetch('/api/getStatusUser', params)
         return await result.json()
     }
 

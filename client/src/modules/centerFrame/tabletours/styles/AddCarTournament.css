@@ -14,7 +14,7 @@
     height: 300px;
     background-size: contain;
     background-repeat: no-repeat;
-    border-radius: 10px;
+    border-radius: 150px;
     border: 1px solid #fff;
 }
 
@@ -102,7 +102,7 @@
     box-sizing: border-box;
 }
 
-@media (width<900px) {
+@media (width<950px) {
 
     .questions {
         background-image: url('../../what.png');
@@ -192,7 +192,7 @@
 
 }
 
-@media (width<400px) {
+@media (width<440px) {
     .questions {
         background-image: url('../../what.png');
         width: 220px;
@@ -240,7 +240,7 @@
 
     .modal_add_tour {
         width: 350px;
-        height: 60vh
+        height: 72vh
     }
 
 }

@@ -8,7 +8,6 @@ const useAddTour = () => {
     const dispatch = useDispatch()
 
     const addTour = async ({ ...props }) => {
-        console.log(props)
         try {
             const params = {
                 method: 'POST',
@@ -18,7 +17,7 @@ const useAddTour = () => {
                 body: JSON.stringify({ ...props })
 
             }
-            const res = await fetch('http://localhost:3333/api/addTournaments', params)
+            const res = await fetch('/api/addTournaments', params)
             const result = await res.json()
             let updateTournaments;
 
@@ -32,6 +31,7 @@ const useAddTour = () => {
                 updateTournaments = [...userStatus.tournament, result];
             }
             dispatch(updateStatusUser({ ...userStatus, tournament: updateTournaments }))
+            //  dispatch(updateContent(result.status))
             return !props.idTour ? `Турнир ${result.name} создан.` : `Турнир ${result.name} обновлён.`
         }
         catch (e) {

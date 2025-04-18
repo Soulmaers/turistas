@@ -20,6 +20,6 @@ export interface User {
         stars: number,
         id: number,
     } | null,
-    tournament: Tournament[]
+    tournament: Tournament[] | []
 
 }

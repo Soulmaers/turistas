@@ -12,7 +12,7 @@ export const useGetImages = () => {
             },
             body: JSON.stringify({ nameImage })
         }
-        const res = await fetch('http://localhost:3333/api/uploades', params)
+        const res = await fetch('/api/uploades', params)
         const imageBlob = await res.blob();
         const imageObjectURL = URL.createObjectURL(imageBlob);
         return imageObjectURL

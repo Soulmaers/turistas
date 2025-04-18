@@ -6,7 +6,7 @@ import { User } from './Interface'
 
 
 
-import { updateContent, updateStatusUser, controll_modal_form } from '../../../GlobalStor';
+import { updateStatusUser, controll_modal_form } from '../../../GlobalStor';
 
 type UserResponce = User | null
 
@@ -48,6 +48,7 @@ const useForm = () => {
             }
         }
         setErrorMessage('');
+        localStorage.setItem('lastContact', contactValue); //
         setGetUser(true);
     }
 
@@ -62,21 +63,12 @@ const useForm = () => {
                 },
                 body: JSON.stringify({ contactID, username })
             }
-            const res = await fetch(`http://localhost:3333/api/user/check`, params);
+            const res = await fetch(`/api/user/check`, params);
             const data: UserResponce = await res.json()
             if (!data) {
                 setErrorMessage('Пользователь не найден');
             }
             else {
-                let statusTour;
-                if (data.tournament.length !== 0) {
-                    const lastTournament = data.tournament[data.tournament.length - 1]
-                    statusTour = Number(lastTournament?.status)
-                }
-                else {
-                    statusTour = null
-                }
-
                 dispatch(updateStatusUser(data))
                 if (tour) {
                     dispatch(set_tour({
@@ -85,7 +77,7 @@ const useForm = () => {
                     }))
                 }
                 dispatch(controll_modal_form(false))
-                dispatch(updateContent(statusTour))
+
 
             }
 

@@ -9,7 +9,7 @@ export const useGetCatchs = () => {
             },
             body: JSON.stringify({ idTour })
         }
-        const res = await fetch('http://localhost:3333/api/getCatchs', params)
+        const res = await fetch('/api/getCatchs', params)
         const data = await res.json()
         return data
     }
