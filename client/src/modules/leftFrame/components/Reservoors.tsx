@@ -19,7 +19,7 @@ const Reservoors = () => {
 
     return (
         windowWidth < 440 ?
-            <Modal style={{ top: '50%' }}><div className="container_reservoors">
+            <Modal style={{ top: '50%' }} onClose={() => dispatch(set_subMenu(null))}><div className="container_reservoors">
                 {rows}
             </div></Modal> :
             <div className="container_reservoors">

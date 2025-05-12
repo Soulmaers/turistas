@@ -37,6 +37,7 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
             weight: e.weight,
             foto_user: e.foto_user,
             data: e.data,
+            comment: e.comment,
             urlFoto: e.urlFoto,
             idUser: e.idUser,
             idTournament: e.idTournament,
@@ -49,6 +50,7 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
         }))
     }
     useEffect(() => {
+        console.log('тут ведь')
         const fetchRows = async () => {
             const newRows = await Promise.all(
                 catchsList.map(async e => {
@@ -77,12 +79,14 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
 
         fetchRows(); // Вызовем асинхронную функцию
     }, [catchsList]); // Зависимость по catchsList
+
+    console.log(rows)
     return <div className="card_list_history">
         <div className='header_tournament_table'>
             <div className="name">{celevoys?.name}</div>
         </div>
         <div className="container_table_history">
-            <table className='styled_table'>
+            {rows.length !== 0 ? <table className='styled_table'>
                 <thead><tr className="history_header">
                     <th>Участник</th>
                     <th>Водоём</th>
@@ -97,7 +101,7 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
                 </tr>
                 </thead>
                 <tbody>{rows}</tbody>
-            </table>
+            </table> : <div className="load">Загрузка журнала...</div>}
         </div>
 
     </div>

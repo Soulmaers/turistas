@@ -37,6 +37,7 @@ export const useEditTour = () => {
 
     const tourData = useSelector((state: RootState) => state.slice.tour)
     const editFunc = async (id: number) => {
+        console.log(id)
         const param = {
             method: 'POST',
             headers: {
@@ -48,7 +49,7 @@ export const useEditTour = () => {
             console.log('тут')
             const res = await fetch(`/api/getContentTour`, param)
             const result = await res.json()
-            dispatch(update_modal(true))
+            //   dispatch(update_modal(true))
 
             if (tourData) {
                 dispatch(set_tour({
@@ -61,14 +62,7 @@ export const useEditTour = () => {
                 }
                 ))
             }
-            /* tourData?.setTour((prev) => ({
-                 ...prev,
-                 id: result.id,
-                 nameTour: result.name,
-                 dateStart: result.dateStart,
-                 dateFinish: result.dateFinish,
-                 users: result.users
-             }))*/
+
             return
         }
         catch (e) {

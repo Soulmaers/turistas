@@ -142,6 +142,7 @@ class ProcessCatch {
             c.idTypeCatch,
             c.idTimeDay,
             c.idBait,
+            c.comment,
             c.data,
             u.name_user,
             u.foto,

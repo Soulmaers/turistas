@@ -1,0 +1,32 @@
+@media(width<440px) {
+    .banner_big {
+        background-color: orange;
+        height: 80px;
+        width: 100%;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+
+    }
+
+    .title_bigfish {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: space-around;
+        color: #000;
+        height: 80%;
+        font-size: 1.5rem;
+    }
+
+    .foto_fisher_bigfish {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 1px solid #fff;
+        background-color: orange;
+        background-size: cover;
+    }
+}

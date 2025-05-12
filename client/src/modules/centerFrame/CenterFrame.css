@@ -105,8 +105,8 @@
         background-color: initial;
         border: none;
         border-radius: 0;
-        height: calc(100% - 60px);
-        margin-top: 40px;
+        height: calc(100% - 120px);
+        margin-top: 60px;
         width: 100%;
     }
 

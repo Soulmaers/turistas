@@ -12,10 +12,7 @@
     box-sizing: border-box;
 }
 
-.tournament:hover {
-    color: gray;
-    background-color: #fff;
-}
+
 
 
 @media (width<440px) {
@@ -28,7 +25,7 @@
     }
 
     .tournament {
-        font-size: 1rem;
+        font-size: 1.3rem;
     }
 
 }

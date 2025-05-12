@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState, set_catchs, set_bigfish } from '../../../../GlobalStor'
 import React, { useEffect } from 'react'
 import { useGetCatchs } from '../hooks/getCatchs'
+import { useEditTour } from '../../../leftFrame/hooks'
 import '../styles/TableTournaments.css'
 
 
@@ -11,44 +12,88 @@ interface TableTournamentProps {
 
 const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     const { getCatchs } = useGetCatchs()
+    const { editFunc } = useEditTour()
+    const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const catchs = useSelector((state: RootState) => state.slice.catchs)
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
+    const tourData = useSelector((state: RootState) => state.slice.tour);
     const dispatch = useDispatch()
     useEffect(() => {
         const fetchData = async () => {
             console.log(idTour)
-            const data = await getCatchs(idTour);
-            console.log(data)
+            const [data, _] = await Promise.all([
+                getCatchs(idTour),
+                editFunc(idTour)
+            ]);
             dispatch(set_catchs((data.data)))
             dispatch(set_bigfish(data.bigFish))
         };
         fetchData();
+
     }, [idTour, actionCatch])
 
-    const rows = catchs.map(e => {
-        return <tr key={e.name_user}>
-            <td>{e.name_user}</td>
-            <td>{e['Лещ']}</td>
-            <td>{e['Щука']}</td>
-            <td>{e['Судак']}</td>
-            <td>{e['Окунь']}</td>
-            <td>{e['Форель']}</td>
-            <td>{e['Другое']}</td>
-            <td>{e['Всего']}</td>
-        </tr>
+    console.log(tourData.users)
+    console.log(catchs)
+    const usersWithTotals = tourData.users.map((e) => {
+        const catchsFisher = catchs.find(el => el.idUser === e.userId);
+        return {
+            ...e,
+            total: catchsFisher ? catchsFisher['Всего'] : 0, // Добавляем значение "Всего"
+        };
+    });
+
+    // Затем сортируем участников по значению "Всего"
+    const sortedUsers = usersWithTotals.sort((a, b) => b.total - a.total); // Сортировка по убыванию
+
+    // Теперь отображаем отсортированные строки
+    const rows = sortedUsers.map((e, index) => {
+        const isCurrentUser = userStatus?.user?.id === e.userId;
+        const rowStyle = isCurrentUser ? { backgroundColor: 'rgba(229, 209, 28, 1)' } : {};
+        const rowStyleCel = isCurrentUser ? { backgroundColor: 'rgba(211, 211, 211, 0.7)' } : {};
+        const rowStyleTwo = isCurrentUser ? { backgroundColor: 'rgba(77, 70, 70, 0.7)' } : {};
+        const count = 0;
+
+        const catchsFisher = catchs.find(el => el.idUser === e.userId);
+        console.log(catchsFisher)
+        return (
+            <tr key={e.name_user} style={rowStyle}>
+                <td className="cel_two" style={rowStyleTwo}>{index + 1}</td>
+                <td className="cel_two" style={rowStyleTwo}>{catchsFisher ? catchsFisher.name_user : e.name_user?.toUpperCase()}</td>
+                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Лещ'] : count}</td>
+                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Щука'] : count}</td>
+                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Судак'] : count}</td>
+                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Окунь'] : count}</td>
+                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Форель'] : count}</td>
+                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Всего'] : count}</td>
+            </tr>
+        );
+
+
+        /*  return (
+              <tr key={e.name_user?.toUpperCase()} style={rowStyle}>
+                  <td className="cel_two" style={rowStyleTwo}>{index + 1}</td>
+                  <td className="cel_two" style={rowStyleTwo}>{e.name_user}</td>
+                  <td className="cel" style={rowStyleCel}>{e['Лещ']}</td>
+                  <td className="cel" style={rowStyleCel}>{e['Щука']}</td>
+                  <td className="cel" style={rowStyleCel}>{e['Судак']}</td>
+                  <td className="cel" style={rowStyleCel}>{e['Окунь']}</td>
+                  <td className="cel" style={rowStyleCel}>{e['Другое']}</td>
+                  <td className="cel" style={rowStyleCel}>{e['Всего']}</td>
+              </tr>
+          );*/
     })
 
     return (
         <div className="container_table">
             <table className='styled_table'>
                 <thead><tr>
+                    <th>№</th>
                     <th>Участики</th>
                     <th>Лещ</th>
                     <th>Щука</th>
                     <th>Судак</th>
                     <th>Окунь</th>
                     <th>Форель</th>
-                    <th>Другое</th>
                     <th>Всего</th>
                 </tr>
                 </thead>

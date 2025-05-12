@@ -4,7 +4,7 @@
 export const useGetImages = () => {
 
     const getImage = async (nameImage: string) => {
-
+        console.log(nameImage)
         const params = {
             method: 'POST',
             headers: {

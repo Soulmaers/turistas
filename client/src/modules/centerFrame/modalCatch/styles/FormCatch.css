@@ -34,18 +34,99 @@ textarea {
     resize: none;
 }
 
-.button_load {
-    color: #fff;
-    cursor: pointer;
-    border: 1px solid #fff;
-    padding: 2px 5px;
-    box-sizing: border-box;
-    border-radius: 5px;
-    margin-left: 20px;
-}
 
-.button_load:active {
-    background-color: #fff;
-    color: #4d4646;
-    border: 1px solid #4d4646;
+
+@media (width<440px) {
+
+    .card_catch {
+        color: #fff;
+        font-size: 1.3rem;
+        margin-bottom: 5px;
+    }
+
+    .modal_catch_tour {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 330px;
+    }
+
+    .body_modal_tour {
+        width: 95%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 10px;
+        border-bottom: 1px solid #fff;
+        box-sizing: border-box;
+    }
+
+    .rows_card_tour_catch {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        margin: 3px 0;
+    }
+
+    .rows_card_tour_foto {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 3px 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .weight,
+    .select {
+        margin: 0;
+        width: auto;
+        padding: 6px;
+        background-color: #fff;
+        color: #000;
+    }
+
+    .button_load {
+        color: #fff;
+        cursor: pointer;
+        box-sizing: border-box;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        background-image: url('../../../../assets/icon_add_foto.webp');
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+
+    .foto_load {
+        width: 60px;
+        height: 60px;
+        background-image: url('../../../../assets/gal.webp');
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        cursor: pointer;
+
+    }
+
+    .wrap_img {
+        width: 90px;
+        height: 90px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        border: 2px solid #fff;
+        box-sizing: border-box;
+    }
+
+    .zoom_foto {
+        height: 500px;
+        width: 300px;
+        background-size: cover;
+        border:
+            2px solid #fff;
+    }
 }

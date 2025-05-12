@@ -54,7 +54,7 @@ export const FormDelCatch = () => {
 
     }
     return <div className="body_del" ref={modalka}>
-        {del && <Modal style={{ top: '50%' }}><TextInfoModal text={text} /></Modal>}
+        {del && <Modal style={{ top: '50%' }} onClose={() => dispatch(dispatch(set_deleteForm(false)))}><TextInfoModal text={text} /></Modal>}
         <div className="header_del">Удалить улов?</div>
         <div className="center_del">
             {rows}

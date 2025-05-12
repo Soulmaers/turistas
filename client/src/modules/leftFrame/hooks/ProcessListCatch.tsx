@@ -9,8 +9,10 @@ export const useProcessList = (userId: number | undefined) => {
     const allCatchs = useSelector((state: RootState) => state.slice.allCatchs);
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const dispatch = useDispatch()
-
+    console.log(userStatus)
     useEffect(() => {
+        console.log('из-за юзер статус?')
+
         const fetchAllCatchs = async () => {
             const param = {
                 method: 'GET'
@@ -18,7 +20,7 @@ export const useProcessList = (userId: number | undefined) => {
             try {
                 const res = await fetch('/api/getCatchsList', param);
                 const data: ExtendedBigFish[] = await res.json();
-                console.log(data)
+                //  console.log(data)
                 const idTournamments = userStatus.tournament.map(e => e.id)
                 const actualtionCatch = data.filter(e => idTournamments.includes(e.idTournament))
                 dispatch(setAllCatchs(actualtionCatch))
@@ -30,6 +32,7 @@ export const useProcessList = (userId: number | undefined) => {
         fetchAllCatchs();
     }, []);
 
+    console.log(allCatchs)
     const uniqCollectionTitle = useCallback(() => {
         const users = allCatchs.map(e => e.name_user).filter((name, index, self) => self.indexOf(name) === index);
         const reservours = allCatchs.map(e => e.name_reservour).filter((name, index, self) => self.indexOf(name) === index);
@@ -41,6 +44,7 @@ export const useProcessList = (userId: number | undefined) => {
 
 
     const sortList = useCallback((id: number, creater: number) => {
+        console.log('список')
         if (userId === creater) {
             const filterCatchs = allCatchs.filter(e => e.idTournament === id)
             dispatch(set_catchsList(filterCatchs))

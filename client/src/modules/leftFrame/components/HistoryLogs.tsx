@@ -22,7 +22,7 @@ const HistoryLogs = () => {
     const tournaments = userStatus.tournament.map(e => <div key={e.id} className="tournament" onClick={() => handler(e.id, e.created_by)}>{e.name}</div>)
     return (
         windowWidth < 440 ?
-            <Modal style={{ top: '50%' }}><div className="container_history">
+            <Modal style={{ top: '50%' }} onClose={() => dispatch(set_subMenu(null))}><div className="container_history">
                 {tournaments}
             </div></Modal> :
             <div className="container_history">

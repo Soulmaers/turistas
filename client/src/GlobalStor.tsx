@@ -13,9 +13,9 @@ interface FishCatch {
     'Судак': number,
     'Окунь': number,
     'Форель': number,
-    'Другое': number,
     'Всего': number,
     name_user: string | null;
+    idUser: number
 
 }
 export interface UserData {
@@ -25,7 +25,6 @@ export interface UserData {
     "Судак": number;
     "Окунь": number;
     "Форель": number;
-    "Другое": number;
     "Всего": number;
 }
 
@@ -39,6 +38,7 @@ export interface BigFish {
     weight: string,
     foto_user: string,
     data: string,
+    comment: string
     urlFoto: null | string//null | {} | string
 }
 export interface ExtendedBigFish extends BigFish {
@@ -53,7 +53,7 @@ export interface ExtendedBigFish extends BigFish {
 }
 // Интерфейс для состояния
 interface MyState {
-    content: number | null | undefined;
+    stateBody: string
     updateReservours: UpdateReservours;
     userStatus: User;
     activForm: boolean,
@@ -81,13 +81,16 @@ interface MyState {
     allCatchs: ExtendedBigFish[],
     staticData: UserData[],
     deleteFormTour: boolean,
-    profil: boolean
+    profil: boolean,
+    addTour: boolean,
+    statusTour: number | null,
+    modalFishers: boolean
 }
 
 export interface Participants {
     name_user: string,
     contactID: string,
-    userID: number | null
+    userId: number
 }
 interface DataTour {
     id: number | null,
@@ -101,7 +104,7 @@ interface DataTour {
 
 // Начальное состояние
 const initialState: MyState = {
-    content: null,
+    stateBody: 'haveTours',
     updateReservours: { index: 0, text: '' },
     userStatus: { user: null, tournament: [] },
     activForm: true,
@@ -125,6 +128,7 @@ const initialState: MyState = {
         weight: '',
         foto_user: '',
         data: '',
+        comment: '',
         urlFoto: null,
         idUser: 0,
         idTournament: 0,
@@ -154,7 +158,10 @@ const initialState: MyState = {
     allCatchs: [],
     staticData: [],
     deleteFormTour: false,
-    profil: false
+    profil: false,
+    addTour: false,
+    statusTour: null,
+    modalFishers: false
 };
 
 // Создаем slice
@@ -162,8 +169,14 @@ const slice = createSlice({
     name: 'GlobalStor',
     initialState,
     reducers: {
-        updateContent: (state, action: PayloadAction<number | null | undefined>) => {
-            state.content = action.payload;
+        set_modalFishers: (state, action: PayloadAction<boolean>) => {
+            state.modalFishers = action.payload;
+        },
+        set_stateBody: (state, action: PayloadAction<string>) => {
+            state.stateBody = action.payload;
+        },
+        set_statusTour: (state, action: PayloadAction<number | null>) => {
+            state.statusTour = action.payload;
         },
         updateReservours: (state, action: PayloadAction<UpdateReservours>) => {
             state.updateReservours = action.payload;
@@ -176,6 +189,9 @@ const slice = createSlice({
         },
         update_modal: (state, action: PayloadAction<boolean>) => {
             state.stateModal = action.payload;
+        },
+        set_add_tour: (state, action: PayloadAction<boolean>) => {
+            state.addTour = action.payload;
         },
         add_catch: (state, action: PayloadAction<boolean>) => {
             state.catchForm = action.payload;
@@ -251,6 +267,7 @@ const slice = createSlice({
 
 // Экспортируем actions
 export const {
+    set_stateBody,
     updateReservours,
     updateStatusUser,
     controll_modal_form,
@@ -274,7 +291,10 @@ export const {
     setAllCatchs,
     set_static,
     set_deleteFormTour,
-    set_profil
+    set_profil,
+    set_add_tour,
+    set_statusTour,
+    set_modalFishers
 } = slice.actions;
 
 

@@ -21,6 +21,7 @@ export const WrapperNavi = () => {
     const handleButtonClick = (selectSubMenu: string) => { //Клик открывает подменю
 
         if (userStatus.tournament.length === 0) return
+        console.log('клик журнал')
         dispatch(set_subMenu(subMenu === selectSubMenu ? null : selectSubMenu))
         if (selectSubMenu === 'stata') dispatch(set_historyWiew(selectSubMenu))
     }
@@ -28,10 +29,6 @@ export const WrapperNavi = () => {
         return subMenu === selectSubMenu ? <IoIosArrowUp className="class_icon" /> : < IoIosArrowDown className="class_icon" />
     }
 
-    const addCardTour = (event: React.MouseEvent<SVGElement>) => {  //меняем стэйт по отображению модального окна
-        event.stopPropagation();
-        dispatch(update_modal(true))
-    }
 
     const menuItems = [
         { label: 'ТУРНИРЫ', icon: <GiTrophy className="class_icon icon_button" />, component: <Tournaments />, key: 'tournaments' },
@@ -52,7 +49,6 @@ export const WrapperNavi = () => {
                         <div className="btn" onClick={() => handleButtonClick(e.key)}>
                             {e.icon}
                             <span className="title_name">{e.label}</span>
-                            {e.key === 'tournaments' && <IoMdAddCircle className="create_btn_tour" onClick={addCardTour} />}
                             {getIconsArrow(e.key)}
                         </div>
 
@@ -62,3 +58,5 @@ export const WrapperNavi = () => {
         </div>
     )
 }
+
+/* {e.key === 'tournaments' && <IoMdAddCircle className="create_btn_tour" onClick={addCardTour} />}*/

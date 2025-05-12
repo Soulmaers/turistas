@@ -1,6 +1,119 @@
-.container_tour_table {
-    border: 1px solid black;
-    margin: 30px 0;
-    height: 20%;
-    width: 90%;
+@font-face {
+    font-family: 'Akrobat';
+    src: url('../../../../fonts/Akrobat-SemiBold.otf') format('opentype');
+    font-weight: 200;
+    /* Вес для ExtraBold */
+    font-style: normal;
+}
+
+
+
+@media (width<440px) {
+
+
+    .container_tour_table {
+        height: 20%;
+        width: 90%;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .title_tour_table {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+        font-family: Akrobat;
+    }
+
+    .body_tour_table {
+        width: 100%
+    }
+
+    .styled_table_tour {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center
+    }
+
+
+    .rows_table_tour_list {
+        background-color: #ABABAB;
+
+    }
+
+    .row_title_table_tour {
+        color: #fff;
+    }
+
+    .row_title_table_tour>th {
+        border: 2px solid #fff;
+        font-size: 0.8rem;
+        padding: 2px;
+        font-family: Akrobat;
+        font-weight: 200;
+        box-sizing: border-box;
+    }
+
+    .rows_table_tour_list>td {
+        border: 2px solid #fff;
+        font-size: 1rem;
+        padding: 4px;
+        font-family: Akrobat;
+        font-weight: 200;
+        box-sizing: border-box;
+    }
+
+    .name_cel {
+        width: 150px;
+        text-align: left;
+        padding-left: 5px !important;
+        cursor: pointer;
+    }
+
+    .set_tour {
+        cursor: pointer;
+    }
+
+    .set_tour_icon {
+        color: #000;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .title_left {
+        align-self: flex-start;
+        color: #000;
+        font-size: 1.3rem;
+        margin: 5px 0;
+        font-weight: 300;
+        font-family: Akrobat;
+        width: 50%;
+    }
+
+    .title_right {
+        text-align: right;
+        color: #FFF;
+        font-size: 1.3rem;
+        margin: 5px 0;
+        font-weight: 300;
+        font-family: Akrobat;
+        width: 50%;
+        align-self: flex-end;
+    }
+
+    .all_tours_list {
+        cursor: pointer;
+    }
+
+    .now_tour_all_list {
+        color: #000;
+        align-self: flex-end;
+    }
+
+    .future_tour_all_list {
+        color: #fff;
+        align-self: flex-start;
+    }
+
 }

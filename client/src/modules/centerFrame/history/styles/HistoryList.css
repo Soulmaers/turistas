@@ -51,4 +51,15 @@ td.delete_catch {
     .card_list_history {
         height: 98%
     }
+
+
+    .load {
+        width: 90%;
+        height: 80%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
 }

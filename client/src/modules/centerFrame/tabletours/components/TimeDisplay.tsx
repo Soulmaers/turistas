@@ -6,10 +6,11 @@ import '../styles/AddCarTournament.css'
 interface TimeDisplayProps {
     status: number;
     dateStart: string;
-    dateFinish: string
+    dateFinish: string,
+    name: string
 }
 
-const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish }) => {
+const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish, name }) => {
 
     const [time, setTime] = useState<string | null>(null);
 
@@ -45,7 +46,7 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish
 
     return (
         <span className='status'>
-            {status === 0 ? `(Старт: ${time})` : status === 1 ? `(Завершится через: ${time})` : statusTour[status]}
+            {status === 0 ? `${name}  (Старт: ${time})` : status === 1 ? `${name}  (Завершится через: ${time})` : `${name} ${statusTour[status]}`}
         </span>
     );
 }

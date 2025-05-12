@@ -45,6 +45,11 @@ app.get('*', (req, res) => {
     });
 });
 app.listen(port, () => {
-    console.log(`Сервер запущен на порту ${port}`),
-        updateStatusTournaments()
-})
+    console.log(`Сервер запущен на порту ${port}`);
+
+    // Выполняем первый запрос сразу при запуске приложения
+    updateStatusTournaments();
+
+    // Устанавливаем интервал для выполнения функции каждый час
+    setInterval(updateStatusTournaments, 60 * 60 * 1000); // 1 час в миллисекундах
+});

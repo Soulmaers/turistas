@@ -20,7 +20,6 @@ export const StatisticCard = () => {
             <td>{e['Судак']}</td>
             <td>{e['Окунь']}</td>
             <td>{e['Форель']}</td>
-            <td>{e['Другое']}</td>
             <td>{e['Всего']}</td>
         </tr>
     })
@@ -41,7 +40,6 @@ export const StatisticCard = () => {
                             <th>Судак</th>
                             <th>Окунь</th>
                             <th>Форель</th>
-                            <th>Другое</th>
                             <th>Всего</th>
                         </tr>
                         </thead>

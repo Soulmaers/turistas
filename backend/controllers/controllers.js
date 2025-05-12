@@ -9,8 +9,8 @@ const path = require('path')
 exports.addTournament = async (req, res) => {
     try {
         const instance = new JobUsers()
-        const { idTour, name, startUnixTime, finishUnixTime, users, created_by } = req.body
-        const tourProps = await instance.createTournament(idTour, name, startUnixTime, finishUnixTime, created_by)
+        const { id, nameTour, dateStart, dateFinish, users } = req.body
+        const tourProps = await instance.createTournament(id, nameTour, dateStart, dateFinish)
 
         const getIdUsers = await Promise.all(users.map(async e => {
             let userReg = await instance.getUser(e.contactID)
@@ -29,6 +29,43 @@ exports.addTournament = async (req, res) => {
         res.json([])
     }
 }
+
+exports.updateTour = async (req, res) => {
+    const { id, nameTour, dateStart, dateFinish, users } = req.body
+    try {
+        const instance = new JobUsers()
+        const tourProps = await instance.updateTournament(id, nameTour, dateStart, dateFinish)
+        await Promise.all(users.map(async el => {
+            return await instance.tournamentsParticipants(id, el.userId)
+        }))
+        res.json(tourProps)
+    }
+    catch (e) {
+        console.log(e)
+        res.json([])
+    }
+
+}
+exports.addTour = async (req, res) => {
+    const { nameTour, startDate, finishDate, created_by, users } = req.body
+    console.log(nameTour, startDate, finishDate, created_by, users)
+    try {
+        const instance = new JobUsers()
+        const tourProps = await instance.createTournament(nameTour, startDate, finishDate, created_by)
+        console.log(tourProps)
+        await Promise.all(users.map(async el => {
+            return await instance.tournamentsParticipants(tourProps.id, el.userId)
+        }))
+        res.json(tourProps)
+    }
+    catch (e) {
+        console.log(e)
+        res.json([])
+    }
+
+}
+
+
 
 exports.getContent = async (req, res) => {
     const [reservours, fishs, baits, timeDay, typeCatch] = await Promise.all([
@@ -185,6 +222,7 @@ exports.getCatchsList = async (req, res) => {
 
     console.time('fetch')
     const result = await ProcessCatch.getAllCatchs()
+    console.log(result)
     console.timeEnd('fetch')
     const data = result.map(e => {
         return {
@@ -204,7 +242,8 @@ exports.getCatchsList = async (req, res) => {
             name_bait: e.name_bait,
             weight: e.weight,
             data: e.data,
-            urlFoto: e.urlFoto
+            urlFoto: e.urlFoto,
+            comment: e.comment
         }
     })
     res.json(data)
@@ -218,14 +257,15 @@ exports.getCatchs = async (req, res) => {
     const data = [];
 
     result.forEach(item => {
-        //  console.log(item)
-        const { name_user, name_fish } = item;
+        // console.log(item)
+        const { name_user, name_fish, idUser } = item;
         const fishType = fishCategories.includes(name_fish) ? name_fish : "Другое";
 
         let userEntry = data.find(entry => entry.name_user === name_user);
 
         if (!userEntry) {
             userEntry = {
+                idUser: idUser,
                 name_user: name_user,
                 "Лещ": 0,
                 "Щука": 0,
@@ -257,6 +297,8 @@ exports.getCatchs = async (req, res) => {
         urlFoto: maxWeightObject.urlFoto,
         data: formatData(maxWeightObject.data)
     } : null;
+
+    data.sort((a, b) => b['Всего'] - a['Всего']);
     res.json({ data, bigFish })
 }
 
@@ -267,6 +309,16 @@ exports.deleteCatch = async (req, res) => {
     console.log(result1, result2)
     const result = result1 & result2 ? 'Улов удалён' : 'Что-то пошло не так'
     res.json(result)
+}
+
+
+
+exports.getFisher = async (req, res) => {
+    const contactID = req.body.contactID
+    const instance = new JobUsers()
+    const user = await instance.getUser(contactID)
+    console.log(user)
+    res.json(user)
 }
 
 exports.getUserCheck = async (req, res) => {

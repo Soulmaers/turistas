@@ -14,9 +14,9 @@ interface UserInputProps {
 
 const UserInput: React.FC<UserInputProps> = ({ users, onUsersChange }) => {
 
-    const addUser = useCallback(() => {
-        onUsersChange([...users, { name_user: '', contactID: '7', userID: null }]);
-    }, [users, onUsersChange]);
+    /* const addUser = useCallback(() => {
+         onUsersChange([...users, { name_user: '', contactID: '7', userId: null }]);
+     }, [users, onUsersChange]);*/
 
     const removeLastUser = useCallback(() => {
         const updatedUsers = users.slice(0, -1); // Удаляем последнего пользователя из списка
@@ -40,7 +40,7 @@ const UserInput: React.FC<UserInputProps> = ({ users, onUsersChange }) => {
     return (
         <>
             <div className="rows_card_tour">
-                <div className="name_car_tour">Участники<IoMdAddCircle className="addUser" onClick={addUser} /> <IoMdRemoveCircle className="removeUser" onClick={removeLastUser} /></div>
+                <div className="name_car_tour">Участники<IoMdAddCircle className="addUser" /> <IoMdRemoveCircle className="removeUser" onClick={removeLastUser} /></div>
             </div>
             <div className="users">{rows}</div>
         </>

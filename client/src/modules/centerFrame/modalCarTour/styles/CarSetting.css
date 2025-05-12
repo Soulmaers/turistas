@@ -1,0 +1,158 @@
+@media (width<440px) {
+    .modal_tour {
+        align-items: center;
+        background-color: #369727;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        min-width: 330px;
+        border-radius: 10px;
+    }
+
+    .title_tour {
+        color: #fff;
+        font-size: 1.3rem;
+
+    }
+
+    .del_tour {
+        width: 95%;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #FA7300;
+        font-size: 1.2rem;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .prop_tour {
+        width: 95%;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #e3c146;
+        font-size: 1rem;
+        margin: 5px 0;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .body_set_tour {
+        margin: 10px 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-top: 1px solid #fff;
+        border-bottom: 1px solid #fff;
+        box-sizing: border-box;
+    }
+
+    .name_wrapper {
+        width: 95%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 15px 0;
+    }
+
+    .add_name_wrapper {
+        width: 95%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .input_name_tour {
+        padding: 2px 5px;
+        border-radius: 5px;
+        height: 25px;
+        font-size: 1rem;
+        width: 85%;
+        outline: none;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.8);
+        box-sizing: border-box;
+    }
+
+    .btn_name_change {
+        width: 25px;
+        border-radius: 50%;
+        height: 25px;
+        background-image: url('../../../../assets/icon_edit.webp');
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    .qr_container {
+        background-color: #fff;
+        height: 160px;
+        margin: 15px 0;
+        width: 95%;
+        border-radius: 5px;
+    }
+
+    .date_container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 95%;
+        border-top: 1px solid #fff;
+        padding: 10px 0;
+        box-sizing: border-box;
+    }
+
+    .rows_card_tour {
+        width: 48%;
+    }
+
+    .name_car_tour {
+        color: #fff;
+        margin-bottom: 5px;
+        font-size: 1.2rem;
+    }
+
+    .datas {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .input_card_tour_picker {
+        background-color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        height: 25px;
+        outline: none;
+        padding: 2px 5px;
+        width: 80%;
+        text-align: center;
+    }
+
+    .react-datepicker-wrapper {
+        width: 80%
+    }
+
+    .messageAlarm {
+        color: yellow;
+        font-size: 1rem;
+        margin: 10px 0;
+        width: 95%;
+        text-align: center;
+    }
+
+    .react-datepicker-popper {
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .start_tour {
+        cursor: pointer;
+    }
+
+}

@@ -220,7 +220,7 @@
         align-items: center;
         justify-content: space-between;
         position: fixed;
-        height: 40px;
+        height: 60px;
         top: 0;
         left: 0;
         right: 0;
@@ -245,7 +245,7 @@
 
     .wrapper {
         position: fixed;
-        height: 45px;
+        height: 60px;
         bottom: 0;
         left: 0;
         right: 0;
@@ -278,9 +278,6 @@
         justify-content: center;
     }
 
-    .component_contents:nth-child(n+2) {
-        border-left: 1px solid #fff;
-    }
 
     .class_icon {
         display: none;

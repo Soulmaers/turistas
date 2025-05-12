@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { useGetDataContent, useResizeWindow } from './modules/servises/hooks/getDataContent'
-import { useSelector } from 'react-redux';
-import { RootState } from './GlobalStor';
+import { useSelector, useDispatch } from 'react-redux';
+import { update_modal, RootState } from './GlobalStor';
 import LeftFrame from './modules/leftFrame/components/LeftFrame'
 import CenterFrame from './modules/centerFrame/CenterFrame'
 import { HeaderMobile } from './modules/leftFrame/components/LeftFrame'
@@ -13,6 +13,7 @@ import Modal from './modules/servises/components/Modal'
 import './App.css';
 
 function App() {
+  const dispatch = useDispatch()
   const { windowWidth } = useResizeWindow()
 
   const activForm = useSelector((state: RootState) => state.slice.activForm)
@@ -31,7 +32,7 @@ function App() {
   return (
 
     <div className="App">
-      {activForm && <Modal style={{ top: '50%' }}><Form /></Modal>}
+      {activForm && <Modal style={{ top: '50%' }} onClose={() => dispatch(update_modal(false))}><Form /></Modal>}
       <div className="body">
         {!isMobile && <LeftFrame />}
         {isMobile && <HeaderMobile />}

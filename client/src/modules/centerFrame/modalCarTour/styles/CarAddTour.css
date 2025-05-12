@@ -1,0 +1,95 @@
+@media (width<440px) {
+    .footer_create_tour {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 85%;
+        cursor: pointer;
+        margin: 10px 0;
+        width: 95%;
+        padding:
+            0 10px;
+        box-sizing: border-box;
+    }
+
+
+    .datas_add_tour {
+        display: block;
+        text-align: center;
+    }
+
+
+
+    .fishers {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #fff;
+        box-sizing: border-box;
+    }
+
+    .add_name_wrapper {
+        margin: 5px 0;
+
+    }
+
+
+
+    .name_car_tour {
+        position: relative;
+    }
+
+    .btn_add_fisher {
+        width: 25px;
+        border-radius: 50%;
+        height: 25px;
+        background-image: url('../../../../assets/icon_plus.webp');
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    .btn_del_fisher {
+        width: 25px;
+        border-radius: 50%;
+        height: 25px;
+        background-image: url('../../../../assets/icon_del_fisher.webp');
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    .container_fishers {
+        margin: 10px 0;
+        width: 85%;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .wrap_fishers {
+        height: 60%;
+        border-bottom: 1px solid #fff;
+    }
+
+    .fishers_question {
+        top: -2px !important;
+        right: -35px !important;
+    }
+
+    .row_fisher {
+        color: #fff;
+        margin: 3px 0;
+        border-bottom: 1px solid #fff;
+        padding: 2px 0;
+        box-sizing: border-box;
+        width: calc(100% - 40px);
+    }
+
+    .wrapper_row_fisher {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+}

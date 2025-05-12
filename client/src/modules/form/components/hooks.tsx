@@ -73,7 +73,7 @@ const useForm = () => {
                 if (tour) {
                     dispatch(set_tour({
                         ...tour,
-                        users: [{ name_user: data.user?.name_user || '', contactID: data.user?.contactID || '', userID: data.user?.id || null }]
+                        users: []
                     }))
                 }
                 dispatch(controll_modal_form(false))

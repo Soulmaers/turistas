@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useSetCatch } from '../hooks/setCatch'
+import Modal from '../../../servises/components/Modal'
 import { RootState, add_catch, set_action_catch, set_catch, set_catchsList, set_urlFoto } from '../../../../GlobalStor'
 import { ExtendedBigFish } from '../../../../GlobalStor'
 import '../styles/FormCatch.css'
@@ -30,6 +31,7 @@ export const FormCatch = () => {
 
     const { getImage } = useGetImages()
     const [timeFile, setTimeFile] = useState<string | null>(null)
+    const [isZoomOpen, setIsZoomOpen] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null)
     const { setCatch, updateCatch } = useSetCatch()
     const catchsList = useSelector((state: RootState) => state.slice.catchsList);
@@ -39,8 +41,7 @@ export const FormCatch = () => {
     const dataContent = useSelector((state: RootState) => state.slice.dataContent)
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
     const dispatch = useDispatch()
-    console.log(user.tournament[user.tournament.length - 1].id)
-    console.log('тур')
+
     const [info, setInfo] = useState<string>('')
     const [formState, setFormState] = useState<Catch>({
         fishs: catchOne.id_fish,
@@ -49,13 +50,14 @@ export const FormCatch = () => {
         baits: catchOne.id_baits,
         timeDay: catchOne.id_timeday,
         weight: catchOne.weight,
-        comment: '',
+        comment: catchOne.comment,
         idTour: catchOne.idTournament || idTour || user.tournament[user.tournament.length - 1].id,
         idUser: catchOne.idUser || user?.user?.id,
         idCatch: catchOne.idCatch || null,
         urlFoto: catchOne?.urlFoto || null,
         image: null
     })
+    console.log(catchOne)
     const modalka = useRef<HTMLDivElement>(null)
 
 
@@ -83,15 +85,6 @@ export const FormCatch = () => {
             gets()
         }
 
-        const handleClickOutside = (event: MouseEvent) => {
-            if (modalka.current && !modalka.current.contains(event.target as Node)) {
-                closeModal();
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
 
     }, [])
 
@@ -127,7 +120,8 @@ export const FormCatch = () => {
         }
     };
     const handlerStart = async () => {
-        if (formState['fishs'] === '') {
+        console.log(formState)
+        if (formState['fishs'] === 0) {
             setInfo('Выберите вид рыбы')
             setTimeout(() => setInfo(''), 2000)
             return; // Прерываем выполнение функции, если валидация не прошла
@@ -199,6 +193,7 @@ export const FormCatch = () => {
                     weight: '',
                     foto_user: '',
                     data: '',
+                    comment: '',
                     urlFoto: null,
                     idUser: 0,
                     idTournament: 0,
@@ -220,47 +215,80 @@ export const FormCatch = () => {
     const timeDay = dataContent.timeDay?.map(e => ({ value: e.id, text: e.name })) ?? []
     const typeCatch = dataContent.typeCatch?.map(e => ({ value: e.id, text: e.name })) ?? []
 
-    return (
-        <div className="modal_add_tour" ref={modalka}>
-            <div className="header_modal_tour">Карточка улова</div>
-            <div className="body_modal_tour">
-                <Selects options={fishs || []} name={'Вид рыбы'} empty={true} selected={formState['fishs'].toString()} nameState={'fishs'} onChange={handleSelectChange} />
 
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Вес (граммы)</div>
+
+    const zomm = () => {
+        if (timeFile) {
+            setIsZoomOpen(true);
+
+        }
+    }
+
+
+    const cancel = () => {
+        dispatch(add_catch(false))
+        dispatch(set_catch({
+            name_user: '',
+            name_fish: '',
+            name_reservour: '',
+            name_type: '',
+            name_bait: '',
+            name_day: '',
+            weight: '',
+            foto_user: '',
+            data: '',
+            comment: '',
+            urlFoto: null,
+            idUser: 0,
+            idTournament: 0,
+            idCatch: 0,
+            id_baits: 0,
+            id_fish: 0,
+            id_reservour: 0,
+            id_timeday: 0,
+            id_type: 0
+        }))
+    }
+    return (
+        <div className="modal_add_tour modal_catch_tour" ref={modalka}>
+            <div className="header_modal_tour card_catch">КАРТОЧКА УЛОВА</div>
+            <div className="body_modal_tour">
+                <Selects options={fishs || []} name={'ВИД РЫБЫ'} empty={true} selected={formState['fishs'].toString()} nameState={'fishs'} onChange={handleSelectChange} />
+
+                <div className="rows_card_tour_catch">
+                    <div className="name_car_tour">ВЕС (Г)</div>
                     <input className="weight" value={formState['weight']} placeholder='введите вес рыбы' onChange={handleInputChange} />
                 </div>
-                <Selects options={reservuors || []} name={'Водоём'} empty={true} selected={formState['reservuors'].toString()} nameState={'reservuors'} onChange={handleSelectChange} />
-                <Selects options={typeCatch || []} name={'Тип ловли'} empty={true} selected={formState['typeFishing'].toString()} nameState={'typeFishing'} onChange={handleSelectChange} />
-                <Selects options={baits || []} name={'Приманка'} empty={true} selected={formState['baits'].toString()} nameState={'baits'} onChange={handleSelectChange} />
-                <Selects options={timeDay || []} name={'Время суток'} empty={false} selected={formState['timeDay'].toString()} nameState={'timeDay'} onChange={handleSelectChange} />
+                <Selects options={reservuors || []} name={'ВОДОЕМ'} empty={true} selected={formState['reservuors'].toString()} nameState={'reservuors'} onChange={handleSelectChange} />
+                <Selects options={typeCatch || []} name={'ТИП ЛОВЛИ'} empty={true} selected={formState['typeFishing'].toString()} nameState={'typeFishing'} onChange={handleSelectChange} />
+                <Selects options={baits || []} name={'ПРИМАНКА'} empty={true} selected={formState['baits'].toString()} nameState={'baits'} onChange={handleSelectChange} />
+                <Selects options={timeDay || []} name={'ВРЕМЯ СУТОК'} empty={false} selected={formState['timeDay'].toString()} nameState={'timeDay'} onChange={handleSelectChange} />
 
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Комментарии</div>
+                <div className="rows_card_tour_catch">
+                    <div className="name_car_tour">КОММЕНТАРИЙ</div>
                     <textarea className="input_car_tour" value={formState['comment']} onChange={handleTextChange}></textarea>
                 </div>
-                <div className="rows_card_tour">
-                    <div className="name_car_tour">Фото</div>
+                <div className="rows_card_tour_foto">
                     <input type="file" id="image" ref={fileInputRef} name="image" accept="image/*" style={{ display: 'none' }} onChange={handleImageChange} />
-                    <div className="button_load" onClick={handleButtonClick}>Загрузить фото</div>
+                    <div className="button_load" onClick={handleButtonClick}></div>
+                    <div className="wrap_img"><div className='foto_load' style={formState.urlFoto ? { backgroundImage: `url(${timeFile})` } : {}} onClick={zomm}></div></div>
+
                 </div>
-                {formState.urlFoto && (
-                    <div
-                        style={{
-                            width: '200px',
-                            height: '200px',
-                            backgroundImage: `url(${timeFile})`,
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'center'
-                        }}
-                    />
-                )}
+
             </div>
-            <div className="footer_modal_tour">
-                <div className="messageAlarm">{info}</div>
-                <IoSave className="start_tour" onClick={handlerStart} />
+
+            <div className="messageAlarm">{info}</div>
+            <div className=" footer_modal_tour footer_create_tour">
+                <div className="title_tour start_tour" onClick={handlerStart} >СОЗДАТЬ</div>
+                <div className="title_tour start_tour" onClick={cancel}>ОТМЕНА</div>
             </div>
+            {isZoomOpen && (
+                <Modal style={{ top: '40%' }} onClose={() => setIsZoomOpen(false)}>
+                    <div className='zoom_foto' style={{ backgroundImage: `url(${timeFile})` }}>
+
+                    </div>
+                </Modal>
+            )}
         </div >
     )
 }

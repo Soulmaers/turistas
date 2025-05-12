@@ -1,6 +1,69 @@
 @media (width<440px) {
 
-    .have_tour {
-        justify-content: center
+    .wrapper_icon_add_catch {
+        position: absolute;
+        top: 45%;
+        left: 12%;
+        width: 120px;
+        height: 120px;
+        background-image: url('../../../../assets/addTour.webp');
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    .wrapper_icon_add_catch_foto {
+        position: absolute;
+        top: 45%;
+        right: 12%;
+        width: 120px;
+        height: 120px;
+        background-image: url('../../../../assets/icon_foto.webp');
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    .mini_add_tour {
+        position: absolute;
+        top: 1.5%;
+        right: 6%;
+        width: 30px;
+        height: 30px;
+        background-image: url('../../../../assets/addTour.webp');
+        background-size: cover;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+    .tour_data_table_title {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center
+    }
+
+}
+
+
+@media(height<667px) {
+    .wrapper_icon_add_catch {
+        position: absolute;
+        top: 45%;
+        left: 12%;
+        width: 100px;
+        height: 100px;
+        background-image: url('../../../../assets/addTour.webp');
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    .wrapper_icon_add_catch_foto {
+        position: absolute;
+        top: 45%;
+        right: 12%;
+        width: 100px;
+        height: 100px;
+        background-image: url('../../../../assets/icon_foto.webp');
+        background-size: cover;
+        cursor: pointer;
     }
 }
