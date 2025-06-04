@@ -1,14 +1,18 @@
 
-import { RootState } from "../../../../GlobalStor"
-import { useSelector } from 'react-redux'
+import { set_catchs, set_bigfish, set_stateBody, RootState } from "../../../../GlobalStor"
+import { useSelector, useDispatch } from 'react-redux'
 import TableTournament from './TableToutnaments'
 import { ClickIconAdd } from "./ClickIconAdd"
 import TimeDisplay from "./TimeDisplay"
-import { Tournament } from '../../../form/components/Interface'
+import { Tournament } from '../../../../GlobalStor'
 import { BannerToBigfish } from './BannerToBigfish'
+import { useGetCatchs } from '../hooks/getCatchs'
+import PullToRefresh from 'react-pull-to-refresh';
+import { SmartPullToRefresh } from '../../../servises/components/SmartPullToRefresh'
 
 export const TourDetalisation: React.FC<{ data: Tournament[] }> = ({ data }) => {
-    console.log(data)
+    const { getCatchs } = useGetCatchs()
+    const dispatch = useDispatch()
     const idClickTour = useSelector((state: RootState) => state.slice.idClickTour)
 
 
@@ -53,5 +57,14 @@ export const TourDetalisation: React.FC<{ data: Tournament[] }> = ({ data }) => 
         }
     }
 
-    return (<>{renderComponents()}</>)
+    const handleRefresh = async () => {
+        const data = await getCatchs(idClickTour)
+        dispatch(set_catchs(data.data));
+        dispatch(set_bigfish(data.bigFish));
+
+    }
+
+
+    return (<SmartPullToRefresh
+        onRefresh={handleRefresh}>{renderComponents()}</SmartPullToRefresh>)
 }

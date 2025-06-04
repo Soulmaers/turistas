@@ -6,7 +6,7 @@
         display: flex;
         flex-direction: column;
         padding: 5px;
-        min-width: 330px;
+        width: 350px;
         border-radius: 10px;
     }
 
@@ -31,8 +31,9 @@
         width: 95%;
         border-radius: 5px;
         padding: 5px;
-        background-color: #e3c146;
-        font-size: 1rem;
+        background-color: orange;
+        font-size: 0.9rem;
+        font-weight: bold;
         margin: 5px 0;
         box-sizing: border-box;
         text-align: center;
@@ -47,6 +48,7 @@
         align-items: center;
         border-top: 1px solid #fff;
         border-bottom: 1px solid #fff;
+        padding-bottom: 10px;
         box-sizing: border-box;
     }
 
@@ -134,15 +136,24 @@
     }
 
     .react-datepicker-wrapper {
-        width: 80%
+        width: 100%
     }
 
     .messageAlarm {
         color: yellow;
-        font-size: 1rem;
+        font-size: 0.7rem;
         margin: 10px 0;
         width: 95%;
         text-align: center;
+    }
+
+    .messageAlarmUsers {
+        color: yellow;
+        font-size: 0.7rem;
+        margin: 10px 0;
+        width: 95%;
+        text-align: center;
+        padding: 10px 0;
     }
 
     .react-datepicker-popper {
@@ -155,4 +166,14 @@
         cursor: pointer;
     }
 
+}
+
+@media (height<680px) {
+    .qr_container {
+        height: 100px;
+    }
+
+    .del_tour {
+        font-size: 1rem
+    }
 }

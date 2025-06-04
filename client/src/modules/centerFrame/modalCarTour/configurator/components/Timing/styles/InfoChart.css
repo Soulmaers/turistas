@@ -1,0 +1,152 @@
+.modal_info_chart {
+    width: 350px;
+    height: 690px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #369727;
+    border-radius: 10px;
+}
+
+.text_chart {
+    width: 100%;
+    color: #fff;
+    line-height: 1.4rem;
+    margin: 20px 0;
+    text-align: center
+}
+
+.chart {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin: 20px 0;
+}
+
+.legend {
+    margin: 30px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.row_content {
+    min-width: 150px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.cube {
+    width: 40px;
+    height: 30px;
+    margin-right: 20px;
+}
+
+.gray {
+    background-color: lightgray;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.title_leg {
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.wrap_all_time {
+    width: 100%;
+    height: 50px;
+    background-color: lightgray;
+    position: relative;
+}
+
+.interval_to_chart {
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+}
+
+.high_label_start {
+    color: #fff;
+    transform: rotate(90deg);
+    transform-origin: left top;
+    display: inline-block;
+    position: absolute;
+    top: -70px;
+    /* Позиция сверху для верхней подписи начала */
+    left: 12px;
+    /* Позиция слева от начала интервала */
+    width: 80px;
+}
+
+.low_label_start {
+    color: #fff;
+    transform: rotate(90deg);
+    transform-origin: left top;
+    display: inline-block;
+    position: absolute;
+    bottom: -40px;
+    /* Позиция снизу для нижней подписи начала */
+    left: 12px;
+    /* Позиция слева от начала интервала */
+    width: 80px;
+}
+
+.high_label_end {
+    color: #fff;
+    transform: rotate(90deg);
+    transform-origin: right top;
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    /* Позиция сверху для верхней подписи конца */
+    right: -12px;
+    /* Позиция справа от конца интервала */
+    width: 80px;
+}
+
+.low_label_end {
+    color: #fff;
+    transform: rotate(90deg);
+    transform-origin: right top;
+    display: inline-block;
+    position: absolute;
+    bottom: -120px;
+    /* Позиция снизу для нижней подписи конца */
+    right: -12px;
+    /* Позиция справа от конца интервала */
+    width: 80px;
+}
+
+@media(height<680px) {
+    .modal_info_chart {
+        width: 330px;
+        height: 540px;
+    }
+
+    .chart {
+        margin: 10px 0;
+    }
+
+    .row_content {
+        margin: 10px 0;
+    }
+
+    .text_chart {
+        margin-bottom: 30px;
+    }
+
+    .legend {
+        margin: 10px 0;
+    }
+}

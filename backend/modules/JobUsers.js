@@ -5,11 +5,13 @@ class JobUsers {
     constructor() {
     }
 
-    async getUser(contactID) {
-        const postModel = `SELECT * FROM users WHERE contactID=@contactID`
+    async getUser(contactID, password) {
+        console.log(contactID, password)
+        const postModel = `SELECT * FROM users WHERE contactID=@contactID AND password=@password`
         try {
             const pool = await connection
-            const result = await pool.request().input('contactID', contactID).query(postModel)
+            const result = await pool.request().input('contactID', contactID).input('password', password).query(postModel)
+            console.log(result.recordset)
             return result.recordset.length == 0 ? null : result.recordset[0]
         }
         catch (e) {
@@ -17,11 +19,25 @@ class JobUsers {
         }
     }
 
-    async addUser(contactID, username) {
-        const postModel = `INSERT INTO users (name_user,contactID) OUTPUT INSERTED. * VALUES(@username, @contactID)`
+    async getFisher(contactID) {
+        console.log(contactID)
+        const postModel = `SELECT * FROM users WHERE contactID=@contactID`
         try {
             const pool = await connection
-            const result = await pool.request().input('contactID', contactID).input('username', username).query(postModel)
+            const result = await pool.request().input('contactID', contactID).query(postModel)
+            console.log(result.recordset)
+            return result.recordset.length == 0 ? null : result.recordset[0]
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+
+    async addUser(contactID, password, username) {
+        const postModel = `INSERT INTO users (name_user,contactID,password) OUTPUT INSERTED. * VALUES(@username, @contactID,@password)`
+        try {
+            const pool = await connection
+            const result = await pool.request().input('contactID', contactID).input('username', username).input('password', password).query(postModel)
             return { user: result.recordset[0], tournament: [] }
         }
         catch (e) {
@@ -58,23 +74,11 @@ class JobUsers {
 
 
     async tournamentsParticipants(tournamentID, userID) {
-        //   const checkModel = `SELECT COUNT(*) AS count FROM tournamentParticipants WHERE userID = @userID AND tournamentID = @tournamentID`;
+
         const postModel = `INSERT INTO tournamentParticipants (userID, tournamentID) VALUES(@userID, @tournamentID)`;
 
         try {
             const pool = await connection;
-
-            // Проверка существования записи
-            /*    const checkResult = await pool.request()
-                    .input('userID', userID)
-                    .input('tournamentID', tournamentID)
-                    .query(checkModel);
-    
-                if (checkResult.recordset[0].count > 0) {
-                    return 'Участник уже зарегистрирован в турнире.';
-                }*/
-
-            // Если записи нет, выполняем вставку
             await pool.request()
                 .input('userID', userID)
                 .input('tournamentID', tournamentID)
@@ -112,7 +116,27 @@ class JobUsers {
 
     }
 
+    async updateAnchorState(id, state, clicktour) {
+        console.log(id, state, clicktour)
+        const updateModel = `UPDATE users SET state_card = @state_card, idClick_tour = @idClick_tour
+       WHERE id = @id`;
 
+        try {
+            const pool = await connection;
+            const result = await pool.request()
+                .input('id', id)
+                .input('state_card', state)
+                .input('idClick_tour', clicktour)
+                .query(updateModel);
+
+            return true
+        }
+        catch (e) {
+            console.log(e)
+            return false
+        }
+
+    }
 
     async createTournament(name, startTime, finishTime, created_by) {
         const nowData = Math.floor((new Date().getTime()) / 1000)
@@ -143,6 +167,22 @@ class JobUsers {
     }
 
 
+    async removeParticipantFromTournament(tournamentID, id) {
+        const postModel = `DELETE tournamentParticipants WHERE userID=@userID AND tournamentID=@tournamentID`;
+
+        try {
+            const pool = await connection;
+            await pool.request()
+                .input('userID', id)
+                .input('tournamentID', tournamentID)
+                .query(postModel);
+
+            return 'Участник успешно удален из турнира';
+        } catch (e) {
+            console.log(e);
+            return 'Произошла ошибка при регистрации участника.';
+        }
+    }
     async getContentTour(id) {
         try {
             const tournamentData = await this.getTournamentData(id); // Первый запрос - данные о турнире

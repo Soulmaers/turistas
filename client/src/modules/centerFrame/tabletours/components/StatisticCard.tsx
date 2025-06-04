@@ -2,6 +2,7 @@
 import { RootState } from "../../../../GlobalStor";
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import Statistics from '../../../leftFrame/components/Statistics'
 import '../styles/StatisticCard.css'
 
 
@@ -48,5 +49,6 @@ export const StatisticCard = () => {
                 </div>
             </div>
         </div>
+        <Statistics />
     </div>)
 }

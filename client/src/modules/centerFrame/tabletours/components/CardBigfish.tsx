@@ -3,9 +3,17 @@ import { BannerToBigfish } from './BannerToBigfish'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useGetImages } from '../hooks/getImages'
+import { useGetCatchs } from '../hooks/getCatchs'
 import '../styles/CardBigFish.css'
 import { RootState, set_stateBody, set_catchs, set_bigfish } from '../../../../GlobalStor'
+
+import { SwipeWrapper } from '../../../servises/components/SwipeWrapper';
+
+
 export const CardBigFish = () => {
+    const dispatch = useDispatch()
+    const { getCatchs } = useGetCatchs()
+    const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const bigFish = useSelector((state: RootState) => state.slice.bigFish)
     const [imageRes, setImageRes] = useState<string | null>(null)
     const [image, setImage] = useState<string | null>(null)
@@ -66,14 +74,28 @@ export const CardBigFish = () => {
     }, [bigFish])
 
 
-    console.log(bigFish)
-    if (!bigFish) return null
+    const fetchData = async () => {
+        if (userStatus?.user?.idClick_tour) {
+            const data = await getCatchs(userStatus.user.idClick_tour);
+            dispatch(set_bigfish(data.bigFish));
+        }
+    };
+
+    useEffect(() => {
+        // Проверка на необходимость загрузки данных
+        if (!bigFish && userStatus?.user?.idClick_tour) {
+            fetchData();
+        }
+    }, []);
 
 
-    console.log(imageRes)
     const faceFish = bigFish ? { backgroundImage: `url(${image})` } : {};
     const reservour = bigFish ? { backgroundImage: `url(${imageRes})` } : {};
-    console.log(reservour)
+
+
+    const handleBack = () => {
+        dispatch(set_stateBody('tourCard'))
+    }
     return (
         <div className="wrapper_card_bigfish">
             <BannerToBigfish />
@@ -82,13 +104,13 @@ export const CardBigFish = () => {
                 <div className={`img_foto_bigfish reservours_catch ${!loader ? 'animate2' : ''}`} style={loader ? {} : reservour}></div>
             </div>
             <div className="content_bigfish">
-                <span className='text_bigfish value_text'>{`Участник: ${bigFish.name_user}`}</span>
-                <span className='text_bigfish value_text'>{`Вид рыбы: ${bigFish.name_fish}`}</span>
-                <span className='text_bigfish value_text'>{`Вес: ${bigFish.weight} грамм`}</span>
-                <span className='text_bigfish value_text'>{`Водоём: ${bigFish.name_reservour}`}</span>
-                <span className='text_bigfish value_text'>{`Дата улова: ${bigFish.data}`}</span>
-                <span className='text_bigfish value_text'>{`Тип ловли: ${bigFish.name_type}`}</span>
-                <span className='text_bigfish value_text'>{`Приманка: ${bigFish.name_bait}`}</span>
+                <span className='text_bigfish value_text'>{`Участник: ${bigFish?.name_user}`}</span>
+                <span className='text_bigfish value_text'>{`Вид рыбы: ${bigFish?.name_fish}`}</span>
+                <span className='text_bigfish value_text'>{`Вес: ${bigFish?.weight} грамм`}</span>
+                <span className='text_bigfish value_text'>{`Водоём: ${bigFish?.name_reservour}`}</span>
+                <span className='text_bigfish value_text'>{`Дата улова: ${bigFish?.data}`}</span>
+                <span className='text_bigfish value_text'>{`Тип ловли: ${bigFish?.name_type}`}</span>
+                <span className='text_bigfish value_text'>{`Приманка: ${bigFish?.name_bait}`}</span>
             </div>
         </div>
     )

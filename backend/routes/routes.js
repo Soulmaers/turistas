@@ -20,3 +20,8 @@ router.post('/api/uploades', controllers.uploades)
 router.post('/api/updateTour', controllers.updateTour)
 router.post('/api/getFisher', controllers.getFisher)
 router.post('/api/addTour', controllers.addTour)
+router.post('/api/getFisherAddTour', controllers.getFisherAddTour)
+router.post('/api/save_anchor', controllers.updateAnchor)
+
+
+

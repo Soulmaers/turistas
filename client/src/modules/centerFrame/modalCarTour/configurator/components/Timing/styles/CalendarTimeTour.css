@@ -1,0 +1,107 @@
+.container_data {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    background-color: darkgreen;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.select_date {
+    display: flex;
+    flex-direction: column;
+    width: 40%
+        /* Располагаем элементы вертикально */
+}
+
+.title_time {
+    color: #fff;
+    margin-bottom: 5px;
+    text-align: center;
+    font-weight: bold
+}
+
+.tyre {
+    margin: 0 5px;
+    color: #fff;
+    font-size: 4.2rem;
+    padding-top: 10px;
+    box-sizing: border-box;
+}
+
+.calendar_time {
+    padding: 2px 5px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.hours_time {
+    width: 100%;
+    margin-top: 10px;
+    /* Отступ сверху */
+}
+
+.input_h {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.dvoetochie {
+    align-self: center;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.add_interval_btn {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px 5px;
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+    background-color: orange;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px 30px;
+}
+
+.input_h {
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    box-sizing: border-box;
+    width: 100px;
+}
+
+.hours_time_display {
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: lightgray;
+    padding: 2px 5px;
+    text-align: center;
+    width: 100%;
+    margin: 10px 0;
+    font-size: 1rem;
+    position: relative;
+    cursor: pointer;
+}
+
+@media (height<680px) {
+    .add_interval_btn {
+        margin: 10px
+    }
+}

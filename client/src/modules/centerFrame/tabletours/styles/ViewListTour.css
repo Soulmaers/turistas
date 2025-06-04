@@ -1,13 +1,3 @@
-@font-face {
-    font-family: 'Akrobat';
-    src: url('../../../../fonts/Akrobat-SemiBold.otf') format('opentype');
-    font-weight: 200;
-    /* Вес для ExtraBold */
-    font-style: normal;
-}
-
-
-
 @media (width<440px) {
 
 
@@ -23,7 +13,6 @@
     .title_tour_table {
         font-size: 1.5rem;
         margin-bottom: 5px;
-        font-family: Akrobat;
     }
 
     .body_tour_table {
@@ -47,19 +36,16 @@
     }
 
     .row_title_table_tour>th {
-        border: 2px solid #fff;
         font-size: 0.8rem;
         padding: 2px;
-        font-family: Akrobat;
         font-weight: 200;
         box-sizing: border-box;
     }
 
     .rows_table_tour_list>td {
         border: 2px solid #fff;
-        font-size: 1rem;
+        font-size: 0.9rem;
         padding: 4px;
-        font-family: Akrobat;
         font-weight: 200;
         box-sizing: border-box;
     }
@@ -84,22 +70,22 @@
     .title_left {
         align-self: flex-start;
         color: #000;
-        font-size: 1.3rem;
-        margin: 5px 0;
+        font-size: 1rem;
+        margin: 8px 0;
         font-weight: 300;
-        font-family: Akrobat;
-        width: 50%;
+        width: 60%;
+        font-weight: bold;
     }
 
     .title_right {
         text-align: right;
         color: #FFF;
-        font-size: 1.3rem;
-        margin: 5px 0;
+        font-size: 1rem;
+        margin: 8px 0;
         font-weight: 300;
-        font-family: Akrobat;
-        width: 50%;
+        width: 60%;
         align-self: flex-end;
+        font-weight: bold;
     }
 
     .all_tours_list {

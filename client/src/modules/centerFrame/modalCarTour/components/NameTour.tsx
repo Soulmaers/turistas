@@ -30,7 +30,7 @@ export const NameTour: React.FC<nameTourProps> = ({ name, flag, updateTourTitle 
     const parentClass = flag ? 'name_wrapper' : 'add_name_wrapper'
     const width = flag ? '85%' : '100%'
     return (<div className={parentClass}>
-        {!flag && <div className="name_car_tour">НАЗВАНИЕ СОБЫТИЯ</div>}
+        {!flag && <div className="name_car_tour">НАЗВАНИЕ ТУРНИРА</div>}
         <input className="input_name_tour" value={nameTour} disabled={flag ? isDisabled : !isDisabled}
             onChange={handleChange} style={{ width }} />
         {flag && <div className="btn_name_change" onClick={handler}></div>}

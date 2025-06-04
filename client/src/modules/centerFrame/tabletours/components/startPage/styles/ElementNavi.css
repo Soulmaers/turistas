@@ -1,0 +1,83 @@
+.table_tour_list {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #e8e8e8;
+}
+
+.rows_type_tour_list {
+    background-color: #e8e8e8;
+}
+
+.rows_table_tour_list>td {
+    border: 1px solid #bcbcbc;
+    font-weight: bold;
+}
+
+.rows_table_tour_list {
+    background-color: #e8e8e8;
+}
+
+.element_type_tour {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    font-weight: bold
+}
+
+.set_tour {
+    text-align: center;
+}
+
+.set_tour_icon_dis {
+    color: gray
+}
+
+.no_tours {
+    width: 100%;
+    background-color: #e8e8e8;
+    padding: 5px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.left_name_type {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.right_name_type {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.arrow_sub_menu {
+    background-image: url('../../../../../../assets/icon_arrow_black.webp');
+    background-size: contain;
+    height: 13px;
+    width: 15px;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.list_sub_all_tour {
+    background-image: url('../../../../../../assets/icon_list.webp');
+    background-size: contain;
+    height: 18px;
+    width: 18px;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.count_tour {
+    padding: 0 8px !important;
+}

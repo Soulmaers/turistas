@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useSetCatch } from '../hooks/setCatch'
 import Modal from '../../../servises/components/Modal'
-import { RootState, add_catch, set_action_catch, set_catch, set_catchsList, set_urlFoto } from '../../../../GlobalStor'
+import { RootState, set_action_catch, set_catch, set_catchsList, set_stateModalWindow, set_urlFoto } from '../../../../GlobalStor'
 import { ExtendedBigFish } from '../../../../GlobalStor'
 import '../styles/FormCatch.css'
 import { useGetImages } from '../../tabletours/hooks/getImages'
@@ -101,15 +101,17 @@ export const FormCatch = () => {
         setFormState((prev) => ({ ...prev, [name]: event.target.value }))
     }, []);
     const closeModal = useCallback(() => {
-        dispatch(add_catch(false))
+        dispatch(set_stateModalWindow({ type: '', status: false }))
     }, [dispatch])
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
+        console.log(event.target.files)
         if (file?.name) {
             const imageUrl = URL.createObjectURL(file);
             setTimeFile(imageUrl);
             const reader = new FileReader();
+            console.log(reader)
             reader.readAsDataURL(file);
             setFormState((prev) => ({ ...prev, image: file, urlFoto: file?.name }));
         }
@@ -226,7 +228,7 @@ export const FormCatch = () => {
 
 
     const cancel = () => {
-        dispatch(add_catch(false))
+        dispatch(set_stateModalWindow({ type: 'catchForm', status: false }))
         dispatch(set_catch({
             name_user: '',
             name_fish: '',

@@ -1,0 +1,49 @@
+@media (width<440px) {
+    .profil {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        align-items: center;
+        justify-content: space-around;
+        background-color: #21852b;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    .profil_row {
+        width: 80%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    .text_title_row {
+        font-size: 1.2rem;
+        margin-left: 10px;
+    }
+
+    .icon_class {
+        font-size: 1.2rem;
+    }
+
+    .out {
+        cursor: pointer;
+    }
+
+    .wrapper_menu {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    .name_fisher {
+        width: 100%;
+        margin: 10px 0;
+        text-align: center;
+        font-size: 1.3rem;
+        color: orange
+    }
+}

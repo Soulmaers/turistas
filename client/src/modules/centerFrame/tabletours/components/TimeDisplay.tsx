@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react'
 import { statusTour } from '../stor'
-import '../styles/AddCarTournament.css'
 
 interface TimeDisplayProps {
     status: number;

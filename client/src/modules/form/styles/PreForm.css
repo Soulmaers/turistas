@@ -1,0 +1,26 @@
+.wrap_pre_form {
+    background-color: #369727;
+    height: 150px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 10px;
+}
+
+.btn_pre_form {
+    color: #fff;
+    font-size: 1.6rem;
+    cursor: pointer;
+    height: 50%;
+    width: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.btn_pre_form:nth-child(n+2) {
+    border-top: 2px solid #fff;
+}

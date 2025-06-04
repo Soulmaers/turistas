@@ -3,7 +3,7 @@ import WiewCheckTitle from './WiewCheckTitle'
 import '../styles/Statistics.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { useProcessList } from '../hooks/ProcessListCatch'
-import { set_historyWiew, click_tour, RootState } from '../../../GlobalStor';
+import { RootState } from '../../../GlobalStor';
 
 
 const Statistics = () => {

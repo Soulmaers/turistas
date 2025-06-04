@@ -3,19 +3,12 @@ import { SetStateAction, useState, useEffect } from "react"
 import { useGetFishers } from '../hookUsers'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { update_modal, set_add_tour, set_modalFishers, set_profil, add_catch, set_deleteFormTour, RootState } from '../../../../GlobalStor';
+import { set_discription, set_stateModalWindowThree, set_tour, RootState } from '../../../../GlobalStor';
+import { GiConsoleController } from "react-icons/gi";
+import { DiscriptionQuestions } from '../../../modalComponents/components/DiscriptionQuestions'
 
 
 
-interface NewTour {
-    nameTour: string;
-    startDate: string;
-    finishDate: string;
-    users: {
-        contactId: string;
-        userId: number;
-    }[]; // Используем массив объектов
-}
 interface Fishers {
     name_user: string
     contactID: string
@@ -23,37 +16,37 @@ interface Fishers {
 
 }
 interface FuncAlarm {
-    mess: React.Dispatch<React.SetStateAction<string>>;
-    addFishers: (users: {
-        contactId: string;
-        userId: number;
-    }[]) => void
+    flag: boolean
+
 }
 
 
 
 
-export const Fishers: React.FC<FuncAlarm> = ({ mess, addFishers }) => {
+export const Fishers: React.FC<FuncAlarm> = ({ flag }) => {
+    const dispatch = useDispatch()
     const [fisherID, setFisherID] = useState('')
     const [countFishers, setCountFishers] = useState(0)
+    const [valid, setValid] = useState<string>('')
     const tourData = useSelector((state: RootState) => state.slice.tour);
     const [fishers, setFishers] = useState<Fishers[]>([])
 
     const { getFisher } = useGetFishers()
 
     useEffect(() => {
-        console.log(tourData)
-        console.log(tourData.users)
         setFishers(tourData.users)
+        setCountFishers(tourData.users.length)
     }, [])
     useEffect(() => {
-        const array = fishers.map(e => ({ contactId: e.contactID, userId: e.userId }));
-        addFishers(array);
+        console.log(fishers)
+        const array = fishers.map(e => ({ contactID: e.contactID, userId: e.userId, name_user: e.name_user }));
+        dispatch(set_tour({ ...tourData, users: array }))
+        //  addFishers(array);
     }, [fishers]);
 
 
 
-    const stop = countFishers >= 5 ? true : false
+    const stop = countFishers >= 6 ? true : false
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFisherID(event.target.value); // обновляем состояние с новым значением
 
@@ -61,18 +54,17 @@ export const Fishers: React.FC<FuncAlarm> = ({ mess, addFishers }) => {
 
 
     const validationLocal = (text: string) => {
-        mess(text)
-        setTimeout(() => mess(''), 2000);
+        setValid(text)
+        setTimeout(() => setValid(''), 2000);
     }
     const handler = async () => {
+        console.log(countFishers)
         console.log(stop)
         console.log(fisherID)
         const duble = fishers.find(e => e.contactID === fisherID)
         if (stop) { validationLocal(`Добавлено максимальное кол-во участников`); return }
         if (fisherID === '') { validationLocal('Введите ID участника'); return }
         if (duble) { validationLocal(`Пользователь ${fisherID} уже добавлен`); return }
-
-
 
         const result = await getFisher(fisherID)
         console.log(result)
@@ -99,12 +91,18 @@ export const Fishers: React.FC<FuncAlarm> = ({ mess, addFishers }) => {
         setCountFishers(prevCount => prevCount - 1);
     }
 
-    console.log(fishers)
+    const handlerDiscriotion = () => {
+        dispatch(set_discription('Для добавления участников введите ID участника.ID каждого пользователя указан у него в личном кабинете. Таким образом Вы можете добавить до 5 участников. Если Вам необходимо больше 5 участников, то после создания ТУРНИРА, в профиле этого ТУРНИРА, Вы найдете QR-code, которым Вы можете поделиться с любым человеком, даже если он не зарегистрирован в приложении. Отсканировав QR-code, пользователь автоматически пройдет регистрацию в приложении и присоеденится к турниру. УДАЛЯТЬ и ДОБАВЛЯТЬ УЧАСТНИКА МОЖЕТ ТОЛЬКО СОЗДАТЕЛЬ ТУРНИРА'))
+        dispatch(set_stateModalWindowThree({ type: 'discription_questions', status: true }))
+    }
+    console.log(flag)
     const rowFihers = fishers.map(e => <div className="wrapper_row_fisher"><div className="row_fisher">{e.name_user.toUpperCase()}</div>
         <div className="btn_del_fisher" onClick={() => deleteHandler(e.userId)}></div></div>)
 
-    return (<div className="add_name_wrapper wrap_fishers">
-        <div className="name_car_tour">УЧАСТНИКИ<span className="icon_question fishers_question"></span></div>
+    const classes = !flag ? 'add_name_wrapper wrap_fishers noflg' : 'add_name_wrapper wrap_fishers flg'
+    const styles = !flag ? { padding: '10px', width: '300px' } : { padding: 0, width: '95%' }
+    return (<div className={classes} style={styles}>
+        <div className="name_car_tour">УЧАСТНИКИ<span className="icon_question fishers_question" onClick={handlerDiscriotion}></span></div>
         <div className="fishers">
             <input className="input_name_tour" placeholder="Введите ID нового участника" value={fisherID} onChange={handleChange} disabled={stop} />
             <div className="btn_add_fisher" onClick={handler}></div></div>
@@ -112,5 +110,6 @@ export const Fishers: React.FC<FuncAlarm> = ({ mess, addFishers }) => {
             {rowFihers}
 
         </div>
+        {!flag && <div className="messageAlarmUsers">{valid}</div>}
     </div>)
 }

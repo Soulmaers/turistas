@@ -2,7 +2,7 @@
 import { IoMdAddCircle } from "react-icons/io"
 import { FaPlus } from "react-icons/fa6";
 import { useSelector, useDispatch } from 'react-redux';
-import { add_catch, set_add_tour, set_tour, update_modal, RootState } from '../../../../GlobalStor';
+import { set_tour, set_catch, set_stateModalWindow, RootState } from '../../../../GlobalStor';
 
 
 
@@ -17,9 +17,31 @@ export const ClickIconAdd: React.FC<ClickIconAddProps> = ({ pref }) => {
 
     const handler = () => {
         if (pref === 1 || pref === 2) {
-            dispatch(add_catch(true));
+            dispatch(set_stateModalWindow({ type: 'catchForm', status: true }));
+            dispatch(set_catch({
+                name_user: '',
+                name_fish: '',
+                name_reservour: '',
+                name_type: '',
+                name_bait: '',
+                name_day: '',
+                weight: '',
+                foto_user: '',
+                data: '',
+                comment: '',
+                urlFoto: null,
+                idUser: 0,
+                idTournament: 0,
+                idCatch: 0,
+                id_baits: 0,
+                id_fish: 0,
+                id_reservour: 0,
+                id_timeday: 0,
+                id_type: 0
+            }))
         } else {
-            dispatch(set_add_tour(true));
+            dispatch(set_stateModalWindow({ type: 'add_tour', status: true }))
+            //  dispatch(set_add_tour(true));
             dispatch(set_tour({
                 id: null,
                 nameTour: '',

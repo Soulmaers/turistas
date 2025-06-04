@@ -1,0 +1,82 @@
+.modal_timetour {
+    align-items: center;
+    background-color: #369727;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 5px;
+}
+
+.discription_time {
+    color: #fff;
+    padding-bottom: 20px;
+    margin-top: 10px;
+    width: 95%;
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.3rem;
+}
+
+.discription_interval {
+    color: yellow;
+    margin: 10px 0;
+    width: 95%;
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.3rem;
+}
+
+.footer_timetour {
+    margin: 20px 0;
+    width: 95%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.time_tick {
+    width: 100px;
+    background-color: orange;
+    padding: 5px;
+    width: 120px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.5rem;
+    cursor: pointer;
+}
+
+
+.ok {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+
+.time_question {
+    top: 8px !important;
+    right: 35px
+}
+
+@media (height<680px) {
+    .container_intervals {
+        height: 170px;
+    }
+
+    .modal_timetour {
+        width: 300px;
+    }
+
+    .footer_timetour {
+        margin: 10px 0;
+    }
+
+}

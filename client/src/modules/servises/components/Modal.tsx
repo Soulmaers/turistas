@@ -1,44 +1,42 @@
-import React, { useRef, useEffect } from 'react'
-import './Modal.css'
+import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import './Modal.css';
+
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, update_modal, set_add_tour, set_subMenu, set_profil, add_catch, set_bigfish } from '../../../GlobalStor';
+import { set_tour, set_catch, set_activeModalLevel, set_stateModalWindow, RootState } from '../../../GlobalStor';
+
 
 interface ModalProps {
     children: React.ReactNode;
-    style: {
-        top: string;
-    };
-    onClose: () => void; // <-- добавляем onClose
+    onClose: () => void;
+    style: React.CSSProperties;
 }
-const Modal = ({ children, style, onClose }: ModalProps) => {
-    const deleteFormTour = useSelector((state: RootState) => state.slice.deleteFormTour);
-    const dispatch = useDispatch()
-    const modalka = useRef<HTMLDivElement>(null)
+
+const Modal = ({ children, onClose, style }: ModalProps) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const activeModalLevel = useSelector((state: RootState) => state.slice.activeModalLevel);
+
     useEffect(() => {
+        if (activeModalLevel !== 1) return;
         const handleClickOutside = (event: MouseEvent) => {
-            if (modalka.current && !modalka.current.contains(event.target as Node)) {
-                console.log(modalka.current)
-                console.log('тут?')
-                if (!deleteFormTour) onClose();
+            if (ref.current && !ref.current.contains(event.target as Node)) {
+                onClose();
             }
         };
+
         document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [activeModalLevel, onClose]);
 
-    }, [onClose])
-
-
-    return (
-        <>
-            <div className="background"></div>
-            <div className="modal_window" ref={modalka} style={{ top: style.top }}>
+    return createPortal(
+        <div className="modal-backdrop" style={{ zIndex: 100 }}>
+            <div className="modal-content" ref={ref} style={style}>
                 {children}
             </div>
-        </>
-    )
-}
+        </div>,
+        document.body
+    );
+};
 
+export default Modal;
 
-export default Modal

@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'Akrobat';
+    src: url('../../../fonts/Akrobat-Regular.otf') format('opentype');
+    font-weight: 400;
+    /* Вес для ExtraBold */
+    font-style: normal;
+}
+
+
 .Left_frame {
     width: 15%;
     height: 100%;
@@ -89,7 +98,8 @@
 }
 
 .title_name {
-    font-size: 1.0rem;
+    font-family: Akrobat;
+    font-size: 1.1rem;
     color: #fff
 }
 
@@ -225,10 +235,11 @@
         left: 0;
         right: 0;
         background-color: #2D6D4B;
+        padding: 0 5px;
     }
 
     .header_admin_container {
-        width: 45%;
+        width: 55%;
         height: 40px;
         background-color: transparent;
         border: none;
@@ -236,7 +247,7 @@
     }
 
     .Header_container {
-        width: 55%;
+        width: 45%;
         height: 40px;
         background-color: transparent;
         border: none;
@@ -304,7 +315,6 @@
 
     .exit,
     .fish_icon,
-    .login,
     .numbers,
     .settings_icon,
     .star_icon {

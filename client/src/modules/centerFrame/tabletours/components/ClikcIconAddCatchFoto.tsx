@@ -2,7 +2,7 @@
 import { IoMdAddCircle } from "react-icons/io"
 import { FaPlus } from "react-icons/fa6";
 import { useSelector, useDispatch } from 'react-redux';
-import { add_catch, update_modal, RootState } from '../../../../GlobalStor';
+import { set_stateModalWindow, RootState } from '../../../../GlobalStor';
 
 
 
@@ -13,7 +13,7 @@ export const ClickIconAddCatchFoto = () => {
 
 
     const handler = () => {
-        dispatch(add_catch(true))
+        dispatch(set_stateModalWindow({ type: 'catchForm', status: true }));
     }
     return (
         <div className="wrapper_icon_add_catch_foto" onClick={handler}></div>

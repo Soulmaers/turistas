@@ -130,3 +130,29 @@ textarea {
             2px solid #fff;
     }
 }
+
+
+@media (height<680px) {
+    .rows_card_tour_catch {
+        margin: 1px 0;
+    }
+
+    .select {
+        padding: 2px;
+    }
+
+    .button_load {
+
+        width: 80px;
+        height: 80px;
+    }
+
+    .wrap_img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .rows_card_tour_foto {
+        justify-content: space-around;
+    }
+}

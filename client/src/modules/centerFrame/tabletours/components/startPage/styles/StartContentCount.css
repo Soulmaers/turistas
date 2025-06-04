@@ -1,0 +1,98 @@
+.row_type_tour_start {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #bcbcbc;
+}
+
+.row_type_tour_low {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #bcbcbc;
+    padding: 10px;
+    box-sizing: border-box;
+    font-weight: bold;
+}
+
+.stat {
+    border-top: 2px solid #e8e8e8;
+    border-radius: 0 0 20px 20px;
+}
+
+
+.last_row {
+    border-bottom: none;
+    border-radius: 0 0 20px 20px;
+}
+
+.card_tours,
+.card_catchs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+
+.title_card_count {
+    background-color: #ffbb3b;
+    color: #000;
+    position: relative;
+    width: 100%;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    text-align: right;
+    border-radius: 20px 20px 0 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.icon_add_content {
+    background-image: url('../../../../../../assets/icon_add_cup.webp');
+    background-size: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 95px;
+    left: -20px;
+    position: absolute;
+    top: -20px;
+    width: 95px;
+}
+
+.icon_add_content_fish {
+    background-image: url('../../../../../../assets/icon_add_fish.webp');
+    background-size: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 95px;
+    left: -20px;
+    position: absolute;
+    top: -20px;
+    width: 95px;
+}
+
+.start_count {
+    width: 90%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* align-content: center; */
+    justify-content: space-between;
+
+}
+
+.tochkes {
+    width: 100%;
+    background-color: lightgray;
+}

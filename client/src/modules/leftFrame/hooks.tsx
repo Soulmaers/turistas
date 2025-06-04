@@ -2,7 +2,7 @@
 
 import { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { update_modal, set_tour, RootState } from '../../GlobalStor'
+import { set_tour, RootState } from '../../GlobalStor'
 
 //import { TourData } from '../servises/contexs/contextStateTourData'
 export const useDeleteTour = () => {

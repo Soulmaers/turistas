@@ -68,8 +68,22 @@
     }
 
     .wrap_fishers {
-        height: 60%;
-        border-bottom: 1px solid #fff;
+        height: 300px;
+        box-sizing: border-box;
+        background-color: #369727;
+    }
+
+    .noflg {
+        width: 300px;
+        padding: 10px;
+        height: 300px;
+        box-sizing: border-box;
+        background-color: #369727;
+    }
+
+    .flg {
+        padding: 0;
+        width: 95%
     }
 
     .fishers_question {
@@ -91,5 +105,41 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
+    }
+
+    .discription_add_tour {
+        color: #ff0;
+        font-size: 0.7rem;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+}
+
+@media (height<680px) {
+    .noflg {
+        width: 300px;
+        padding: 10px;
+        min-height: 180px;
+        box-sizing: border-box;
+        background-color: #369727;
+    }
+
+    .flg {
+        padding: 0;
+        width: 95%;
+        height: 180px;
+    }
+
+    .modal_tour {
+        width: 300px;
+    }
+
+    .prop_tour {
+        font-size: 0.8rem
+    }
+
+    .name_car_tour {
+        font-size: 1rem;
     }
 }

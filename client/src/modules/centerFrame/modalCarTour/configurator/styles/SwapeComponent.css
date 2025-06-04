@@ -1,0 +1,55 @@
+.wrap_swipe {
+    align-items: center;
+    display: flex;
+    width: 90%;
+    height: 40px;
+}
+
+
+
+.swipe_out {
+    width: 40px;
+    height: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    -webkit-tap-highlight-color: transparent;
+    /* отключает подсветку при тапе на iOS */
+    -webkit-user-select: none;
+    /* отключает выделение текста на iOS */
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    /* убирает контур при фокусе */
+}
+
+.in {
+    background-image: url('../../../../../assets/icon_toggle_on.webp');
+}
+
+.off {
+    background-image: url('../../../../../assets/icon_toggle_off.webp');
+}
+
+.text_swipe {
+    font-size: 1rem;
+    width: 100%;
+    color: #fff
+}
+
+
+@media (height<680px) {
+    .text_swipe {
+        font-size: 0.7rem;
+        width: 100%;
+        color: #fff
+    }
+
+    .wrap_swipe {
+        height: 25px
+    }
+}

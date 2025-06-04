@@ -6,6 +6,9 @@ import { useEditTour } from '../../../leftFrame/hooks'
 import '../styles/TableTournaments.css'
 
 
+
+
+
 interface TableTournamentProps {
     idTour: number; // Или другой подходящий тип, например, number
 }
@@ -18,22 +21,22 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
     const tourData = useSelector((state: RootState) => state.slice.tour);
     const dispatch = useDispatch()
+
+
+    const fetchData = async () => {
+        const [data, _] = await Promise.all([
+            getCatchs(idTour),
+            editFunc(idTour)
+        ]);
+        dispatch(set_catchs(data.data));
+        dispatch(set_bigfish(data.bigFish));
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            console.log(idTour)
-            const [data, _] = await Promise.all([
-                getCatchs(idTour),
-                editFunc(idTour)
-            ]);
-            dispatch(set_catchs((data.data)))
-            dispatch(set_bigfish(data.bigFish))
-        };
         fetchData();
+    }, [idTour, actionCatch]);
 
-    }, [idTour, actionCatch])
 
-    console.log(tourData.users)
-    console.log(catchs)
     const usersWithTotals = tourData.users.map((e) => {
         const catchsFisher = catchs.find(el => el.idUser === e.userId);
         return {
@@ -54,7 +57,7 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
         const count = 0;
 
         const catchsFisher = catchs.find(el => el.idUser === e.userId);
-        console.log(catchsFisher)
+
         return (
             <tr key={e.name_user} style={rowStyle}>
                 <td className="cel_two" style={rowStyleTwo}>{index + 1}</td>
@@ -68,19 +71,6 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
             </tr>
         );
 
-
-        /*  return (
-              <tr key={e.name_user?.toUpperCase()} style={rowStyle}>
-                  <td className="cel_two" style={rowStyleTwo}>{index + 1}</td>
-                  <td className="cel_two" style={rowStyleTwo}>{e.name_user}</td>
-                  <td className="cel" style={rowStyleCel}>{e['Лещ']}</td>
-                  <td className="cel" style={rowStyleCel}>{e['Щука']}</td>
-                  <td className="cel" style={rowStyleCel}>{e['Судак']}</td>
-                  <td className="cel" style={rowStyleCel}>{e['Окунь']}</td>
-                  <td className="cel" style={rowStyleCel}>{e['Другое']}</td>
-                  <td className="cel" style={rowStyleCel}>{e['Всего']}</td>
-              </tr>
-          );*/
     })
 
     return (
@@ -99,6 +89,7 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
                 </thead>
                 <tbody>{rows}</tbody>
             </table>
+
         </div>
     )
 }

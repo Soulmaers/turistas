@@ -1,5 +1,31 @@
 import { createSlice, PayloadAction, configureStore } from '@reduxjs/toolkit';
-import { User } from './modules/form/components/Interface';
+import { LargeNumberLike } from 'node:crypto';
+
+
+
+export interface User {
+    user: {
+        contactID: '',
+        name_user: 'string',
+        trophys: number,
+        fishs: number,
+        stars: number,
+        id: number,
+        state_card: string | null,
+        idClick_tour: number | null
+    } | null,
+    tournament: Tournament[] | []
+
+}
+export interface Tournament {
+    status: number | undefined | null | string,
+    big_fish: number | null,
+    name: string,
+    created_by: number,
+    dateStart: string,
+    dateFinish: string,
+    id: number
+}
 
 // Интерфейс для UpdateReservours
 interface UpdateReservours {
@@ -51,14 +77,14 @@ export interface ExtendedBigFish extends BigFish {
     id_timeday: number,
     id_type: number
 }
+
+
 // Интерфейс для состояния
 interface MyState {
-    stateBody: string
+    stateBody: string;
+    historyStateBody: string[];
     updateReservours: UpdateReservours;
     userStatus: User;
-    activForm: boolean,
-    stateModal: boolean,
-    catchForm: boolean,
     idClickTour: number | null
     tour: DataTour,
     catch: ExtendedBigFish,
@@ -75,18 +101,33 @@ interface MyState {
     urlFoto: null | string,
     catchsList: [] | ExtendedBigFish[],
     historyWiew: string,
-    subMenu: null | string,
-    deleteForm: boolean,
     deleteIdCatch: null | ExtendedBigFish,
     allCatchs: ExtendedBigFish[],
     staticData: UserData[],
     deleteFormTour: boolean,
-    profil: boolean,
-    addTour: boolean,
     statusTour: number | null,
-    modalFishers: boolean
-}
+    modalFishers: boolean,
+    discription: string,
+    formStep: {
+        step: string,
+        index: number | null
+    },
+    prevStateBodyForRender: null | string,
+    stateModalWindow: StateModal,
+    stateModalWindowTwo: StateModal,
+    stateModalWindowThree: StateModal,
+    stateModalWindowThour: StateModal,
+    activeModalLevel: number,
+    modalStack: number[]
+    intervals: Interval[] | [],
 
+}
+interface Interval {
+    start: number; // Время начала в секундах
+    end: number;   // Время конца в секундах
+    startDateTime: string;
+    endDateTime: string;
+}
 export interface Participants {
     name_user: string,
     contactID: string,
@@ -99,17 +140,28 @@ interface DataTour {
     dateFinish: string,
     users: Participants[]
 }
+type FormStepPayload = {
+    step: 'start' | 'preform' | 'entry' | 'main';
+    index?: number | null;
+};
 
-
-
+interface StateModal {
+    type: string,
+    status: boolean
+}
 // Начальное состояние
 const initialState: MyState = {
-    stateBody: 'haveTours',
+    modalStack: [],
+    intervals: [],
+    stateModalWindow: { type: 'null', status: false },
+    stateModalWindowTwo: { type: 'null', status: false },
+    stateModalWindowThree: { type: 'null', status: false },
+    stateModalWindowThour: { type: 'null', status: false },
+    stateBody: 'startwindow',
+    historyStateBody: [],
+    prevStateBodyForRender: null,
     updateReservours: { index: 0, text: '' },
     userStatus: { user: null, tournament: [] },
-    activForm: true,
-    stateModal: false,
-    catchForm: false,
     idClickTour: null,
     tour: {
         id: null,
@@ -151,17 +203,19 @@ const initialState: MyState = {
     bigFish: null,
     urlFoto: null,
     catchsList: [],
-    subMenu: null,
     historyWiew: 'tournaments',
-    deleteForm: false,
     deleteIdCatch: null,
     allCatchs: [],
     staticData: [],
     deleteFormTour: false,
-    profil: false,
-    addTour: false,
     statusTour: null,
-    modalFishers: false
+    modalFishers: false,
+    formStep: {
+        step: 'start',
+        index: null
+    },
+    discription: '',
+    activeModalLevel: 0
 };
 
 // Создаем slice
@@ -169,32 +223,72 @@ const slice = createSlice({
     name: 'GlobalStor',
     initialState,
     reducers: {
+        setModalStackPush: (state, action: PayloadAction<number>) => {
+            if (!state.modalStack.includes(action.payload)) {
+                state.modalStack.push(action.payload);
+                state.activeModalLevel = action.payload;
+            }
+        },
+        setModalStackPop: (state) => {
+            state.modalStack.pop();
+            state.activeModalLevel = state.modalStack[state.modalStack.length - 1] || 0;
+        },
+        setFormStepWithIndex: (state, action: PayloadAction<FormStepPayload>) => {
+            state.formStep.step = action.payload.step;
+            state.formStep.index = action.payload.index ?? null;
+        },
+        set_stateModalWindow: (state, action: PayloadAction<StateModal>) => {
+            state.stateModalWindow = action.payload;
+        },
+        set_activeModalLevel: (state, action: PayloadAction<number>) => {
+            state.activeModalLevel = action.payload;
+        },
+
+        set_stateModalWindowTwo: (state, action: PayloadAction<StateModal>) => {
+            state.stateModalWindowTwo = action.payload;
+        },
+        set_stateModalWindowThree: (state, action: PayloadAction<StateModal>) => {
+            state.stateModalWindowThree = action.payload;
+        },
+        set_stateModalWindowThour: (state, action: PayloadAction<StateModal>) => {
+            state.stateModalWindowThour = action.payload;
+        },
+        set_intervals: (state, action: PayloadAction<Interval[]>) => {
+            state.intervals = action.payload;
+        },
+
+
+
+        goBackState: (state) => {
+            const prev = state.historyStateBody.pop();
+            if (prev) {
+                state.stateBody = prev;
+            } else {
+                state.stateBody = 'startwindow';
+            }
+        },
+
+        set_stateBody: (state, action: PayloadAction<string>) => {
+            if (state.stateBody !== action.payload) {
+                state.historyStateBody.push(state.stateBody);
+                state.prevStateBodyForRender = state.stateBody; // 👈 Сохраняем прошлый экран для рендера подложки
+            }
+            state.stateBody = action.payload;
+        },
         set_modalFishers: (state, action: PayloadAction<boolean>) => {
             state.modalFishers = action.payload;
         },
-        set_stateBody: (state, action: PayloadAction<string>) => {
-            state.stateBody = action.payload;
-        },
         set_statusTour: (state, action: PayloadAction<number | null>) => {
             state.statusTour = action.payload;
+        },
+        set_discription: (state, action: PayloadAction<string>) => {
+            state.discription = action.payload
         },
         updateReservours: (state, action: PayloadAction<UpdateReservours>) => {
             state.updateReservours = action.payload;
         },
         updateStatusUser: (state, action: PayloadAction<User>) => {
             state.userStatus = action.payload;
-        },
-        controll_modal_form: (state, action: PayloadAction<boolean>) => {
-            state.activForm = action.payload;
-        },
-        update_modal: (state, action: PayloadAction<boolean>) => {
-            state.stateModal = action.payload;
-        },
-        set_add_tour: (state, action: PayloadAction<boolean>) => {
-            state.addTour = action.payload;
-        },
-        add_catch: (state, action: PayloadAction<boolean>) => {
-            state.catchForm = action.payload;
         },
         click_tour: (state, action: PayloadAction<number | null>) => {
             state.idClickTour = action.payload;
@@ -226,14 +320,8 @@ const slice = createSlice({
         set_historyWiew: (state, action: PayloadAction<string>) => {
             state.historyWiew = action.payload;
         },
-        set_subMenu: (state, action: PayloadAction<null | string>) => {
-            state.subMenu = action.payload;
-        },
         resetAll: (state) => {
             return initialState;
-        },
-        set_deleteForm: (state, action: PayloadAction<boolean>) => {
-            state.deleteForm = action.payload;
         },
         set_deleteFormTour: (state, action: PayloadAction<boolean>) => {
             state.deleteFormTour = action.payload;
@@ -255,24 +343,25 @@ const slice = createSlice({
         set_static: (state, action: PayloadAction<UserData[]>) => {
             state.staticData = action.payload;
         },
-        set_profil: (state, action: PayloadAction<boolean>) => {
-            state.profil = action.payload;
-        },
-
-
-
 
     },
 });
 
 // Экспортируем actions
-export const {
+export const { goBackState,
+    setModalStackPush,
+    set_intervals,
+    setModalStackPop,
+    set_activeModalLevel,
+    setFormStepWithIndex,
+    set_stateModalWindow,
+    set_stateModalWindowTwo,
+    set_stateModalWindowThree,
+    set_stateModalWindowThour,
+    set_discription,
     set_stateBody,
     updateReservours,
     updateStatusUser,
-    controll_modal_form,
-    update_modal,
-    add_catch,
     click_tour,
     set_tour,
     set_catch,
@@ -283,16 +372,12 @@ export const {
     set_urlFoto,
     set_catchsList,
     set_historyWiew,
-    set_subMenu,
     resetAll,
-    set_deleteForm,
     set_deleteIdCatch,
     deleteCatch,
     setAllCatchs,
     set_static,
     set_deleteFormTour,
-    set_profil,
-    set_add_tour,
     set_statusTour,
     set_modalFishers
 } = slice.actions;

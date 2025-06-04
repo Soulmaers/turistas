@@ -1,0 +1,78 @@
+.modal_config {
+    align-items: center;
+    background-color: #369727;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 10px 5px;
+}
+
+
+.wrapper_buttons_content {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+
+.wrap_row {
+    margin: 5px 0;
+    border-radius: 5px;
+    background-color: orange;
+    padding: 12px 2px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer
+}
+
+.wrap_row_import_card {
+    margin: 20px 0;
+    border-radius: 5px;
+    background-color: #FA7300;
+    padding: 8px 2px;
+    width: 90%;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+}
+
+.footer_config {
+    border-top: 2px solid #fff;
+    padding: 10px !important;
+}
+
+.title_tour {
+    width: 80%;
+    text-align: center;
+    font-size: 1.2rem
+}
+
+@media (height<680px) {
+    .modal_config {
+        width: 300px;
+    }
+
+    .title_tour {
+
+        font-size: 1.1rem
+    }
+
+    .wrapper_buttons_content {
+        margin: 5px 0;
+    }
+
+    .wrap_row {
+        font-size: 0.65rem;
+        padding: 8px 2px;
+    }
+}

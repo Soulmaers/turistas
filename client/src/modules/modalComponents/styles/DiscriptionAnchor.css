@@ -1,0 +1,25 @@
+.wrapper_discription {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    width: 270px;
+    text-align: center;
+}
+
+.text_message {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.poysnyalka {
+    color: #fff;
+    font-style: italic;
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin: 15px 0;
+
+}

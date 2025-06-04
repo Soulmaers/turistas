@@ -1,0 +1,29 @@
+.background_three {
+    background-color: #fffc;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 4;
+    border-radius: 10px;
+}
+
+.modal_window_three {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Центрируем модальное окно */
+    background-color: #369727;
+    border-radius: 10px;
+    z-index: 4;
+    /* Модальное окно должно быть над фоном */
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 75%;
+}

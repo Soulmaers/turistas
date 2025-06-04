@@ -18,11 +18,9 @@
     height: 80%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
     background-color: #4d4646;
     color: #fff;
     border-radius: 5px;
-    padding: 3px;
     border: 1px solid #fff;
 }
 
@@ -103,9 +101,7 @@
 }
 
 @media (width<440px) {
-    .login {
-        cursor: pointer;
-    }
+
 
     .trophy_all {
         background-image: url('../../../assets/icon_cup.webp');
@@ -127,6 +123,60 @@
     .number {
         font-size: 1.2rem;
         padding-bottom: 2px;
+    }
+
+
+    .anchor,
+    .login {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .icon_anchor {
+        width: 22px;
+        height: 22px;
+
+    }
+
+    .groundAnchor {
+        background-image: url('../../../assets/icon_anchor.webp');
+        background-size: cover;
+    }
+
+    .nogroundAnchor {
+        background-image: url('../../../assets/icon_anchor_red.webp');
+        background-size: cover;
+    }
+
+    .icon_profil {
+        width: 35px;
+        height: 21px;
+        background-image: url('../../../assets/icon_gumburger.webp');
+        background-size: cover;
+    }
+
+
+    .ic {
+        margin: 5px;
+    }
+
+    .gumber {
+        margin-left: 20px
+    }
+
+    .numbers {
+        margin-left: 0 2px;
+    }
+
+    .wrap_icons {
+        display: flex;
+        align-items: center;
+    }
+
+    .wrapper_account {
+        justify-content: space-between;
     }
 
 }

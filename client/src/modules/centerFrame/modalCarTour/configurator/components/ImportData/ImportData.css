@@ -1,0 +1,44 @@
+.discription_time {
+    padding: 0
+}
+
+.btn_import {
+    width: 90%
+}
+
+.low_load_data {
+    font-size: .85rem;
+    margin: 5px 0;
+    padding: 12px 2px;
+    width: 90%;
+    background-color: #FA7300;
+    cursor: pointer;
+}
+
+.flow {
+    min-height: 370px;
+}
+
+.body_card_modal {
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+
+}
+
+@media (height<680px) {
+
+
+    .modal_subif {
+        width: 300px;
+        min-height: 530px;
+    }
+
+
+    .flow {
+        min-height: 230px;
+    }
+
+}

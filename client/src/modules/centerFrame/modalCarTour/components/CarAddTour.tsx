@@ -5,10 +5,12 @@ import { PropTour } from "./PropTour";
 import { NameTour } from "./NameTour";
 import DatePickerInput from './DatePickerInput'
 import { Fishers } from './Fishers'
+import ModalTwoLauout from '../../../servises/components/ModalTwoLauout'
+import { DiscriptionQuestions } from '../../../modalComponents/components/DiscriptionQuestions'
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, update_modal, set_tour, set_bigfish, set_add_tour } from '../../../../GlobalStor';
-import { Tournament } from '../../../form/components/Interface';
+import { RootState, set_tour, set_stateModalWindowTwo, set_stateModalWindow } from '../../../../GlobalStor';
 
+import { Configurator } from '../configurator/components/Configurator'
 import '../styles/CarAddTour.css'
 
 interface NewTour {
@@ -17,7 +19,7 @@ interface NewTour {
     finishDate: string;
     created_by: string;
     users: {
-        contactId: string;
+        contactID: string;
         userId: number;
     }[]; // Используем массив объектов
 }
@@ -26,6 +28,8 @@ export const CarAddTour = () => {
     const dispatch = useDispatch()
     const { addTour } = useAddTour()
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
+    const stateModalWindowTwo = useSelector((state: RootState) => state.slice.stateModalWindowTwo);
+    const stateModalWindowThree = useSelector((state: RootState) => state.slice.stateModalWindowThree);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
     const [messageAlarm, setMessageAlarm] = useState('');
@@ -36,6 +40,23 @@ export const CarAddTour = () => {
         created_by: '',
         users: [] // Начальное состояние для пользователей
     });
+
+
+    const renderTwo = () => {
+        if (stateModalWindowTwo.status) {
+            if (stateModalWindowTwo.type === 'reg') return <ModalTwoLauout style={{ top: '50%' }} onClose={() => dispatch(set_stateModalWindowTwo({ ...stateModalWindowTwo, status: false }))}>
+                <Configurator modalConfig={() => dispatch(set_stateModalWindowTwo({ ...stateModalWindowTwo, status: false }))} /></ModalTwoLauout>
+            if (stateModalWindowTwo.type === 'discription_questions') return <ModalTwoLauout style={{ top: '50%' }} onClose={() => dispatch(set_stateModalWindowTwo({ ...stateModalWindowTwo, status: false }))}><DiscriptionQuestions /></ModalTwoLauout>
+
+        } else {
+            return null
+        }
+    }
+
+
+    useEffect(() => {
+        setMessageAlarm('Здесь будут находится сервисные сообщения, связанные с регистрацией. Например: Не заполнено назнание ТУРНИРА!')
+    }, [])
     const updateTour = (newName: string) => {
         setNewTour((prev) => ({
             ...prev,
@@ -65,7 +86,7 @@ export const CarAddTour = () => {
         }
 
     };
-    const arrayFishers = (fishers: { contactId: string; userId: number }[]) => {
+    const arrayFishers = (fishers: { contactID: string; userId: number, name_user: string }[]) => {
         console.log(fishers)
         setNewTour((prev) => ({
             ...prev,
@@ -91,23 +112,21 @@ export const CarAddTour = () => {
             if (newTour.users.length === 0) message += ' Участников, ';
             setMessageAlarm(message.slice(0, -2));
         }
-
     }
 
+    const renderDiscripton = ('Задать параметры турнира, такие как Время проведения, рыба, тип ловли, приманка и прочее, вы можете в регламенте турнира. Если какой-то из параметров не будет заполнен, то он считается не регламентированным (без ограничений).')
     const cancel = () => {
-        dispatch(set_add_tour(false))
+        dispatch(set_stateModalWindow({ type: 'add_tour', status: false }))
     }
     return (<div className="modal_tour">
-        <div className="title_tour header_modal_add_tour">СОЗДАНИЕ СОБЫТИЯ</div>
+
+        <div className="title_tour header_modal_add_tour">СОЗДАНИЕ ТУРНИРА</div>
         <div className="body_set_tour">
             <NameTour name={''} flag={false} updateTourTitle={updateTour} />
-            <Fishers mess={setMessageAlarm} addFishers={arrayFishers} />
-            <PropTour text={'ДОБАВИТЬ РЕГЛАМЕНТ СОБЫТИЯ'} pref={'reg'} />
-            <PropTour text={'УКАЗАТЬ ВИД РЫБЫ'} pref={'fishs'} />
-            <PropTour text={'КРИТЕРИИ ПОБЕДЫ'} pref={'wins'} />
-            <div className="date_container"><DatePickerInput flag={false} label="СТАРТ" selectedDate={startDate} onDateChange={updateTourStartDate} />
-                <DatePickerInput label="КОНЕЦ" flag={false} selectedDate={finishDate} onDateChange={updateTourFinishDate} />
-            </div>
+            <Fishers flag={true} />
+            <div className="discription_add_tour">{renderDiscripton}</div>
+            <PropTour text={'ДОБАВИТЬ РЕГЛАМЕНТ ТУРНИРА'} pref={'reg'} />
+
         </div>
         <div className="messageAlarm">{messageAlarm}</div>
         <div className=" footer_modal_tour footer_create_tour">
@@ -117,3 +136,7 @@ export const CarAddTour = () => {
 
     </div>)
 }
+/*  {renderTwo()}*/
+/*<div className="date_container"><DatePickerInput flag={false} label="СТАРТ" selectedDate={startDate} onDateChange={updateTourStartDate} />
+                <DatePickerInput label="КОНЕЦ" flag={false} selectedDate={finishDate} onDateChange={updateTourFinishDate} />
+            </div>*/

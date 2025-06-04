@@ -16,6 +16,10 @@
 
     }
 
-
+    .card_tournament {
+        border-radius: 0;
+        background-color: lightgray;
+        width: 100%
+    }
 
 }

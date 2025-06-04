@@ -12,6 +12,7 @@ export const useGetDataContent = () => {
         const result = await fetch('/api/getContent', params)
         const data = await result.json()
 
+        console.log(data)
         dispatch(set_dataContent(data))
     })
     return { getContent }

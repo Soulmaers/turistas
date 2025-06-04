@@ -1,10 +1,10 @@
 
 import '../styles/HistoryList.css'
-import { RootState, set_deleteForm, add_catch, set_catch, set_deleteIdCatch, ExtendedBigFish } from '../../../../GlobalStor';
+import { RootState, set_stateModalWindow, set_catch, set_deleteIdCatch, ExtendedBigFish } from '../../../../GlobalStor';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatUnixTime } from '../servises'
 import { FaTimes } from "react-icons/fa";
-import { Tournament } from '../../../form/components/Interface'
+import { Tournament } from '../../../../GlobalStor'
 import { useEffect, useState } from 'react';
 import { useGetImages } from '../../tabletours/hooks/getImages'
 
@@ -19,13 +19,13 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
 
 
     const handler = (catchItem: ExtendedBigFish) => {
-        dispatch(set_deleteForm(true))
+        dispatch(set_stateModalWindow({ type: 'deleteForm', status: true }))
         dispatch(set_deleteIdCatch(catchItem))
     }
 
     const editHandler = (e: ExtendedBigFish) => {
         console.log(e)
-        dispatch(add_catch(true))
+        dispatch(set_stateModalWindow({ type: 'catchForm', status: true }))
 
         dispatch(set_catch({
             name_user: e.name_user,
@@ -101,7 +101,10 @@ export const HistoryList: React.FC<{ data: Tournament[] }> = ({ data }) => {
                 </tr>
                 </thead>
                 <tbody>{rows}</tbody>
-            </table> : <div className="load">Загрузка журнала...</div>}
+            </table> : <div className="container_load">
+                <div className="loader_global"></div>
+                <span className="span_dicription">ЗАГРУЗКА ...</span>
+            </div>}
         </div>
 
     </div>

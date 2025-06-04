@@ -1,0 +1,85 @@
+.entry_wrapper {
+    height: 80vh;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 10px;
+    box-sizing: border-box;
+}
+
+
+.header_entry_form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title_entry_form {
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+.discription_entry_form {
+    color: #dbd7d7;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 25px;
+    width: 92%;
+    margin-top: 30px;
+}
+
+.container_auth {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.entry_footer {
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.3rem
+}
+
+.input_entry {
+    margin: 10px 0;
+    padding: 5px 5px;
+    width: 90%;
+    font-size: 1.3rem;
+    border: none;
+    border-radius: 5px;
+
+}
+
+.messAlarm {
+    margin: 5px 0;
+    width: 100%;
+    text-align: center;
+    color: yellow
+}
+
+
+.toggle_password {
+    position: absolute;
+    right: 10px;
+    /* Определяем расстояние от правого края */
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.35rem;
+}
+
+.row_pass_input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    position: relative;
+}

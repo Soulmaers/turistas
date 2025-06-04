@@ -5,10 +5,12 @@ import { DeleteTour } from './DeleteTour'
 import { PropTour } from "./PropTour";
 import { NameTour } from "./NameTour";
 import { QRcomponent } from "./QRcomponent";
+import ModalTwoLauout from '../../../servises/components/ModalTwoLauout'
+import { FormDeleteTour } from '../../../modalComponents/components/FormDeleteTour'
 import DatePickerInput from './DatePickerInput'
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, update_modal, set_tour, set_bigfish } from '../../../../GlobalStor';
-import { Tournament } from '../../../form/components/Interface';
+import { RootState, set_stateModalWindowTwo, set_stateModalWindow, set_tour } from '../../../../GlobalStor';
+
 import '../styles/CarSetting.css'
 
 export const CardTourSetting = () => {
@@ -20,7 +22,7 @@ export const CardTourSetting = () => {
     const tourData = useSelector((state: RootState) => state.slice.tour);
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
-
+    const stateModalWindowTwo = useSelector((state: RootState) => state.slice.stateModalWindowTwo);
 
     useEffect(() => {
         console.log(tourData)
@@ -54,23 +56,26 @@ export const CardTourSetting = () => {
     };
     const hand = async () => {
         console.log(tourData)
-        if (tourData.nameTour !== '' && tourData.dateStart !== 'null' && tourData.dateFinish !== 'null') {
+        if (tourData.users.length !== 0 && tourData.nameTour !== '' && tourData.dateStart !== 'null' && tourData.dateFinish !== 'null') {
             console.log('все ок')
 
             const { id, nameTour, dateStart, dateFinish, users } = tourData
             const res = await updateTour({ id, nameTour, dateStart, dateFinish, users })
-            dispatch(update_modal(false))
+            dispatch(set_stateModalWindow({ type: 'stateModal', status: false }))
         }
         else {
             let message = 'Добавьте:';
-            if (tourData.nameTour === '') message += ' Название, ';
-            if (tourData.dateStart === 'null') message += ' Дата старта, ';
-            if (tourData.dateFinish === 'null') message += ' Дата завершения, ';
-
-            setMessageAlarm(message.slice(0, -2));
+            if (tourData.nameTour === '') message += ' Название. ';
+            if (tourData.dateStart === 'null') message += ' Дата старта. ';
+            if (tourData.dateFinish === 'null') message += ' Дата завершения. ';
+            if (tourData.users.length === 0) message += ' Участников. '
+            setMessageAlarm(message);
         }
 
     }
+
+
+
 
     return (<div className="modal_tour">
         <div className="title_tour header_modal_tour">НАСТРОЙКИ СОБЫТИЯ</div>

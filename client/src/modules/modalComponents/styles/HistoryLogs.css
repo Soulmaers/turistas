@@ -1,0 +1,31 @@
+.container_history {
+    width: 100%;
+    margin: 5px 0;
+    color: #fff;
+}
+
+.tournament {
+    width: 100%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 2px 10px;
+    box-sizing: border-box;
+}
+
+
+
+
+@media (width<440px) {
+
+
+
+    .container_history {
+        width: 250px;
+        padding: 10px;
+    }
+
+    .tournament {
+        font-size: 1.3rem;
+    }
+
+}

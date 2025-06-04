@@ -1,14 +1,14 @@
 @media(width<440px) {
     .banner_big {
         background-color: orange;
-        height: 80px;
         width: 100%;
+        height: 80px;
         padding: 0 10px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         box-sizing: border-box;
-
+        margin: 10px 0;
     }
 
     .title_bigfish {
@@ -18,7 +18,7 @@
         justify-content: space-around;
         color: #000;
         height: 80%;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
 
     .foto_fisher_bigfish {

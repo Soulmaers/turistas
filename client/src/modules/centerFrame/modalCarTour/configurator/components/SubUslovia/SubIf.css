@@ -1,0 +1,51 @@
+.modal_subif {
+    align-items: center;
+    background-color: #369727;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 350px;
+    padding: 10px 5px;
+    min-height: 670px;
+    box-sizing: border-box;
+}
+
+
+.sub_if_text {
+    background-color: #fff;
+    width: 90%;
+    color: #000;
+    min-height: 200px;
+    padding: 10px;
+    font-size: 0.7rem;
+}
+
+.discription_time {
+    width: 80%
+}
+
+.subif {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 500px;
+    justify-content: flex-start;
+}
+
+@media (height<680px) {
+
+
+    .modal_subif {
+        width: 300px;
+        min-height: 530px;
+    }
+
+
+    .subif {
+        width: 300px;
+        min-height: 360px;
+    }
+
+}

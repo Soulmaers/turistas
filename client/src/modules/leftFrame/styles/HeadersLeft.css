@@ -1,28 +1,42 @@
 .Header_container {
-    width: 100%;
     height: 80px;
     background-color: #2D6D4B;
     border-radius: 5px;
     border: 1px solid #fff;
     box-sizing: border-box;
+    padding: 8px;
 }
 
 
 .container_logo {
-    width: 100%;
-    height: 100%;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
     padding: 0 5px;
     box-sizing: border-box;
     cursor: pointer;
+    background-image: url('../../../assets/icon_arrow_back.webp');
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    height: 24px;
+    justify-content: flex-start;
+    background-size: contain;
+    width: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 
 
 .logo_maxi {
-    width: calc(100% - 40px);
+    width: 100%;
     height: 30px;
+}
+
+.back_arrow {
+    margin: 0 3px;
+    width: 30px;
+    height: 30px;
+    background-image: url('../../../assets/icon_arrow_back.webp');
+    background-size: cover;
+    cursor: pointer;
 }

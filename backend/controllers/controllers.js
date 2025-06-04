@@ -35,9 +35,12 @@ exports.updateTour = async (req, res) => {
     try {
         const instance = new JobUsers()
         const tourProps = await instance.updateTournament(id, nameTour, dateStart, dateFinish)
-        await Promise.all(users.map(async el => {
-            return await instance.tournamentsParticipants(id, el.userId)
-        }))
+        const newUsers = users.map(u => u.userId);
+        const currentFishers = (await instance.getTournamentUsers(id)).map(e => e.userId)
+        const toAdd = newUsers.filter(fisher => !currentFishers.includes(fisher));
+        const toRemove = currentFishers.filter(id => !newUsers.includes(id));
+        await Promise.all(toAdd.map(uid => instance.tournamentsParticipants(id, uid)));
+        await Promise.all(toRemove.map(uid => instance.removeParticipantFromTournament(id, uid)));
         res.json(tourProps)
     }
     catch (e) {
@@ -48,11 +51,12 @@ exports.updateTour = async (req, res) => {
 }
 exports.addTour = async (req, res) => {
     const { nameTour, startDate, finishDate, created_by, users } = req.body
-    console.log(nameTour, startDate, finishDate, created_by, users)
+
     try {
         const instance = new JobUsers()
         const tourProps = await instance.createTournament(nameTour, startDate, finishDate, created_by)
-        console.log(tourProps)
+
+
         await Promise.all(users.map(async el => {
             return await instance.tournamentsParticipants(tourProps.id, el.userId)
         }))
@@ -85,7 +89,7 @@ exports.getStatusUser = async (req, res) => {
 exports.uploades = async (req, res) => {
     const nameFile = req.body.nameImage
 
-    console.log(nameFile)
+
     const filePath = path.join(__dirname, `../uploades/${nameFile}`);
     //  const filePath = path.join(uploadsDir, nameFile);
     res.sendFile(filePath)
@@ -321,13 +325,23 @@ exports.getFisher = async (req, res) => {
     res.json(user)
 }
 
+exports.getFisherAddTour = async (req, res) => {
+    const contactID = req.body.contactID
+    const instance = new JobUsers()
+    const user = await instance.getFisher(contactID)
+    console.log(user)
+    res.json(user)
+}
+
+
+
 exports.getUserCheck = async (req, res) => {
-    const { contactID, username } = req.body
+    const { contactID, passValue, username } = req.body
 
     const instance = new JobUsers()
 
     if (!username) {
-        const user = await instance.getUser(contactID)
+        const user = await instance.getUser(contactID, passValue)
         if (user) {
             const tournament = await instance.getTournaments(user.id)
             // console.log({ user, tournament })
@@ -338,7 +352,7 @@ exports.getUserCheck = async (req, res) => {
         }
     }
     else {
-        const propsUser = await instance.addUser(contactID, username);
+        const propsUser = await instance.addUser(contactID, passValue, username);
         return res.json(propsUser);
     }
 
@@ -358,5 +372,15 @@ exports.getContentTour = async (req, res) => {
     const tournament = await instance.getContentTour(id)
     res.json(tournament)
 }
+
+exports.updateAnchor = async (req, res) => {
+    const id = req.body.userId
+    const state = req.body.stateBody
+    const clickIDtour = req.body.idClickTour
+    const instance = new JobUsers()
+    const result = await instance.updateAnchorState(id, state, clickIDtour)
+    res.json(result)
+}
+
 
 

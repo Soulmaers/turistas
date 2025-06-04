@@ -18,7 +18,7 @@ export const useGetFishers = () => {
                 body: JSON.stringify({ contactID })
 
             }
-            const res = await fetch('/api/getFisher', params)
+            const res = await fetch('/api/getFisherAddTour', params)
             const result = await res.json()
             console.log(result)
             return result || []

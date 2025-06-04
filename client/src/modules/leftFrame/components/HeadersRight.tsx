@@ -1,11 +1,12 @@
 
 import '../styles/HeadersRight.css'
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { FaTrophy, FaStar } from "react-icons/fa";
 import { FaFish } from "react-icons/fa6"
 import iconCup from '../../../assets/icon_cup.webp'
+import { AnchorButton } from './AnchorButton'
 import { useSelector, useDispatch } from 'react-redux';
-import { updateStatusUser, RootState, set_profil } from '../../../GlobalStor';
+import { updateStatusUser, RootState, set_stateModalWindow } from '../../../GlobalStor';
 import { useGetStatusUser } from '../../righFrame/hooks/getStatusUser'
 
 
@@ -31,20 +32,26 @@ const RenderHeaderRight = () => {
     }, [userStatus.user?.id, actionCatch])
 
 
-
     const onClickProfil = () => {
-        dispatch(set_profil(true))
+        dispatch(set_stateModalWindow({ type: 'profil', status: true }))
     }
+
+
     return (
         <div className="header_admin_container">
             <div className="wrapper_account">
-                <div className="trophy_count"> <div className="trophy_all"></div> <span className="numbers">{trophys}</span></div>
-                <div className="fish_count"><div className="fish_all"></div><span className="numbers">{fishs}</span></div>
-                <div className="login" onClick={onClickProfil}>{name_user.toUpperCase()}</div>
+                <div className="wrap_icons">
+                    <div className="trophy_count ic"> <div className="trophy_all"></div> <span className="numbers">{trophys}</span></div>
+                    <div className="fish_count ic"><div className="fish_all"></div><span className="numbers">{fishs}</span></div>
+                </div>
+                <div className="wrap_icons">
+                    <div className="login ic gumber" onClick={onClickProfil}><span className="icon icon_profil"></span></div>
+                    <AnchorButton />
+                </div>
 
             </div>
         </div >
 
     )
 }
-export default RenderHeaderRight
+export default React.memo(RenderHeaderRight)

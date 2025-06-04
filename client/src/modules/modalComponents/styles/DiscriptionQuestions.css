@@ -1,0 +1,14 @@
+.wrapper_discription_question {
+    background-color: orange;
+    width: 300px;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.text_message_question {
+    color: #000;
+    font-size: 0.7rem;
+    text-align: center;
+    font-weight: bold;
+    Line-height: 1.2rem;
+}

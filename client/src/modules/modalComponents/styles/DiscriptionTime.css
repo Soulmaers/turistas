@@ -1,0 +1,38 @@
+.modal_disc_time {
+    width: 350px;
+    height: 690px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #369727;
+    border-radius: 10px;
+}
+
+.footer_ok {
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin: 20px 0;
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+}
+
+.body_text {
+    color: #fff;
+}
+
+.li_text {
+    margin: 10px;
+}
+
+
+@media(height<680px) {
+    .modal_disc_time {
+        width: 330px;
+        height: 540px;
+    }
+}
