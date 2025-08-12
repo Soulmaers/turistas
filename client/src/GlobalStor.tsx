@@ -27,6 +27,40 @@ export interface Tournament {
     id: number
 }
 
+export interface TimeTour {
+    start: number,
+    finish: number,
+}
+export interface Property {
+    id: number,
+    name: string,
+}
+export interface PropertyTour {
+    id: number,
+    name: string,
+    flag: number
+}
+
+export interface TourEvent {
+    status: number | null
+    id: number | null,
+    name: string,
+    criVictory: { id: number, name: string }
+    dopsub: string | null
+    fotoAll: boolean
+    fotoLider: boolean
+    timeTour: TimeTour[]
+    fishers: Participants[]
+    fishs: Property[]
+    reservours: Property[]
+    typeCatch: Property[]
+    typeBaits: Property[],
+    creater_by: null | number,
+    dateStart: string,
+    dateFinish: string,
+    link: string | null
+}
+
 // Интерфейс для UpdateReservours
 interface UpdateReservours {
     index: number;
@@ -78,9 +112,18 @@ export interface ExtendedBigFish extends BigFish {
     id_type: number
 }
 
-
+interface ArrayStateCardTour {
+    fish: boolean,
+    reservours: boolean,
+    typeCatch: boolean,
+    typeBaits: boolean
+}
 // Интерфейс для состояния
 interface MyState {
+    validTours: null | PropertyTour[]
+    intervalId: number | null
+    stateCardTour: ArrayStateCardTour
+    tourEvent: TourEvent
     stateBody: string;
     historyStateBody: string[];
     updateReservours: UpdateReservours;
@@ -138,7 +181,10 @@ interface DataTour {
     nameTour: string,
     dateStart: string,
     dateFinish: string,
-    users: Participants[]
+    users: Participants[],
+    timeTour: TimeTour[],
+    fishs: Property[]
+
 }
 type FormStepPayload = {
     step: 'start' | 'preform' | 'entry' | 'main';
@@ -151,6 +197,34 @@ interface StateModal {
 }
 // Начальное состояние
 const initialState: MyState = {
+    validTours: null,
+    stateCardTour: {
+        fish: false,
+        reservours: false,
+        typeCatch: false,
+        typeBaits: false
+    },
+    intervalId: null,
+    // Интерфейс для состояния
+    tourEvent: {
+        status: null,
+        id: null,
+        name: '',
+        criVictory: { id: 1, name: 'Вес максимальный' },
+        dopsub: null,
+        fotoAll: false,
+        fotoLider: false,
+        timeTour: [],
+        fishers: [],
+        fishs: [],
+        reservours: [],
+        typeCatch: [],
+        typeBaits: [],
+        creater_by: null,
+        dateStart: '',
+        dateFinish: '',
+        link: null
+    },
     modalStack: [],
     intervals: [],
     stateModalWindow: { type: 'null', status: false },
@@ -168,7 +242,9 @@ const initialState: MyState = {
         nameTour: '',
         dateStart: '',
         dateFinish: '',
-        users: []
+        users: [],
+        timeTour: [],
+        fishs: []
     },
     catch: {
         name_user: '',
@@ -233,6 +309,9 @@ const slice = createSlice({
             state.modalStack.pop();
             state.activeModalLevel = state.modalStack[state.modalStack.length - 1] || 0;
         },
+        setIntervalId: (state, action) => {
+            state.intervalId = action.payload;
+        },
         setFormStepWithIndex: (state, action: PayloadAction<FormStepPayload>) => {
             state.formStep.step = action.payload.step;
             state.formStep.index = action.payload.index ?? null;
@@ -242,6 +321,9 @@ const slice = createSlice({
         },
         set_activeModalLevel: (state, action: PayloadAction<number>) => {
             state.activeModalLevel = action.payload;
+        },
+        set_validTours: (state, action: PayloadAction<null | PropertyTour[]>) => {
+            state.validTours = action.payload;
         },
 
         set_stateModalWindowTwo: (state, action: PayloadAction<StateModal>) => {
@@ -256,7 +338,9 @@ const slice = createSlice({
         set_intervals: (state, action: PayloadAction<Interval[]>) => {
             state.intervals = action.payload;
         },
-
+        set_stateCardTour: (state, action: PayloadAction<ArrayStateCardTour>) => {
+            state.stateCardTour = action.payload;
+        },
 
 
         goBackState: (state) => {
@@ -277,6 +361,9 @@ const slice = createSlice({
         },
         set_modalFishers: (state, action: PayloadAction<boolean>) => {
             state.modalFishers = action.payload;
+        },
+        set_tourEvent: (state, action: PayloadAction<TourEvent>) => {
+            state.tourEvent = action.payload;
         },
         set_statusTour: (state, action: PayloadAction<number | null>) => {
             state.statusTour = action.payload;
@@ -348,7 +435,12 @@ const slice = createSlice({
 });
 
 // Экспортируем actions
-export const { goBackState,
+export const {
+    set_validTours,
+    setIntervalId,
+    set_stateCardTour,
+    set_tourEvent,
+    goBackState,
     setModalStackPush,
     set_intervals,
     setModalStackPop,

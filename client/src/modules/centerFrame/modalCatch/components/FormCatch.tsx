@@ -2,14 +2,42 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useSetCatch } from '../hooks/setCatch'
-import Modal from '../../../servises/components/Modal'
-import { RootState, set_action_catch, set_catch, set_catchsList, set_stateModalWindow, set_urlFoto } from '../../../../GlobalStor'
+import { CatchModalFooter } from './CatchModalFooter'
+import { CatchFileUploader } from './CatchFileUploader'
+import { ZoomModal } from './ZoomModal'
+import { RootState, set_action_catch, set_catch, set_catchsList, set_stateModalWindowTwo, set_stateModalWindow, set_urlFoto } from '../../../../GlobalStor'
 import { ExtendedBigFish } from '../../../../GlobalStor'
 import '../styles/FormCatch.css'
 import { useGetImages } from '../../tabletours/hooks/getImages'
+import { useInitFormState } from '../hooks/unitFormState'
 import { Selects } from './Selects'
-import { IoSave } from "react-icons/io5";
+import { IoMdSettings } from "react-icons/io";
+import { predictFromImage, loadModel } from '../utils/teachable'
+import { SelectTours } from './SelectTours'
+import { CustomSelect } from './CustomSelect'
+import { ModalAlert } from '../../../modalComponents/components/ModalAlert';
 
+const defaultState = {
+    name_user: '',
+    name_fish: '',
+    name_reservour: '',
+    name_type: '',
+    name_bait: '',
+    name_day: '',
+    weight: '',
+    foto_user: '',
+    data: '',
+    comment: '',
+    urlFoto: null,
+    idUser: 0,
+    idTournament: 0,
+    idCatch: 0,
+    id_baits: 0,
+    id_fish: 0,
+    id_reservour: 0,
+    id_timeday: 0,
+    id_type: 0
+}
 
 export interface Catch {
     idCatch: null | number
@@ -29,64 +57,76 @@ export interface Catch {
 export const FormCatch = () => {
 
 
-    const { getImage } = useGetImages()
+    const { getImageOrigin } = useGetImages()
+
     const [timeFile, setTimeFile] = useState<string | null>(null)
     const [isZoomOpen, setIsZoomOpen] = useState<boolean>(false);
+    const [showRecognitionAlert, setShowRecognitionAlert] = useState(false);
+    const [admin, set_admin] = useState<boolean>(false);
+    const isProcessing = useRef(false);
     const fileInputRef = useRef<HTMLInputElement>(null)
     const { setCatch, updateCatch } = useSetCatch()
+    const validTours = useSelector((state: RootState) => state.slice.validTours)
     const catchsList = useSelector((state: RootState) => state.slice.catchsList);
     const catchOne = useSelector((state: RootState) => state.slice.catch);
     const user = useSelector((state: RootState) => state.slice.userStatus)
     const idTour = useSelector((state: RootState) => state.slice.idClickTour)
     const dataContent = useSelector((state: RootState) => state.slice.dataContent)
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent);
+    const created = user.tournament.find(e => e.id === idTour)
+    const formDefault = useInitFormState(catchOne, idTour, user);
     const dispatch = useDispatch()
 
     const [info, setInfo] = useState<string>('')
-    const [formState, setFormState] = useState<Catch>({
-        fishs: catchOne.id_fish,
-        reservuors: catchOne.id_reservour,
-        typeFishing: catchOne.id_type,
-        baits: catchOne.id_baits,
-        timeDay: catchOne.id_timeday,
-        weight: catchOne.weight,
-        comment: catchOne.comment,
-        idTour: catchOne.idTournament || idTour || user.tournament[user.tournament.length - 1].id,
-        idUser: catchOne.idUser || user?.user?.id,
-        idCatch: catchOne.idCatch || null,
-        urlFoto: catchOne?.urlFoto || null,
-        image: null
-    })
-    console.log(catchOne)
+    const [formState, setFormState] = useState<Catch>(formDefault);
     const modalka = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (typeof window === 'undefined' || !('requestIdleCallback' in window)) return;
+
+        const id = requestIdleCallback(async () => {
+            try {
+                await loadModel();
+
+                const canvas = document.createElement('canvas');
+                canvas.width = 224;
+                canvas.height = 224;
+
+                const ctx = canvas.getContext('2d');
+                if (ctx) ctx.fillRect(0, 0, 224, 224);
+
+                await predictFromImage(canvas);
+                console.log('🔥 Модель прогрета');
+            } catch (e) {
+                console.error('Ошибка прогрева модели:', e);
+            }
+        }, { timeout: 600 });
+
+        return () => cancelIdleCallback?.(id);
+    }, []);
 
 
     useEffect(() => {
-        const findTimeDay = () => {
-            const nowTime = new Date()
-            const hours = nowTime.getHours()
-            if (hours < 6) {
-                setFormState((prev) => ({ ...prev, 'timeDay': '1' }))
-            } else if (hours < 12) {
-                setFormState((prev) => ({ ...prev, 'timeDay': '2' }))
-            } else if (hours < 18) {
-                setFormState((prev) => ({ ...prev, 'timeDay': '3' }))
-            } else {
-                setFormState((prev) => ({ ...prev, 'timeDay': '4' }))
-            }
+        if (catchOne.name_day === '') {
+            const hours = new Date().getHours();
+            const timeId = hours < 6 ? 1 : hours < 12 ? 2 : hours < 18 ? 3 : 4;
+            setFormState(prev => ({ ...prev, timeDay: timeId.toString() }));
         }
-        if (catchOne.name_day === '') findTimeDay()
+    }, [catchOne.name_day]);
+
+    useEffect(() => {
+        const isOwner = user.user?.id === catchOne.idUser;
+        const isCreator = user.user?.id === user.tournament.find(e => e.id === idTour)?.created_by;
+        set_admin(catchOne.idUser === 0 || isOwner || isCreator);
+    }, [catchOne.idUser, user.user?.id, created?.created_by]);
+
+
+    useEffect(() => {
         if (catchOne.urlFoto) {
-            const gets = async () => {
-                if (catchOne.urlFoto) {
-                    setTimeFile(await getImage(catchOne.urlFoto))
-                }
-            }
-            gets()
+            getImageOrigin(catchOne.urlFoto).then(setTimeFile);
         }
-
-
-    }, [])
+    }, [catchOne.urlFoto]);
 
 
 
@@ -105,35 +145,90 @@ export const FormCatch = () => {
     }, [dispatch])
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInfo('Распознавание изображения');
+        setShowRecognitionAlert(true)
         const file = event.target.files && event.target.files[0];
-        console.log(event.target.files)
+        //   console.log(event.target.files)
         if (file?.name) {
             const imageUrl = URL.createObjectURL(file);
             setTimeFile(imageUrl);
             const reader = new FileReader();
-            console.log(reader)
+            // console.log(reader)
             reader.readAsDataURL(file);
             setFormState((prev) => ({ ...prev, image: file, urlFoto: file?.name }));
+
+
+            // Создаем HTMLImageElement
+            const img = new Image();
+            img.src = imageUrl;
+            img.crossOrigin = "anonymous"; // важно для предсказания
+
+            img.onload = async () => {
+                try {
+                    const prediction = await predictFromImage(img);
+
+                    console.log('Предсказание:', prediction);
+
+                    // Пример: если классы совпадают с ID в справочнике
+                    const className = prediction.className;
+
+                    const fishMapping: Record<string, string> = {
+                        "Щука": '2',
+                        "Судак": '3',
+                        "Окунь": '4',
+                        "Лещ": '1'
+                    };
+                    console.log(className)
+                    const predictedId = fishMapping[className];
+                    if (predictedId) {
+                        setFormState(prev => ({ ...prev, fishs: String(predictedId) }));
+                        setInfo('')
+                        setShowRecognitionAlert(false);
+                    }
+                } catch (error) {
+                    console.error("Ошибка распознавания изображения:", error);
+                }
+            };
+
+            img.onerror = (e) => {
+                console.error("Ошибка загрузки изображения для предсказания", e);
+            };
         }
     };
     const handleButtonClick = () => {
+        if (!admin) return
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
     };
     const handlerStart = async () => {
-        console.log(formState)
-        if (formState['fishs'] === 0) {
-            setInfo('Выберите вид рыбы')
-            setTimeout(() => setInfo(''), 2000)
-            return; // Прерываем выполнение функции, если валидация не прошла
+        console.log(validTours)
+        if (isProcessing.current) {
+            setInfo('Улов сохраняется, подождите!');
+            return
         }
-        else if (formState.weight !== '' && !formState.urlFoto) {
-            setInfo('Добавьте фото улова')
-            setTimeout(() => setInfo(''), 2000)
-            return; // Прерываем выполнение функции, если валидация не прошла
-        } else {
-            let mess: null | { mess: string, catch: ExtendedBigFish } = null
+
+        if (formState['fishs'] === 0 || formState['fishs'] === '0') {
+            setInfo('Выберите вид рыбы');
+            setShowRecognitionAlert(true)
+            setTimeout(() => { setInfo(''); setShowRecognitionAlert(false) }, 2000);
+            return;
+        }
+
+        if (formState.weight !== '' && !formState.urlFoto) {
+            //setInfo('Добавьте фото улова')
+            setInfo('Добавьте фото улова');;
+            setShowRecognitionAlert(true)
+
+            setTimeout(() => { setInfo(''); setShowRecognitionAlert(false) }, 2000);
+            return;
+        }
+        isProcessing.current = true;
+        // 🔒 Блокируем повторный запуск
+        setInfo('Улов сохраняется...');
+        setShowRecognitionAlert(true)
+        try {
+            let mess: null | { mess: string, catch: ExtendedBigFish } = null;
 
             const formData = new FormData();
             formData.append('fishs', formState.fishs.toString());
@@ -143,154 +238,121 @@ export const FormCatch = () => {
             formData.append('timeDay', formState.timeDay.toString());
             formData.append('weight', formState.weight);
             formData.append('comment', formState.comment);
-            formData.append('idTour', String(formState.idTour)); // Преобразуем в строку
+            formData.append('idTour', String(formState.idTour));
             formData.append('idUser', String(formState.idUser));
 
-            console.log(formData)
-            if (formState.urlFoto && formState.image) { // Проверка на null
-                formData.append('urlFoto', formState.urlFoto);
-                formData.append('image', formState.image);
-            }
+            formState.urlFoto && formData.append('urlFoto', formState.urlFoto);
+            formState.image && formData.append('image', formState.image);
 
             if (catchOne.idCatch !== 0) {
-
                 formData.append('idCatch', String(catchOne.idCatch));
-                mess = await updateCatch(formData)
-            }
-            else {
-                console.log(formState)
-                setInfo('ждем')
-                mess = await setCatch(formData)
+                mess = await updateCatch(formData);
+
+            } else {
+                console.log('сет')
+                mess = await setCatch(formData);
 
             }
-
+            console.log(mess)
             if (mess) {
-                setInfo(mess?.mess)
-                if (mess?.catch) {
-                    const object = catchsList.map(e => {
-                        if (mess?.catch && e.idCatch === mess.catch.idCatch) {
-                            return { ...mess.catch }
-                        }
-                        else {
-                            return e
-                        }
-                    })
-                    console.log(object)
-                    dispatch(set_catchsList(object))
+                const setCatch = localStorage.getItem('setCatch')
+                const arraySet = setCatch ? JSON.parse(setCatch) : []
+                console.log(arraySet)
+                type CatchKeys = keyof Catch;
+
+                const obj = arraySet.reduce((acc: Record<CatchKeys, any>, e: CatchKeys) => {
+                    acc[e] = formState[e]; // Здесь e гарантированно является ключом Catch
+                    return acc;
+                }, {} as Record<CatchKeys, any>);
+
+                localStorage.setItem('fishingData', JSON.stringify(obj));
+                setInfo(mess.mess);
+
+                if (mess !== null && mess.catch) {
+                    const updatedList = catchsList.map(e =>
+                        e.idCatch === mess?.catch.idCatch ? { ...mess.catch } : e
+                    );
+                    dispatch(set_catchsList(updatedList));
                 }
-
             }
-
 
             setTimeout(() => {
                 setInfo('');
-                dispatch(set_action_catch(actionCatch + 1))
-                dispatch(set_catch({
-                    name_user: '',
-                    name_fish: '',
-                    name_reservour: '',
-                    name_type: '',
-                    name_bait: '',
-                    name_day: '',
-                    weight: '',
-                    foto_user: '',
-                    data: '',
-                    comment: '',
-                    urlFoto: null,
-                    idUser: 0,
-                    idTournament: 0,
-                    idCatch: 0,
-                    id_baits: 0,
-                    id_fish: 0,
-                    id_reservour: 0,
-                    id_timeday: 0,
-                    id_type: 0
-                }))
+                dispatch(set_action_catch(actionCatch + 1));
+                dispatch(set_catch(defaultState));
+                setShowRecognitionAlert(false)
                 closeModal();
-            }, 1500)
+                isProcessing.current = false;
+            }, 0);
+        } catch (error) {
+            console.error('Ошибка при отправке:', error);
+            setInfo('Ошибка при отправке данных');
+            setShowRecognitionAlert(true)
+            setTimeout(() => { setInfo(''); setShowRecognitionAlert(false) }, 2000);
+        } finally {
 
         }
-    }
-    const fishs = dataContent.fishs?.map(e => ({ value: e.id, text: e.name })) ?? []
-    const reservuors = dataContent.reservours?.map(e => ({ value: e.id, text: e.name })) ?? []
-    const baits = dataContent.baits?.map(e => ({ value: e.id, text: e.name })) ?? []
-    const timeDay = dataContent.timeDay?.map(e => ({ value: e.id, text: e.name })) ?? []
-    const typeCatch = dataContent.typeCatch?.map(e => ({ value: e.id, text: e.name })) ?? []
+    };
 
 
+    const getOptions = (fallback: any[], tournament: any[]) =>
+        (tournament.length ? tournament : fallback).map(e => ({ value: e.id, text: e.name }));
 
-    const zomm = () => {
-        if (timeFile) {
-            setIsZoomOpen(true);
-
-        }
-    }
-
+    const fishs = getOptions(dataContent.fishs ?? [], tourEvent.fishs);
+    const reservours = getOptions(dataContent.reservours ?? [], tourEvent.reservours);
+    const baits = getOptions(dataContent.baits ?? [], tourEvent.typeBaits);
+    const typeCatch = getOptions(dataContent.typeCatch ?? [], tourEvent.typeCatch);
+    const timeDay = getOptions(dataContent.timeDay ?? [], []);
 
     const cancel = () => {
         dispatch(set_stateModalWindow({ type: 'catchForm', status: false }))
-        dispatch(set_catch({
-            name_user: '',
-            name_fish: '',
-            name_reservour: '',
-            name_type: '',
-            name_bait: '',
-            name_day: '',
-            weight: '',
-            foto_user: '',
-            data: '',
-            comment: '',
-            urlFoto: null,
-            idUser: 0,
-            idTournament: 0,
-            idCatch: 0,
-            id_baits: 0,
-            id_fish: 0,
-            id_reservour: 0,
-            id_timeday: 0,
-            id_type: 0
-        }))
+        dispatch(set_catch(defaultState))
     }
-    return (
-        <div className="modal_add_tour modal_catch_tour" ref={modalka}>
-            <div className="header_modal_tour card_catch">КАРТОЧКА УЛОВА</div>
-            <div className="body_modal_tour">
-                <Selects options={fishs || []} name={'ВИД РЫБЫ'} empty={true} selected={formState['fishs'].toString()} nameState={'fishs'} onChange={handleSelectChange} />
 
-                <div className="rows_card_tour_catch">
-                    <div className="name_car_tour">ВЕС (Г)</div>
-                    <input className="weight" value={formState['weight']} placeholder='введите вес рыбы' onChange={handleInputChange} />
-                </div>
-                <Selects options={reservuors || []} name={'ВОДОЕМ'} empty={true} selected={formState['reservuors'].toString()} nameState={'reservuors'} onChange={handleSelectChange} />
-                <Selects options={typeCatch || []} name={'ТИП ЛОВЛИ'} empty={true} selected={formState['typeFishing'].toString()} nameState={'typeFishing'} onChange={handleSelectChange} />
-                <Selects options={baits || []} name={'ПРИМАНКА'} empty={true} selected={formState['baits'].toString()} nameState={'baits'} onChange={handleSelectChange} />
-                <Selects options={timeDay || []} name={'ВРЕМЯ СУТОК'} empty={false} selected={formState['timeDay'].toString()} nameState={'timeDay'} onChange={handleSelectChange} />
+    const settDown = () => {
+        dispatch(set_stateModalWindowTwo({ type: 'setLoad', status: true }))
 
-                <div className="rows_card_tour_catch">
-                    <div className="name_car_tour">КОММЕНТАРИЙ</div>
-                    <textarea className="input_car_tour" value={formState['comment']} onChange={handleTextChange}></textarea>
-                </div>
-                <div className="rows_card_tour_foto">
-                    <input type="file" id="image" ref={fileInputRef} name="image" accept="image/*" style={{ display: 'none' }} onChange={handleImageChange} />
-                    <div className="button_load" onClick={handleButtonClick}></div>
-                    <div className="wrap_img"><div className='foto_load' style={formState.urlFoto ? { backgroundImage: `url(${timeFile})` } : {}} onClick={zomm}></div></div>
-
-                </div>
-
-            </div>
-
-            <div className="messageAlarm">{info}</div>
-            <div className=" footer_modal_tour footer_create_tour">
-                <div className="title_tour start_tour" onClick={handlerStart} >СОЗДАТЬ</div>
-                <div className="title_tour start_tour" onClick={cancel}>ОТМЕНА</div>
-            </div>
-            {isZoomOpen && (
-                <Modal style={{ top: '40%' }} onClose={() => setIsZoomOpen(false)}>
-                    <div className='zoom_foto' style={{ backgroundImage: `url(${timeFile})` }}>
+    }
+    return <><ModalAlert
+        text={info}
+        visible={showRecognitionAlert}
+        onDone={() => setShowRecognitionAlert(false)}
+    />
+        <div className={showRecognitionAlert ? 'overlay-dark' : ''}>
+            <div className="modal_add_tour modal_catch_tour" ref={modalka}>
+                <div className="header_catchs"><div className="header_modal_tour card_catch">КАРТОЧКА УЛОВА</div><IoMdSettings className="setting_catch_user" onClick={settDown} /></div>
+                <div className="body_modal_tour">
+                    <div className="wrapper_type_catch">
+                        <CustomSelect options={fishs || []} placeholder='ВИД РЫБЫ (начните ввод)' name="ВИД РЫБЫ" nameState="fishs" selected={formState['fishs'].toString()} onChange={handleSelectChange} />
+                        <CustomSelect options={reservours || []} placeholder='ВОДОЁМ (начните ввод)' name='ВОДОЕМ' selected={formState['reservuors'].toString()} nameState='reservuors' onChange={handleSelectChange} />
+                        <CustomSelect options={typeCatch || []} placeholder='ВИД ЛОВЛИ (начните ввод)' name='ТИП ЛОВЛИ' selected={formState['typeFishing'].toString()} nameState='typeFishing' onChange={handleSelectChange} />
+                        <CustomSelect options={baits || []} placeholder='ПРИМАНКА (начните ввод)' name='ПРИМАНКА' selected={formState['baits'].toString()} nameState='baits' onChange={handleSelectChange} />
+                    </div>
+                    <div className="wrapper_antropometr">
+                        <div className="one_rows">
+                            <div className="rows_card_tour_catch hadl_enter">
+                                <div className="name_title_option">ВЕС (Г)</div>
+                                <input className="weight" value={formState['weight']} placeholder='введите вес рыбы' onChange={handleInputChange} />
+                            </div>
+                            <div className="rows_card_tour_catch hadl_enter">
+                                <div className="name_title_option">ДЛИННА (СМ)</div>
+                                <input className="weight" placeholder='введите длинну рыбы' />
+                            </div>
+                            <CustomSelect options={timeDay || []} placeholder='' name='ВРЕМЯ СУТОК' selected={formState['timeDay'].toString()} nameState='timeDay' onChange={handleSelectChange} />
+                        </div>
+                        <div className="rows_card_tour_catch">
+                            <textarea className="input_car_tour" placeholder='КОММЕНТАРИЙ' value={formState['comment']} onChange={handleTextChange}></textarea>
+                        </div>
 
                     </div>
-                </Modal>
-            )}
-        </div >
-    )
+                    <CatchFileUploader fileInputRef={fileInputRef} handleImageChange={handleImageChange} handleButtonClick={handleButtonClick} timeFile={timeFile} urlFoto={formState.urlFoto} onZoom={async () => {
+                        if (!formState.urlFoto) return;
+                        setIsZoomOpen(true);
+                    }} />
+                    <SelectTours catchFish={formState} />
+                </div>
+                <CatchModalFooter admin={admin} handlerStart={handlerStart} cancel={cancel} />
+                {isZoomOpen && <ZoomModal timeFile={timeFile} onClose={() => setIsZoomOpen(false)} />}
+            </div ></div>
+    </>
 }

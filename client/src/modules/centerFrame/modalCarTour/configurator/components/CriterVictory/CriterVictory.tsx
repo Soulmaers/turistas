@@ -2,24 +2,25 @@
 import './CriterVictory.css'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, set_stateModalWindowThour, set_stateModalWindowThree } from '../../../../../../GlobalStor';
+import { RootState, set_tourEvent, set_stateModalWindowThree } from '../../../../../../GlobalStor';
 
 
 export const CriterVictory = () => {
     const dispatch = useDispatch()
 
-    const [radio, setRadio] = useState('max_weight')
+    const [radio, setRadio] = useState({ id: 1, name: 'Вес максимальный' })
     const stateModalWindowThree = useSelector((state: RootState) => state.slice.stateModalWindowThree);
-
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent);
 
     const options = [
-        { value: 'max_weight', label: 'Вес максимальный' },
-        { value: 'sum_weight', label: 'Вес суммарный' },
-        { value: 'max_length', label: 'Длинна максимальная' },
-        { value: 'sum_length', label: 'Длинна суммарная' },
-        { value: 'count', label: 'Количество' }
+        { id: 1, name: 'Вес максимальный' },
+        { id: 2, name: 'Вес суммарный' },
+        { id: 3, name: 'Длинна максимальная' },
+        { id: 4, name: 'Длинна суммарная' },
+        { id: 5, name: 'Количество' }
     ];
     const over = () => {
+        dispatch(set_tourEvent({ ...tourEvent, criVictory: radio }))
         dispatch(set_stateModalWindowThree({ ...stateModalWindowThree, status: false }))
     }
 
@@ -32,9 +33,9 @@ export const CriterVictory = () => {
             <div className="discription_time">Эти данные будут учитываться при отображении лидера турнира.</div>
             <div className="criter_blocks">
                 {options.map(option => (
-                    <div className="row_radio" key={option.value} onClick={() => setRadio(option.value)}>
-                        <div className={`rad ${radio === option.value ? 'active_on' : ''}`}></div>
-                        <div className="rad_text">{option.label}</div>
+                    <div className="row_radio" key={option.name} onClick={() => setRadio({ id: option.id, name: option.name })}>
+                        <div className={`rad ${radio.id === option.id ? 'active_on' : ''}`}></div>
+                        <div className="rad_text">{option.name}</div>
                     </div>
                 ))}
             </div>

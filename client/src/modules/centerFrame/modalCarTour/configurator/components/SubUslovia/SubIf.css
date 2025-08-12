@@ -7,7 +7,6 @@
     justify-content: space-between;
     width: 350px;
     padding: 10px 5px;
-    min-height: 670px;
     box-sizing: border-box;
 }
 
@@ -39,7 +38,6 @@
 
     .modal_subif {
         width: 300px;
-        min-height: 530px;
     }
 
 

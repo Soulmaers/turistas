@@ -4,92 +4,68 @@ import { IoSave } from "react-icons/io5";
 import { DeleteTour } from './DeleteTour'
 import { PropTour } from "./PropTour";
 import { NameTour } from "./NameTour";
-import { QRcomponent } from "./QRcomponent";
+import TournamentQRCode from "./QRcomponent";
 import ModalTwoLauout from '../../../servises/components/ModalTwoLauout'
 import { FormDeleteTour } from '../../../modalComponents/components/FormDeleteTour'
 import DatePickerInput from './DatePickerInput'
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, set_stateModalWindowTwo, set_stateModalWindow, set_tour } from '../../../../GlobalStor';
+import { RootState, set_stateCardTour, set_tourEvent, set_stateModalWindow, set_tour } from '../../../../GlobalStor';
 
 import '../styles/CarSetting.css'
 
 export const CardTourSetting = () => {
     const dispatch = useDispatch()
     const { updateTour } = useUpdateTour()
-    const [dels, setDels] = useState<boolean>(false)
-    const [text, setText] = useState<string>('')
     const [messageAlarm, setMessageAlarm] = useState('');
-    const tourData = useSelector((state: RootState) => state.slice.tour);
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [finishDate, setFinishDate] = useState<Date | null>(null);
-    const stateModalWindowTwo = useSelector((state: RootState) => state.slice.stateModalWindowTwo);
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent);
 
+    const state = useSelector((state: RootState) => state.slice.stateCardTour);
+    console.log(tourEvent)
     useEffect(() => {
-        console.log(tourData)
-        if (tourData) {
-            setStartDate(new Date(Number(tourData.dateStart) * 1000))
-            setFinishDate(new Date(Number(tourData.dateFinish) * 1000))
-        }
+
+        if (!tourEvent.id) return
+        dispatch(set_stateCardTour({ ...state, typeBaits: true, typeCatch: true, fish: true, reservours: true }))
 
     }, [])
 
 
-    if (!tourData.id) return null
+    if (!tourEvent.id) return null
 
     const updateTourTitle = (newName: string) => {
-        dispatch(set_tour({ ...tourData, nameTour: newName }))
+        dispatch(set_tourEvent({ ...tourEvent, name: newName }))
     };
-    const updateTourStartDate = (newDate: Date | null) => {
-        if (newDate) {
-            setStartDate(newDate)
-            dispatch(set_tour({ ...tourData, dateStart: String(new Date(newDate).getTime() / 1000) }))
 
-        }
-
-    };
-    const updateTourFinishDate = (newDate: Date | null) => {
-        if (newDate) {
-            setFinishDate(newDate)
-            dispatch(set_tour({ ...tourData, dateFinish: String(new Date(newDate).getTime() / 1000) }))
-        }
-
-    };
     const hand = async () => {
-        console.log(tourData)
-        if (tourData.users.length !== 0 && tourData.nameTour !== '' && tourData.dateStart !== 'null' && tourData.dateFinish !== 'null') {
+        console.log(tourEvent)
+        const notiming = tourEvent.timeTour.length === 0
+        const fishers = tourEvent.fishers.length === 0
+        const hasFalse = Object.values(state).some(value => value === false);
+        if (tourEvent.name !== '' && !notiming && !fishers && !hasFalse) {
             console.log('все ок')
 
-            const { id, nameTour, dateStart, dateFinish, users } = tourData
-            const res = await updateTour({ id, nameTour, dateStart, dateFinish, users })
+
+            const res = await updateTour(tourEvent)
             dispatch(set_stateModalWindow({ type: 'stateModal', status: false }))
         }
         else {
             let message = 'Добавьте:';
-            if (tourData.nameTour === '') message += ' Название. ';
-            if (tourData.dateStart === 'null') message += ' Дата старта. ';
-            if (tourData.dateFinish === 'null') message += ' Дата завершения. ';
-            if (tourData.users.length === 0) message += ' Участников. '
-            setMessageAlarm(message);
+            if (tourEvent.name === '') message += ' Название, ';
+            if (fishers) message += ' Участников, ';
+            if (hasFalse || notiming) message += ' Регламент турнира, ';
+            setMessageAlarm(message.slice(0, -2));
         }
 
     }
 
 
-
-
     return (<div className="modal_tour">
         <div className="title_tour header_modal_tour">НАСТРОЙКИ СОБЫТИЯ</div>
         <div className="body_set_tour">
-            <NameTour name={tourData.nameTour} flag={true} updateTourTitle={updateTourTitle} />
-            <DeleteTour idTour={tourData.id} name={tourData.nameTour} />
-            <QRcomponent />
+            <NameTour name={tourEvent.name} flag={true} updateTourTitle={updateTourTitle} />
+            <DeleteTour idTour={tourEvent.id} name={tourEvent.name} />
+            {tourEvent?.link && <TournamentQRCode link={tourEvent?.link} />}
             <PropTour text={'РЕДАКТИРОВАТЬ УЧАСТНИКОВ'} pref={'fishers'} />
-            <PropTour text={'РЕДАКТИРОВАТЬ РЕГЛАМЕНТ СОБЫТИЯ'} pref={'reg'} />
-            <PropTour text={'РЕДАКТИРОВАТЬ ВИД РЫБЫ'} pref={'fishs'} />
-            <PropTour text={'КРИТЕРИИ ПОБЕДЫ'} pref={'wins'} />
-            <div className="date_container"><DatePickerInput label="СТАРТ" flag={true} selectedDate={startDate} onDateChange={updateTourStartDate} />
-                <DatePickerInput label="КОНЕЦ" flag={true} selectedDate={finishDate} onDateChange={updateTourFinishDate} />
-            </div>
+            <PropTour text={'РЕДАКТИРОВАТЬ РЕГЛАМЕНТ ТУРНИРА'} pref={'reg'} />
         </div>
         <div className="messageAlarm">{messageAlarm}</div>
         <div className=" footer_modal_tour">

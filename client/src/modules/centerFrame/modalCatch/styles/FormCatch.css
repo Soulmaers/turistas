@@ -38,6 +38,22 @@ textarea {
 
 @media (width<440px) {
 
+    .setting_catch_user {
+        color: #fff;
+        cursor: pointer;
+        font-size: 1.5rem;
+    }
+
+    .header_catchs {
+        width: 90%;
+        margin: 5px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 5px;
+        box-sizing: border-box;
+    }
+
     .card_catch {
         color: #fff;
         font-size: 1.3rem;
@@ -48,7 +64,8 @@ textarea {
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-width: 330px;
+        width: 350px;
+        padding: 20px 0;
     }
 
     .body_modal_tour {
@@ -65,7 +82,8 @@ textarea {
         display: flex;
         width: 100%;
         flex-direction: column;
-        margin: 3px 0;
+        margin: 6px 0;
+        position: relative;
     }
 
     .rows_card_tour_foto {
@@ -84,6 +102,25 @@ textarea {
         padding: 6px;
         background-color: #fff;
         color: #000;
+    }
+
+    .weight {
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+        height: 32px;
+        outline: none;
+        padding: 5px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+
+    .weight::placeholder {
+        font-weight: 300;
+        font-style: italic;
+        font-size: 0.8rem;
     }
 
     .button_load {
@@ -129,12 +166,80 @@ textarea {
         border:
             2px solid #fff;
     }
+
+    .admin-width {
+        width: auto !important
+    }
+
+    .wrapper_type_catch {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: darkgreen;
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    .wrapper_antropometr {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: darkgreen;
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        box-sizing: border-box;
+        margin: 10px 0;
+    }
+
+    .one_rows {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .hadl_enter {
+        width: 32.4%;
+        margin: 0 3px;
+        text-align: center;
+    }
+
+    .input_car_tour {
+        font-style: italic;
+    }
+
+    .overlay-dark {
+        pointer-events: none;
+        opacity: 0.4;
+        filter: grayscale(0.3);
+    }
 }
 
 
-@media (height<680px) {
+@media (height<813px) {
+
     .rows_card_tour_catch {
-        margin: 1px 0;
+        margin: 3px;
+    }
+
+    .modal_catch_tour {
+        padding: 10px 0
+    }
+
+    .weight {
+        height: 22px;
+    }
+
+    .input_val {
+        height: 22px;
+    }
+
+    .name_title_option {
+        font-size: 0.6rem;
     }
 
     .select {
@@ -154,5 +259,20 @@ textarea {
 
     .rows_card_tour_foto {
         justify-content: space-around;
+    }
+
+    .modal_catch_tour {
+        width: 330px;
+    }
+
+    .zoom_foto_loader {
+        width: 100%;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: #888;
+        background-color: #f2f2f2;
     }
 }

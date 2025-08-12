@@ -1,16 +1,34 @@
 const { UpdatePropTournaments } = require('../modules/UpdatePropTournaments')
 
 const updateStatusTournaments = async () => {
-    const nowData = Math.floor((new Date().getTime()) / 1000)
-    const tournaments = await UpdatePropTournaments.getTournaments()
-    const updateStatusTournaments = tournaments.map(e => {
-        const currentStatus = nowData > Number(e.dateFinish) ? 2 : nowData > Number(e.dateStart) ? 1 : e.status
-        return { ...e, status: currentStatus }
-    })
-    //  console.log(updateStatusTournaments)
-    const promises = updateStatusTournaments.map(async e => { return await UpdatePropTournaments.updateStatus(e) })
-    const res = await Promise.all(promises)
-}
+    const nowData = Math.floor(Date.now() / 1000);
+    const tournaments = await UpdatePropTournaments.getTournaments();
+
+    // Только те турниры, где статус нужно обновить
+    const tournamentsToUpdate = tournaments.filter(tournament => {
+        const newStatus = nowData > Number(tournament.dateFinish)
+            ? 2
+            : nowData > Number(tournament.dateStart)
+                ? 1
+                : tournament.status;
+
+        return newStatus !== tournament.status;
+    });
+
+    // Обновляем только изменённые
+    const promises = tournamentsToUpdate.map(tournament => {
+        const newStatus = nowData > Number(tournament.dateFinish)
+            ? 2
+            : nowData > Number(tournament.dateStart)
+                ? 1
+                : tournament.status;
+
+        return UpdatePropTournaments.updateStatus({ ...tournament, status: newStatus });
+    });
+
+    const res = await Promise.all(promises);
+    //   console.log(`Обновлено турниров: ${res.length}`);
+};
 
 
 

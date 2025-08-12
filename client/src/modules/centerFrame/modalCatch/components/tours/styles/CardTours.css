@@ -1,0 +1,66 @@
+.set_selected_tours {
+    background-color: #023102;
+    width: 330px;
+}
+
+
+.title_selected_tour {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.name_card_selected {
+    color: #fff;
+    margin: 15px 0;
+    font-size: 1.2rem;
+}
+
+
+.disc_card_selected {
+    color: #fff;
+    font-size: 0.9rem;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.btn_select_tour {
+    background-color: orange;
+    color: #000;
+    cursor: pointer;
+    font-size: .9rem;
+    font-weight: 700;
+    padding: 8px 10px;
+}
+
+.activ_tours_selected {
+    border-top: 1px solid #fff;
+}
+
+
+.tours_complite {
+    color: #fff
+}
+
+
+
+.snoska {
+
+    color: orange;
+
+}
+
+
+.snoska_disc {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.pozc {
+    color: #fff;
+    font-size: 0.8rem;
+    margin: 0 5px;
+}

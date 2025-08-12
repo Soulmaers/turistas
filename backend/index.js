@@ -18,22 +18,11 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json())
 
 
-/*app.use((req, res, next) => {
-    console.log(req.secure)
-    // Проверяем, если запрос сделан через HTTPS
-    if (req.secure) {
-        // Перенаправляем на HTTP
-        return res.redirect(`http://${req.headers.host}${req.url}`);
-    }
-    next(); // Если не через HTTPS, затем продолжаем
-});*/
 
 
 app.use(routes)
 app.use(express.static(path.join(__dirname, '../client/build')));
-/*app.get('*', (req, res) => {
-    res.sendFile(path.join('__dirname', 'client/build', 'index.html'))
-})*/
+
 
 app.get('*', (req, res) => {
     const filePath = path.join(__dirname, '..', 'client', 'build', 'index.html');
@@ -51,5 +40,5 @@ app.listen(port, () => {
     updateStatusTournaments();
 
     // Устанавливаем интервал для выполнения функции каждый час
-    setInterval(updateStatusTournaments, 60 * 60 * 1000); // 1 час в миллисекундах
+    setInterval(updateStatusTournaments, 1000); // 1 час в миллисекундах
 });

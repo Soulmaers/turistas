@@ -1,38 +1,39 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from 'react'
-import { RootState, set_stateModalWindowThour, set_stateModalWindowThree } from '../../../../../../GlobalStor';
+import { useState, useEffect } from 'react'
+import { RootState, set_tourEvent, set_stateCardTour, set_stateModalWindowThree } from '../../../../../../GlobalStor';
 import './Fishs.css'
 import { SwapeComponent } from '../SwapeComponent'
 import { FindFilter } from '../FindFilter'
 
 
-const storFishs = [
-    { id: 1, name: 'Щука' },
-    { id: 2, name: 'Судак' },
-    { id: 3, name: 'Лещ' },
-    { id: 4, name: 'Окунь' },
-    { id: 5, name: 'Форель' }
-];
 
 
 export const Fishs = () => {
     const dispatch = useDispatch()
-
+    const dataContent = useSelector((state: RootState) => state.slice.dataContent)
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent);
     const stateModalWindowThree = useSelector((state: RootState) => state.slice.stateModalWindowThree);
-    const [arrayFishs, setArrayFishs] = useState<{ id: number; name: string }[]>(storFishs)
+    const [arrayFishs, setArrayFishs] = useState<{ id: number; name: string }[]>(dataContent?.fishs || [])
     const [selectedFishs, setSelectedFishs] = useState<{ id: number; name: string }[]>([])
+    const state = useSelector((state: RootState) => state.slice.stateCardTour);
+    const [anyFish, setAnyFish] = useState(false);
+    const [other, setOther] = useState(false)
 
 
-    const [fishs, setFishs] = useState({
-        any: false,
-        other: false
-    });
-    const toggleBait = (key: keyof typeof fishs) => {
-        setFishs(prev => ({ ...prev, [key]: !prev[key] }));
-    };
+
+    useEffect(() => {
+        console.log(tourEvent.fishs)
+        console.log(state.fish)
+        setSelectedFishs(tourEvent.fishs);
+        if (state.fish) setAnyFish(tourEvent.fishs.length === 0); // если массив пуст — значит "Любая приманка"
+
+    }, [tourEvent.fishs]);
+
 
 
     const over = () => {
+        if (anyFish || selectedFishs.length !== 0) dispatch(set_stateCardTour({ ...state, fish: true }))
+        dispatch(set_tourEvent({ ...tourEvent, fishs: anyFish ? [] : selectedFishs }))
         dispatch(set_stateModalWindowThree({ ...stateModalWindowThree, status: false }))
     }
 
@@ -43,15 +44,14 @@ export const Fishs = () => {
     const deleteFish = (id: number) => {
         setSelectedFishs(selectedFishs.filter(e => e.id !== id))
     }
-    console.log(fishs)
 
 
-    const svoyBlockStyle = fishs.any
+    const svoyBlockStyle = anyFish
         ? { opacity: 0.5, pointerEvents: 'none' as const }
         : undefined;
 
 
-    const displayValue = fishs.any ? 'none' : undefined;
+    const displayValue = anyFish ? 'none' : undefined;
 
 
     return (<div className="modal_subif">
@@ -66,9 +66,9 @@ export const Fishs = () => {
             </div>
             <div className="container_sort_fishs">
                 <span className="span_text_info">* начните вводить название</span>
-                <FindFilter disArray={setSelectedFishs} disabled={fishs.any} display={displayValue} objs={arrayFishs} selected={selectedFishs} />
-                <SwapeComponent text={'Любая рыба'} active={fishs.any} onToggle={() => toggleBait('any')} />
-                <SwapeComponent text={'Добавить колонку ДРУГОЕ'} active={fishs.other} onToggle={() => toggleBait('other')} />
+                <FindFilter disArray={setSelectedFishs} disabled={anyFish} display={displayValue} objs={arrayFishs} selected={selectedFishs} />
+                <SwapeComponent text={'Любая рыба'} active={anyFish} onToggle={() => setAnyFish((prev) => !prev)} />
+                <SwapeComponent text={'Добавить колонку ДРУГОЕ'} active={other} onToggle={() => setOther((prev) => !prev)} />
             </div>
         </div>
         <div className="footer_ok" onClick={over}>OK</div>

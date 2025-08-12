@@ -92,29 +92,7 @@ class JobUsers {
     }
 
 
-    async updateTournament(id, name, startTime, finishTime) {
-        const nowData = Math.floor((new Date().getTime()) / 1000)
-        const status = nowData > Number(finishTime) ? 2 : nowData > Number(startTime) ? 1 : 0
-        const updateModel = `UPDATE tournaments SET name = @name, dateStart = @startTime, dateFinish = @finishTime, status = @status OUTPUT INSERTED.*  WHERE id = @id`;
 
-        try {
-            const pool = await connection;
-            const result = await pool.request()
-                .input('id', id)
-                .input('name', name)
-                .input('startTime', startTime)
-                .input('finishTime', finishTime)
-                .input('status', status)
-                .query(updateModel);
-
-            return result.recordset[0];
-        }
-        catch (e) {
-            console.log(e)
-            return []
-        }
-
-    }
 
     async updateAnchorState(id, state, clicktour) {
         console.log(id, state, clicktour)
@@ -191,7 +169,20 @@ class JobUsers {
             }
 
             const users = await this.getTournamentUsers(id); // Второй запрос - участники турнира
-            return { ...tournamentData[0], users }; // объединение данных
+            console.log('users')
+            const timing = await this.getTournamentTiming(id)
+            console.log('timing')
+            const fishs = await this.getTournamentFishs(id)
+            console.log('фиш')
+            const reservours = await this.getTournamentReservours(id)
+            console.log('водо')
+            const typeCatch = await this.getTournamentTypeCatch(id)
+            console.log('катч')
+            const typeBaits = await this.getTournamentTypeBaits(id)
+            console.log('баит')
+            const criVictory = await this.getTournamentCriVictory(id)
+            console.log('тута???')
+            return { ...tournamentData[0], criVictory: criVictory, users, timing, fishs, reservours, typeCatch, typeBaits }; // объединение данных
         } catch (error) {
             console.error("Error fetching tournament data:", error);
             return null;
@@ -227,21 +218,124 @@ class JobUsers {
         }
     }
 
+    async getTournamentTiming(id) {
+        const query = `
+            SELECT u.start, u.finish 
+            FROM tournamentTimings tp
+            JOIN timing u ON tp.timingId = u.id
+            WHERE tp.tournamentId = @id;
+        `;
+        try {
+            const pool = await connection;
+            const result = await pool.request().input('id', id).query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error fetching tournament timing:", error);
+            return []; // Возвращаем пустой массив в случае ошибки
+        }
+    }
+
+    async getTournamentCriVictory(id) {
+        const query = `
+            SELECT u.id, u.name 
+            FROM tournaments tp
+            JOIN cri_victory u ON tp.crivictoryId = u.id
+            WHERE tp.id = @id;
+        `;
+        try {
+            const pool = await connection;
+            const result = await pool.request().input('id', id).query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error fetching tournament criteria victory:", error);
+            return [];
+        }
+    }
+
+    async getTournamentFishs(id) {
+        const query = `
+            SELECT u.id, u.name 
+            FROM tournamentFishs tp
+            JOIN fishs u ON tp.fishId = u.id
+            WHERE tp.tournamentId = @id;
+        `;
+        try {
+            const pool = await connection;
+            const result = await pool.request().input('id', id).query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error fetching tournament timing:", error);
+            return []; // Возвращаем пустой массив в случае ошибки
+        }
+    }
+
+    async getTournamentReservours(id) {
+        const query = `
+            SELECT u.id, u.name 
+            FROM tournamentReservours tp
+            JOIN reservours u ON tp.reservourId = u.id
+            WHERE tp.tournamentId = @id;
+        `;
+        try {
+            const pool = await connection;
+            const result = await pool.request().input('id', id).query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error fetching tournament timing:", error);
+            return []; // Возвращаем пустой массив в случае ошибки
+        }
+    }
+
+    async getTournamentTypeCatch(id) {
+        const query = `
+            SELECT u.id, u.name 
+            FROM tournamentTypeCatch tp
+            JOIN type_catch u ON tp.typecatchId = u.id
+            WHERE tp.tournamentId = @id;
+        `;
+        try {
+            const pool = await connection;
+            const result = await pool.request().input('id', id).query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error fetching tournament timing:", error);
+            return []; // Возвращаем пустой массив в случае ошибки
+        }
+    }
+
+    async getTournamentTypeBaits(id) {
+        const query = `
+            SELECT u.id, u.name 
+            FROM tournamentTypeBaits tp
+            JOIN baits u ON tp.typebaitId = u.id
+            WHERE tp.tournamentId = @id;
+        `;
+        try {
+            const pool = await connection;
+            const result = await pool.request().input('id', id).query(query);
+            return result.recordset;
+        } catch (error) {
+            console.error("Error fetching tournament timing:", error);
+            return []; // Возвращаем пустой массив в случае ошибки
+        }
+    }
+
 
 
     async deleteTournament(id) {
-        const post = `DELETE FROM tournaments WHERE id=@id`
 
         try {
-            const pool = await connection
-            const res = await pool.request()
-                .input('id', id)
-                .query(post)
-            return 'ОК'
-        }
+            const pool = await connection;
+            const request = pool.request();
 
-        catch (e) {
-            console.log(e)
+            await request
+                .input('tournamentId', sql.Int, id)
+                .query('DELETE FROM tournaments WHERE id = @tournamentId');
+
+            return { message: 'Турнир и все связанные данные успешно удалены.' }
+        } catch (error) {
+            console.error('Ошибка при удалении турнира:', error);
+            return { message: 'Ошибка при удалении турнира.' }
         }
     }
 }

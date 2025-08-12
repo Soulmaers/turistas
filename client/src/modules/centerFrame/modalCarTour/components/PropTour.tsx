@@ -4,7 +4,7 @@ import ModalTwoLauout from '../../../servises/components/ModalTwoLauout'
 import { Configurator } from '../configurator/components/Configurator';
 import { UniversalModal } from '../../../servises/components/UniversalModal'
 import { useSelector, useDispatch } from 'react-redux';
-import { set_tour, set_stateModalWindowTwo, set_activeModalLevel, RootState } from '../../../../GlobalStor';
+import { set_tour, set_tourEvent, set_stateModalWindowTwo, set_activeModalLevel, RootState } from '../../../../GlobalStor';
 
 
 interface PropTourProps {
@@ -23,6 +23,7 @@ export const PropTour: React.FC<PropTourProps> = ({ text, pref }) => {
     const close = () => set_modalProperty(false);
 
     const handler = () => {
+
         switch (pref) {
             case 'fishers': dispatch(set_stateModalWindowTwo({ type: 'fishers', status: true })); break;
             case 'reg': dispatch(set_stateModalWindowTwo({ type: 'reg', status: true }));

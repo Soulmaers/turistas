@@ -2,7 +2,7 @@
 import { IoMdAddCircle } from "react-icons/io"
 import { FaPlus } from "react-icons/fa6";
 import { useSelector, useDispatch } from 'react-redux';
-import { set_tour, set_catch, set_stateModalWindow, RootState } from '../../../../GlobalStor';
+import { set_stateCardTour, set_catch, set_tourEvent, set_stateModalWindow, RootState } from '../../../../GlobalStor';
 
 
 
@@ -42,12 +42,31 @@ export const ClickIconAdd: React.FC<ClickIconAddProps> = ({ pref }) => {
         } else {
             dispatch(set_stateModalWindow({ type: 'add_tour', status: true }))
             //  dispatch(set_add_tour(true));
-            dispatch(set_tour({
+            dispatch(set_tourEvent({
+                status: null,
                 id: null,
-                nameTour: '',
+                name: '',
+                criVictory: { id: 1, name: 'Вес максимальный' },
+                dopsub: null,
+                fotoAll: false,
+                fotoLider: false,
+                timeTour: [],
+                fishers: [],
+                fishs: [],
+                reservours: [],
+                typeCatch: [],
+                typeBaits: [],
+                creater_by: null,
                 dateStart: '',
                 dateFinish: '',
-                users: []
+                link: null
+            }))
+
+            dispatch(set_stateCardTour({
+                fish: false,
+                reservours: false,
+                typeCatch: false,
+                typeBaits: false
             }))
         }
     };

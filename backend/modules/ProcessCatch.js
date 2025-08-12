@@ -42,8 +42,8 @@ class ProcessCatch {
         const res = reservuors ? Number(reservuors) : 0
         const type = typeFishing ? Number(typeFishing) : 0
         const bait = baits ? Number(baits) : 0
-        const date = Math.floor((new Date().getTime()) / 1000)
-        const post = `UPDATE catch SET idFish=@fishs, idReservour=@reservuors, idTypeCatch=@typeFishing, idTimeDay=@timeDay,idBait=@baits,weight=@weight,comment=@comment, data=@date,urlFoto=@urlFoto
+
+        const post = `UPDATE catch SET idFish=@fishs, idReservour=@reservuors, idTypeCatch=@typeFishing, idTimeDay=@timeDay,idBait=@baits,weight=@weight,comment=@comment,urlFoto=@urlFoto
        WHERE id=@idCatch `
 
         try {
@@ -57,7 +57,6 @@ class ProcessCatch {
                 .input('baits', bait)
                 .input('weight', weight)
                 .input('comment', comment)
-                .input('date', date)
                 .input('urlFoto', urlFoto)
                 .query(post)
             return 'Улов обновлен'

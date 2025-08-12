@@ -3,7 +3,7 @@ import { SetStateAction, useState, useEffect } from "react"
 import { useGetFishers } from '../hookUsers'
 
 import { useSelector, useDispatch } from 'react-redux';
-import { set_discription, set_stateModalWindowThree, set_tour, RootState } from '../../../../GlobalStor';
+import { set_discription, set_tourEvent, set_stateModalWindowThree, set_tour, RootState } from '../../../../GlobalStor';
 import { GiConsoleController } from "react-icons/gi";
 import { DiscriptionQuestions } from '../../../modalComponents/components/DiscriptionQuestions'
 
@@ -29,18 +29,20 @@ export const Fishers: React.FC<FuncAlarm> = ({ flag }) => {
     const [countFishers, setCountFishers] = useState(0)
     const [valid, setValid] = useState<string>('')
     const tourData = useSelector((state: RootState) => state.slice.tour);
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent);
     const [fishers, setFishers] = useState<Fishers[]>([])
 
     const { getFisher } = useGetFishers()
 
     useEffect(() => {
-        setFishers(tourData.users)
-        setCountFishers(tourData.users.length)
+        setFishers(tourEvent.fishers)
+        setCountFishers(tourEvent.fishers.length)
     }, [])
     useEffect(() => {
         console.log(fishers)
         const array = fishers.map(e => ({ contactID: e.contactID, userId: e.userId, name_user: e.name_user }));
         dispatch(set_tour({ ...tourData, users: array }))
+        dispatch(set_tourEvent({ ...tourEvent, fishers: fishers }))
         //  addFishers(array);
     }, [fishers]);
 
@@ -58,9 +60,6 @@ export const Fishers: React.FC<FuncAlarm> = ({ flag }) => {
         setTimeout(() => setValid(''), 2000);
     }
     const handler = async () => {
-        console.log(countFishers)
-        console.log(stop)
-        console.log(fisherID)
         const duble = fishers.find(e => e.contactID === fisherID)
         if (stop) { validationLocal(`Добавлено максимальное кол-во участников`); return }
         if (fisherID === '') { validationLocal('Введите ID участника'); return }

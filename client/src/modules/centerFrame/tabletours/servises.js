@@ -17,4 +17,28 @@ export class Helpers {
         return formattedDate;
     }
 
+
+    static razbor(timeTour, now) {
+        const nowData = Math.floor(now / 1000);
+
+        const minStart = timeTour.reduce((min, interval) => interval.start < min ? interval.start : min, timeTour[0].start);
+        const maxFinish = timeTour.reduce((max, interval) => interval.finish > max ? interval.finish : max, timeTour[0].finish);
+
+        if (nowData < minStart) {
+            return false
+        } else if (nowData > maxFinish) {
+            return false
+        } else {
+            // Проверяем, попадает ли nowData в какой-то интервал
+            const currentInterval = timeTour.find(interval => nowData >= interval.start && nowData <= interval.finish);
+            if (currentInterval) {
+                return true
+            } else {
+                // nowData между minStart и maxFinish, но не в интервале — значит прерванный
+                return false
+            }
+        }
+
+    }
+
 }

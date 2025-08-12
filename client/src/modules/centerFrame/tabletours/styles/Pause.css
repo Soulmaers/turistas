@@ -1,0 +1,23 @@
+.pause {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: lightgray;
+    color: #000;
+    padding: 10px;
+    width: 300px;
+    border-radius: 50px;
+}
+
+
+.disc_pause {
+    margin-top: 10px;
+    text-align: center;
+}
+
+
+.title_pause {
+    font-weight: bold
+}

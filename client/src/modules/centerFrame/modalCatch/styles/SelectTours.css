@@ -1,0 +1,65 @@
+.container_select_tours {
+    align-items: center;
+    background-color: #006400;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+    padding: 10px;
+    width: 90%;
+    padding-top: 0px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.btn_select_tour {
+    padding: 8px 10px;
+    background-color: orange;
+    color: #000;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 100%;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.tochkis {
+    margin: 10px 0;
+    background-image: url('../../../../assets/dotes.webp');
+    background-size: cover;
+    margin: 10px 0;
+    width: 40px;
+    height: 10px;
+}
+
+.icon_question_tours {
+    background-image: url('../../../../assets/icon_question.webp');
+    background-size: cover;
+    cursor: pointer;
+    height: 25px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+    width: 25px;
+
+}
+
+.footer_modal_tour {
+    position: relative;
+
+}
+
+@media (height<680px) {
+
+    .btn_select_tour {
+        font-size: 0.8rem
+    }
+
+    .foot {
+        margin: 0 !important;
+    }
+}

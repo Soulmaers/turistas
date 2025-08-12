@@ -19,14 +19,14 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const catchs = useSelector((state: RootState) => state.slice.catchs)
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
-    const tourData = useSelector((state: RootState) => state.slice.tour);
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent)
     const dispatch = useDispatch()
 
 
     const fetchData = async () => {
-        const [data, _] = await Promise.all([
+        const [data] = await Promise.all([
             getCatchs(idTour),
-            editFunc(idTour)
+            //  editFunc(idTour)
         ]);
         dispatch(set_catchs(data.data));
         dispatch(set_bigfish(data.bigFish));
@@ -37,7 +37,7 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     }, [idTour, actionCatch]);
 
 
-    const usersWithTotals = tourData.users.map((e) => {
+    const usersWithTotals = tourEvent.fishers.map((e) => {
         const catchsFisher = catchs.find(el => el.idUser === e.userId);
         return {
             ...e,

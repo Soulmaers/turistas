@@ -1,0 +1,42 @@
+.wrapper_set_abs {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid #fff;
+}
+
+.discription_time_set_load {
+    text-align: left;
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #fff;
+}
+
+.row_radio_set {
+    width: 90%;
+}
+
+.rad_text_set {
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.modal_subif {
+    height: auto;
+}
+
+
+
+@media (height<680px) {
+
+    .discription_time_set_load {
+        font-size: 0.9rem;
+    }
+
+    .rad_text_set {
+        font-size: 0.7rem;
+    }
+}

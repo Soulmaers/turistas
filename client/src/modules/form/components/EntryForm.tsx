@@ -2,7 +2,7 @@ import '../styles/EntryForm.css'
 import { useState } from 'react';
 import { useGetDataUser } from '../../servises/hooks/getDataUser'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-
+import { useGetDataContent } from '../../servises/hooks/getDataContent'
 
 interface Entry {
     index: number
@@ -10,7 +10,7 @@ interface Entry {
 }
 export const EntryForm: React.FC<Entry> = ({ index, onDone }) => {
     const { getDataUser } = useGetDataUser()
-
+    const { getContent } = useGetDataContent();
     const [errorMessage, setErrorMessage] = useState('')
     const [valueContact, setValueContact] = useState('')
     const [valueName, setValueName] = useState('')
@@ -84,6 +84,7 @@ export const EntryForm: React.FC<Entry> = ({ index, onDone }) => {
             setErrorMessage('Пользователь не найден');
             return;
         }
+        await getContent()
         onDone();
     };
 

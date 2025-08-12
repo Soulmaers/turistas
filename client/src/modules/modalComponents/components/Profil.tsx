@@ -5,7 +5,7 @@ import { IoMdLogOut } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
 import '../styles/Profil.css'
 import { useSelector, useDispatch } from 'react-redux';
-import { updateStatusUser, RootState } from '../../../GlobalStor';
+import { setIntervalId, RootState } from '../../../GlobalStor';
 
 import { resetAll } from '../../../GlobalStor';
 
@@ -13,10 +13,16 @@ import { resetAll } from '../../../GlobalStor';
 
 export const Profil = () => {
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
+    const intervalId = useSelector((state: RootState) => state.slice.intervalId);
     const dispatch = useDispatch()
     const onClick = () => {
         dispatch(resetAll())
         localStorage.removeItem('lastContact');
+
+        if (intervalId) {
+            clearInterval(intervalId);
+            dispatch(setIntervalId(null));
+        }
 
     }
 

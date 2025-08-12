@@ -1,72 +1,83 @@
 import './TypeBaits.css'
 
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AddCustomOptions } from '../AddCustomOptions'
-import { RootState, set_stateModalWindowThour, set_stateModalWindowThree } from '../../../../../../GlobalStor';
+import { RootState, set_tourEvent, set_stateCardTour, set_stateModalWindowThree } from '../../../../../../GlobalStor';
 import { SwapeComponent } from '../SwapeComponent'
 
 export const TypeBaits = () => {
     const dispatch = useDispatch()
-
+    const dataContent = useSelector((state: RootState) => state.slice.dataContent)
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent);
+    const state = useSelector((state: RootState) => state.slice.stateCardTour);
     const stateModalWindowThree = useSelector((state: RootState) => state.slice.stateModalWindowThree);
-    const [selectedFishs, setSelectedFishs] = useState<{ id: number; name: string }[]>([])
+    const [selectedBaitsTypes, setSelectedBaitsTypes] = useState<number[]>([]);
+    const [customBaits, setCustomBaits] = useState<{ id: number; name: string }[]>([]);
+    const [anyBaits, setAnyBaits] = useState(false);
 
 
-    const [baits, setBaits] = useState({
-        vobler: false,
-        vert: false,
-        koleb: false,
-        rezina: false,
-        zhivec: false,
-        cherv: false,
-        any: false,
-    });
-    const toggleBait = (key: keyof typeof baits) => {
-        setBaits(prev => ({ ...prev, [key]: !prev[key] }));
+    useEffect(() => {
+        if (tourEvent?.typeBaits) {
+            const ids = tourEvent.typeBaits
+                .filter(item => item.id > 0) // стандартные приманки
+                .map(item => item.id);
+
+            const custom = tourEvent.typeBaits
+                .filter(item => item.id < 0); // пользовательские приманки (временные id)
+
+            setSelectedBaitsTypes(ids);
+            setCustomBaits(custom);
+            if (state.typeBaits) setAnyBaits(tourEvent.typeBaits.length === 0); // если массив пуст — значит "Любая приманка"
+        }
+    }, [tourEvent.typeBaits]);
+
+
+    const toggleCatch = (id: number) => {
+        setSelectedBaitsTypes(prev =>
+            prev.includes(id) ? prev.filter(e => e !== id) : [...prev, id]
+        );
     };
 
-
     const over = () => {
-        dispatch(set_stateModalWindowThree({ ...stateModalWindowThree, status: false }))
-    }
+        const baits = dataContent.baits?.filter(el => selectedBaitsTypes.includes(el.id))
+        console.log(baits)
+        if (baits || anyBaits) dispatch(set_stateCardTour({ ...state, typeBaits: true }))
+        if (baits) dispatch(set_tourEvent({ ...tourEvent, typeBaits: anyBaits ? [] : baits }))
+        dispatch(set_stateModalWindowThree({ ...stateModalWindowThree, status: false }));
+    };
+
     const handlerDiscriotion = () => {
-        console.log('ок')
-    }
+        console.log("описание");
+    };
 
-    const deleteFish = (id: number) => {
-        setSelectedFishs(selectedFishs.filter(e => e.id !== id))
-    }
-    const displayValue = baits.any ? 'none' : undefined;
+    const deleteCustom = (id: number) => {
+        setCustomBaits(customBaits.filter(e => e.id !== id));
+    };
+    const displayValue = anyBaits ? 'none' : undefined;
 
-    const svoyBlockStyle = baits.any
+    const svoyBlockStyle = anyBaits
         ? { opacity: 0.5, pointerEvents: 'none' as const }
         : undefined;
 
-
+    const rows = dataContent.baits?.map(e => <SwapeComponent text={e.name} active={selectedBaitsTypes.includes(e.id)} onToggle={() => toggleCatch(e.id)} />)
 
     return (<div className="modal_subif">
         <div className="title_tour header_modal_add_tour">ВИД ПРИМАНКИ<span className="icon_question time_question" onClick={handlerDiscriotion}></span></div>
         <div className="body_card_modal">
             <div className="discription_time">Здесь Вы можете выбрать тип приманки допустимый в создаваемом турнире</div>
             <div className="svoy_block" style={svoyBlockStyle}>
-                <SwapeComponent text="Воблер" active={baits.vobler} onToggle={() => toggleBait('vobler')} />
-                <SwapeComponent text="Вертушка" active={baits.vert} onToggle={() => toggleBait('vert')} />
-                <SwapeComponent text="Колебалка" active={baits.koleb} onToggle={() => toggleBait('koleb')} />
-                <SwapeComponent text="Резина" active={baits.rezina} onToggle={() => toggleBait('rezina')} />
-                <SwapeComponent text="Живец" active={baits.zhivec} onToggle={() => toggleBait('zhivec')} />
-                <SwapeComponent text="Червь/Опарыш" active={baits.cherv} onToggle={() => toggleBait('cherv')} />
-
+                {rows}
             </div>
             <div className="field_custom" style={svoyBlockStyle}>
-                {selectedFishs.length !== 0 && selectedFishs.map(e => (<div className="row_wrap_interval_fish" key={e.name}>
+                {customBaits.length !== 0 && customBaits.map(e => (<div className="row_wrap_interval_fish" key={e.name}>
                     <div className="body_interval" >{e.name}</div>
-                    <span className="del_interval" onClick={() => deleteFish(e.id)}></span>
+                    <span className="del_interval" onClick={() => deleteCustom(e.id)}></span>
                 </div>))}
             </div>
             <div className="container_sort_fishs">
-                <AddCustomOptions disArray={setSelectedFishs} disabled={baits.any} display={displayValue} />
-                <SwapeComponent text="Любая приманка" active={baits.any} onToggle={() => toggleBait('any')} />
+                <AddCustomOptions disArray={setCustomBaits} disabled={anyBaits} display={displayValue} />
+                <SwapeComponent text="Любая приманка" active={anyBaits} onToggle={() => setAnyBaits(prev => !prev)} />
 
             </div>
         </div>

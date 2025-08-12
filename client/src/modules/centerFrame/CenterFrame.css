@@ -42,9 +42,16 @@
         font-size: 0.7rem
     }
 
-    .container_table_history {
-        border-radius: 5px;
+    tr.rows_list_catch:nth-child(odd) {
+        background-color: gray;
+        /* Светло-серый */
     }
+
+    tr.rows_list_catch:nth-child(even) {
+        background-color: #a9a9a9;
+        /* Темно-серый */
+    }
+
 
     .stat_name {
         font-size: 0.9rem
@@ -137,9 +144,12 @@
 
 
     .header_tournament_table {
-        border: none;
-        border-radius: 0;
-        background-color: transparent;
+        width: 100%;
+        background-color: #FFBB3B;
+        border-radius: 10px 10px 0 0;
+        padding: 10px;
+        box-sizing: border-box;
+        font-weight: bold;
     }
 
     .body_table {

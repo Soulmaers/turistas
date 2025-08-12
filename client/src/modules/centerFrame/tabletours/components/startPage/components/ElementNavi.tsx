@@ -27,7 +27,7 @@ export const ElementNavi: React.FC<PropsTours> = ({ tours, nameType, isActive, s
             return <div className="no_tours">Турниров нет</div>
         }
         else {
-            return <table className="table_tour_list"><tbody><TypeListTours data={tours} /></tbody></table>
+            return <table className="table_tour_list"><tbody><TypeListTours data={tours.slice(0, 3)} /></tbody></table>
         }
 
     }

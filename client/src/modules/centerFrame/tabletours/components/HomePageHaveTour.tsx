@@ -13,10 +13,10 @@ import { SwipeWrapper } from '../../../servises/components/SwipeWrapper'
 import WiewCardReservours from '../../reservours/components/WiewCardReservours'
 import { HistoryList } from '../../history/components/HistoryList'
 import { StatisticCard } from '../../tabletours/components/StatisticCard'
-
+import { useEditTour } from '../../../leftFrame/hooks'
 
 export const HomePageHaveTour: React.FC<{ data: User }> = ({ data }) => {
-
+    const { editFunc } = useEditTour()
     const dispatch = useDispatch()
     const statebody = useSelector((state: RootState) => state.slice.stateBody)
     const history = useSelector((state: RootState) => state.slice.historyStateBody);
@@ -30,17 +30,26 @@ export const HomePageHaveTour: React.FC<{ data: User }> = ({ data }) => {
     const futureTours = data.tournament.filter(e => e.status === 0)
     const oldTours = data.tournament.filter(e => e.status === 2)
 
+
+    const getS = async (id: number) => {
+        await editFunc(id);
+    };
+
+
     useEffect(() => {
         console.log(data?.user)
         if (data?.user?.state_card) {
             dispatch(set_stateBody(data.user.state_card))
             dispatch(click_tour(data.user.idClick_tour))
+            if (data.user.idClick_tour) getS(data.user.idClick_tour)
+
             if (!statusTour) {
                 const tour = data.tournament.find(e => e.id === data?.user?.idClick_tour)
                 // console.log(tour)
                 dispatch(set_statusTour(Number(tour?.status)))
             }
         }
+
 
     }, [])
     //  console.log(statusTour)
@@ -52,7 +61,7 @@ export const HomePageHaveTour: React.FC<{ data: User }> = ({ data }) => {
                 <ClickIconAdd pref={3} />
                 <ViewListTours user={idUser} btn={true} data={futureTours} title={'ЗАПЛАНИРОВАННЫЕ ТУРНИРЫ'} flag={false} tableStyles={{ bottom: '23%' }} titleStyles={{ color: '#fff' }} />
             </>;
-            case 'tourCard': return <TourDetalisation data={data.tournament} />;
+            case 'tourCard': return <TourDetalisation />;
             case 'bigFish': return <CardBigFish />;
             case 'typeToursList': {
                 if (statusTour !== null) {

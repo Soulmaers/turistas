@@ -28,6 +28,8 @@ import { Reservours } from './modalCarTour/configurator/components/Reservours/Re
 import { InfoChart } from './modalCarTour/configurator/components/Timing/components/InfoChart'
 import { Fishers } from '../centerFrame/modalCarTour/components/Fishers'
 import { Configurator } from '../centerFrame/modalCarTour/configurator/components/Configurator'
+import { SettingsStorLoad } from '../modalComponents/components/SettingsStorLoad'
+import { CardTours } from './modalCatch/components/tours/components/CardTours'
 import './CenterFrame.css'
 
 
@@ -76,7 +78,9 @@ const CenterFrame = () => {
                 components: {
                     deleteFormTour: { component: <FormDeleteTour />, top: '30%' },
                     reg: { component: <Configurator modalConfig={() => dispatch(set_stateModalWindowTwo({ ...stateModalWindowTwo, status: false }))} />, top: '10%' },
-                    fishers: { component: <Fishers flag={false} />, top: '15%' }
+                    fishers: { component: <Fishers flag={false} />, top: '15%' },
+                    setLoad: { component: <SettingsStorLoad />, top: '15%' },
+                    cardSelected: { component: <CardTours />, top: '15%' }
                 }
             },
             {

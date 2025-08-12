@@ -11,7 +11,7 @@ export const BannerToBigfish = () => {
 
     }, [bigFish])
 
-    console.log(bigFish)
+    // console.log(bigFish)
 
     const handler = () => {
         if (bigFish) dispatch(set_stateBody('bigFish'))

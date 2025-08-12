@@ -17,8 +17,9 @@ export const TypeListTours: React.FC<PropsTours> = ({ data }) => {
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
 
 
-    const handler = (event: React.MouseEvent, idClickTour: number) => {
+    const handler = async (event: React.MouseEvent, idClickTour: number) => {
         event.stopPropagation()
+        await editFunc(idClickTour)
         dispatch(click_tour(idClickTour))
         dispatch(set_stateBody('tourCard'))
     }
@@ -48,7 +49,7 @@ export const TypeListTours: React.FC<PropsTours> = ({ data }) => {
     const rows = data.map((e, index) => {
         const createdBy = e.created_by === userStatus?.user?.id
         console.log(createdBy)
-        if (index > 4) return null
+        if (index > 5) return null
         return <tr key={e.name} className="rows_table_tour_list" onClick={(event) => handler(event, e.id)}>
             <td className="count_tour">{index + 1}</td>
             <td className="name_cel" >{e.name}</td>

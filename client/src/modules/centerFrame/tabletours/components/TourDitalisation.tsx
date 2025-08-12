@@ -3,44 +3,47 @@ import { set_catchs, set_bigfish, set_stateBody, RootState } from "../../../../G
 import { useSelector, useDispatch } from 'react-redux'
 import TableTournament from './TableToutnaments'
 import { ClickIconAdd } from "./ClickIconAdd"
+import { Pause } from './Pause'
 import TimeDisplay from "./TimeDisplay"
-import { Tournament } from '../../../../GlobalStor'
 import { BannerToBigfish } from './BannerToBigfish'
 import { useGetCatchs } from '../hooks/getCatchs'
-import PullToRefresh from 'react-pull-to-refresh';
+import { useState, useEffect } from 'react'
+import { Helpers } from '../servises'
 import { SmartPullToRefresh } from '../../../servises/components/SmartPullToRefresh'
 
-export const TourDetalisation: React.FC<{ data: Tournament[] }> = ({ data }) => {
+export const TourDetalisation = () => {
     const { getCatchs } = useGetCatchs()
     const dispatch = useDispatch()
-    const idClickTour = useSelector((state: RootState) => state.slice.idClickTour)
+
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent)
 
 
-    if (!idClickTour) {
-        return null
-    }
-    const tour = data.find(e => e.id === idClickTour)
-    if (!tour) {
-        return null;
-    }
+    const [now, setNow] = useState(Date.now())
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNow(Date.now()) // обновляем текущее время каждую секунду
+        }, 1000)
+        return () => clearInterval(interval)
+    }, [])
 
     const renderComponents = () => {
-        switch (tour.status) {
-            case 1:
+        switch (tourEvent.status) {
+            case 1: const add = Helpers.razbor(tourEvent.timeTour, now)
                 return <>
                     <div className="tour_data_table_title">
-                        <TimeDisplay status={Number(tour.status)} dateStart={tour.dateStart} dateFinish={tour.dateFinish} name={tour.name} />
-                        <TableTournament idTour={idClickTour} />
+                        <TimeDisplay status={Number(tourEvent.status)} dateStart={tourEvent.dateStart} dateFinish={tourEvent.dateFinish} name={tourEvent.name} />
+                        {tourEvent.id && <TableTournament idTour={tourEvent.id} />}
                     </div>
-                    <ClickIconAdd pref={1} />
-                    <ClickIconAdd pref={2} />
+                    {add ? <><ClickIconAdd pref={1} />
+                        <ClickIconAdd pref={2} /></> : <Pause />}
                     <BannerToBigfish />
                 </>
             case 0:
                 return <>
                     <div className="tour_data_table_title">
-                        <TimeDisplay status={Number(tour.status)} dateStart={tour.dateStart} dateFinish={tour.dateFinish} name={tour.name} />
-                        <TableTournament idTour={idClickTour} />
+                        <TimeDisplay status={Number(tourEvent.status)} dateStart={tourEvent.dateStart} dateFinish={tourEvent.dateFinish} name={tourEvent.name} />
+                        {tourEvent.id && <TableTournament idTour={tourEvent.id} />}
                     </div>
                     <BannerToBigfish />
                 </>
@@ -48,8 +51,8 @@ export const TourDetalisation: React.FC<{ data: Tournament[] }> = ({ data }) => 
             case 2:
                 return <>
                     <div className="tour_data_table_title">
-                        <TimeDisplay status={Number(tour.status)} dateStart={tour.dateStart} dateFinish={tour.dateFinish} name={tour.name} />
-                        <TableTournament idTour={idClickTour} />
+                        <TimeDisplay status={Number(tourEvent.status)} dateStart={tourEvent.dateStart} dateFinish={tourEvent.dateFinish} name={tourEvent.name} />
+                        {tourEvent.id && <TableTournament idTour={tourEvent.id} />}
                     </div>
                     <BannerToBigfish />
                 </>
@@ -58,7 +61,8 @@ export const TourDetalisation: React.FC<{ data: Tournament[] }> = ({ data }) => 
     }
 
     const handleRefresh = async () => {
-        const data = await getCatchs(idClickTour)
+        if (!tourEvent.id) return
+        const data = await getCatchs(tourEvent.id)
         dispatch(set_catchs(data.data));
         dispatch(set_bigfish(data.bigFish));
 

@@ -1,25 +1,26 @@
 .container_table_history {
-    width: 98%;
+    width: 100%;
     height: 100%;
     background-color: #4d4646;
     overflow-y: auto;
+    overflow-x: hidden;
     scrollbar-width: none;
     /* для Firefox */
     -ms-overflow-style: none;
-    border-radius: 10px 10px 0 0;
     box-sizing: border-box;
     color: #fff;
     font-size: 0.9rem;
 }
 
 .card_list_history {
-    width: 100%;
+
     height: 93%;
-    padding: 10px;
+    padding: 10px 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+    box-sizing: border-box;
 
 }
 
@@ -61,5 +62,25 @@ td.delete_catch {
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
+    }
+
+    th.header_history_catch {
+        color: #fff;
+        font-weight: bold;
+        border: none
+    }
+
+    th.header_history_catch:nth-child(n + 2) {
+        border-left: 1px solid #fff;
+    }
+
+    td.row_history_catch {
+        color: #000;
+        font-weight: bold;
+        border: none
+    }
+
+    td.row_history_catch:nth-child(n + 2) {
+        border-left: 1px solid #fff;
     }
 }

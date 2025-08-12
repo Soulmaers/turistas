@@ -44,15 +44,10 @@ export const useProcessList = (userId: number | undefined) => {
 
 
     const sortList = useCallback((id: number, creater: number) => {
-        console.log('список')
-        if (userId === creater) {
-            const filterCatchs = allCatchs.filter(e => e.idTournament === id)
-            dispatch(set_catchsList(filterCatchs))
-        }
-        else {
-            const filterCatchs = allCatchs.filter(e => e.idUser === userId && e.idTournament === id)
-            dispatch(set_catchsList(filterCatchs))
-        }
+
+        const filterCatchs = allCatchs.filter(e => e.idTournament === id)
+        dispatch(set_catchsList(filterCatchs))
+
 
 
     }, [allCatchs])

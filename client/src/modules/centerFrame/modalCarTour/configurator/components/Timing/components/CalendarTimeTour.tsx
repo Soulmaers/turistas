@@ -21,13 +21,14 @@ interface PropCalendar {
 export const CalendarTimeTour: React.FC<PropCalendar> = ({ message }) => {
     const dispatch = useDispatch();
     const intervals = useSelector((state: RootState) => state.slice.intervals);
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent);
 
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [finishDate, setFinishDate] = useState<Date | null>(null);
-    const [startHour, setStartHour] = useState('');
-    const [startMinute, setStartMinute] = useState('');
-    const [endHour, setEndHour] = useState('');
-    const [endMinute, setEndMinute] = useState('');
+    const [startHour, setStartHour] = useState('00');
+    const [startMinute, setStartMinute] = useState('00');
+    const [endHour, setEndHour] = useState('00');
+    const [endMinute, setEndMinute] = useState('00');
 
     const [activeWheelTarget, setActiveWheelTarget] = useState<'start' | 'end' | null>(null);
 
@@ -66,11 +67,12 @@ export const CalendarTimeTour: React.FC<PropCalendar> = ({ message }) => {
     };
 
     const handleAddInterval = useCallback(() => {
+        console.log(startDate)
         if (!startDate || !finishDate) {
             message('Выберите обе даты');
             return;
         }
-
+        console.log(startHour, startMinute)
         if (!validateTime(startHour, startMinute) || !validateTime(endHour, endMinute)) {
             message('Введите корректное время');
             return;
@@ -103,7 +105,7 @@ export const CalendarTimeTour: React.FC<PropCalendar> = ({ message }) => {
             message('Новый интервал пересекается с существующими интервалами');
             return;
         }
-
+        console.log(startDateTime)
         const newInterval: Interval = {
             start: Math.floor(startDateTime.getTime() / 1000),
             end: Math.floor(finishDateTime.getTime() / 1000),
@@ -111,13 +113,14 @@ export const CalendarTimeTour: React.FC<PropCalendar> = ({ message }) => {
             endDateTime: formatDateTime(finishDateTime),
         };
 
+        console.log(newInterval)
         dispatch(set_intervals([...intervals, newInterval]));
         setStartDate(null);
         setFinishDate(null);
-        setStartHour('чч');
-        setStartMinute('мм');
-        setEndHour('чч');
-        setEndMinute('мм');
+        setStartHour('00');
+        setStartMinute('00');
+        setEndHour('00');
+        setEndMinute('00');
         message('');
     }, [startDate, finishDate, startHour, startMinute, endHour, endMinute, message, dispatch, intervals]);
 

@@ -11,11 +11,14 @@ interface Props {
 }
 export const Selects: React.FC<Props> = ({ options, name, empty, selected, nameState, onChange }) => {
 
+
+
     const option = useMemo(() => options.map(e => (<option key={e.value + e.text} className='option' value={e.value}>{e.text}</option>)), [options])
 
+    const classes = name === 'ВРЕМЯ СУТОК' ? 'rows_card_tour_catch hadl_enter' : 'rows_card_tour_catch'
     return (
-        <div className="rows_card_tour_catch">
-            <div className="name_car_tour">{name}</div>
+        <div className={classes}>
+            {name === 'ВРЕМЯ СУТОК' && <div className="name_title_option">{name}</div>}
             <select className="select" value={selected} onChange={(event) => onChange(event, nameState)}>
                 {empty && <option className='option' value=""></option>}
                 {option}

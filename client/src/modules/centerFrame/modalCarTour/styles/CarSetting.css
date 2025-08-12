@@ -90,10 +90,12 @@
 
     .qr_container {
         background-color: #fff;
-        height: 160px;
+        min-height: 160px;
         margin: 15px 0;
         width: 95%;
         border-radius: 5px;
+        padding: 5px;
+        box-sizing: border-box;
     }
 
     .date_container {
@@ -170,7 +172,7 @@
 
 @media (height<680px) {
     .qr_container {
-        height: 100px;
+        min-height: 100px;
     }
 
     .del_tour {

@@ -19,7 +19,7 @@ interface PropIntervals {
 }
 
 export const IntervalsList: React.FC<PropIntervals> = ({ intervals }) => {
-
+    console.log(intervals)
     const dispatch = useDispatch()
 
     const delInterval = (index: number) => {

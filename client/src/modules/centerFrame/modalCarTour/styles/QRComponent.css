@@ -1,0 +1,14 @@
+.links {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.qr {
+    margin: 10px 0;
+}
+
+.link_btn {
+    color: blue
+}

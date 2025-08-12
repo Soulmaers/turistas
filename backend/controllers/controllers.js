@@ -2,9 +2,14 @@
 const { JobUsers } = require('../modules/JobUsers')
 const { GetContent } = require('../modules/GetContent')
 const { ProcessCatch } = require('../modules/ProcessCatch')
+const { TournamentInserter } = require('../modules/TourProcess')
 const { formatData } = require('../servises/servisFunction')
 const multer = require('multer');
 const path = require('path')
+const exifr = require('exifr');
+const fs = require('fs');
+
+const { sql, connection } = require('../dbconfig')
 
 exports.addTournament = async (req, res) => {
     try {
@@ -30,44 +35,115 @@ exports.addTournament = async (req, res) => {
     }
 }
 
+
+
 exports.updateTour = async (req, res) => {
-    const { id, nameTour, dateStart, dateFinish, users } = req.body
-    try {
-        const instance = new JobUsers()
-        const tourProps = await instance.updateTournament(id, nameTour, dateStart, dateFinish)
-        const newUsers = users.map(u => u.userId);
-        const currentFishers = (await instance.getTournamentUsers(id)).map(e => e.userId)
-        const toAdd = newUsers.filter(fisher => !currentFishers.includes(fisher));
-        const toRemove = currentFishers.filter(id => !newUsers.includes(id));
-        await Promise.all(toAdd.map(uid => instance.tournamentsParticipants(id, uid)));
-        await Promise.all(toRemove.map(uid => instance.removeParticipantFromTournament(id, uid)));
-        res.json(tourProps)
-    }
-    catch (e) {
-        console.log(e)
-        res.json([])
-    }
+    console.log(req.body)
+    const { id, name, dateStart, dateFinish, dopsub, fotoLider, fotoAll, fishers, fishs, typeBaits, typeCatch, reservours, timeTour } = req.body;
 
-}
+    const start = String(timeTour[0].start)
+    const finish = String(timeTour[timeTour.length - 1].finish)
+    let transaction;
+    try {
+        const pool = await connection; // Подключаемся к базе данных
+        transaction = new sql.Transaction(pool); // Создаем новую транзакцию
+        await transaction.begin(); // Начинаем транзакцию
+
+        try {
+            const instanceTourProcess = new TournamentInserter(transaction);
+            const tourProps = await instanceTourProcess.updateTournament(id, name, start, finish, fotoAll, fotoLider, dopsub);
+
+            await instanceTourProcess.updateRelation('tournamentParticipants', 'userId', fishers.map(e => e.userId), id);
+            await instanceTourProcess.updateRelation('tournamentFishs', 'fishId', fishs.map(e => e.id), id);
+            await instanceTourProcess.updateRelation('tournamentReservours', 'reservourId', reservours.map(e => e.id), id);
+            await instanceTourProcess.updateRelation('tournamentTypeBaits', 'typebaitId', typeBaits.map(e => e.id), id);
+            await instanceTourProcess.updateRelation('tournamentTypeCatch', 'typecatchId', typeCatch.map(e => e.id), id);
+            await instanceTourProcess.updateTournamentTimings(id, timeTour);
+
+            await transaction.commit();
+
+            res.json(tourProps);
+        } catch (err) {
+            await transaction.rollback();
+            console.error('Transaction error:', err);
+            res.status(500).json({ error: 'Ошибка при обновлении турнира' });
+        }
+    } catch (err) {
+        console.error('Connection error:', err);
+        res.status(500).json({ error: 'Ошибка подключения к базе данных' });
+    }
+};
+
+
+
+
+
+
 exports.addTour = async (req, res) => {
-    const { nameTour, startDate, finishDate, created_by, users } = req.body
+    const tour = req.body.tourEvent;
+    const created_by = req.body.created_by;
+
+    // Проверка входных данных
+    if (!tour || !created_by) {
+        return res.status(400).json({ error: 'Недостаточно данных для создания турнира.' });
+    }
+
+    let transaction;
 
     try {
-        const instance = new JobUsers()
-        const tourProps = await instance.createTournament(nameTour, startDate, finishDate, created_by)
+        const pool = await connection; // Подключаемся к базе данных
+        transaction = new sql.Transaction(pool); // Создаем новую транзакцию
 
+        await transaction.begin(); // Начинаем транзакцию
 
-        await Promise.all(users.map(async el => {
-            return await instance.tournamentsParticipants(tourProps.id, el.userId)
-        }))
-        res.json(tourProps)
+        const inserter = new TournamentInserter(transaction);
+
+        const timingIds = await inserter.insertTimings(tour.timeTour);
+        const status = await inserter.status(tour.timeTour)
+        const tournamentId = await inserter.createTournament(tour, created_by, status);
+
+        // Проверка на наличие идентификаторов
+        if (!tournamentId || !timingIds || timingIds.length === 0) {
+            throw new Error('Не удалось создать турнир или получить идентификаторы таймингов.');
+        }
+
+        await inserter.insertInto('tournamentTimings', tournamentId, 'timingId', timingIds);
+        await inserter.insertInto('tournamentParticipants', tournamentId, 'userId', tour.fishers.map(e => e.userId));
+        await inserter.insertInto('tournamentFishs', tournamentId, 'fishId', tour.fishs.map(e => e.id));
+        await inserter.insertInto('tournamentReservours', tournamentId, 'reservourId', tour.reservours.map(e => e.id));
+        await inserter.insertInto('tournamentTypeBaits', tournamentId, 'typebaitId', tour.typeBaits.map(e => e.id));
+        await inserter.insertInto('tournamentTypeCatch', tournamentId, 'typecatchId', tour.typeCatch.map(e => e.id));
+
+        await transaction.commit(); // Подтверждаем транзакцию
+
+        // Возвращаем созданный турнир
+        const createdTournament = {
+            id: tournamentId,
+            name: tour.name,
+            created_by,
+            fotoAll: tour.fotoAll,
+            fotoLider: tour.fotoLider,
+            crivictoryId: tour.criVictory.id,
+            status: status, // Убедитесь, что статус определен
+            timeTour: tour.timeTour,
+            fishers: tour.fishers,
+            fishs: tour.fishs,
+            reservours: tour.reservours,
+            typeBaits: tour.typeBaits,
+            typeCatch: tour.typeCatch,
+            dateStart: String(tour.timeTour[0].start),
+            dateFinish: String(tour.timeTour[tour.timeTour.length - 1].finish)
+        };
+
+        res.json(createdTournament);
+    } catch (error) {
+        if (transaction) {
+            await transaction.rollback(); // Откатываем транзакцию в случае ошибки
+        }
+        console.error('Ошибка при создании турнира:', error); // Логируем ошибку для отладки
+        res.status(500).json({ error: 'Произошла ошибка при создании турнира.' }); // Возвращаем ошибку клиенту
     }
-    catch (e) {
-        console.log(e)
-        res.json([])
-    }
-
-}
+};
 
 
 
@@ -126,7 +202,7 @@ exports.updateCatch = async (req, res) => {
 
 
         const data = req.body;
-
+        console.log(data.urlFoto)
         const formState = {
             fishs: data.fishs,
             reservuors: data.reservuors,
@@ -137,7 +213,7 @@ exports.updateCatch = async (req, res) => {
             comment: data.comment,
             idTour: Number(data.idTour),
             idUser: Number(data.idUser),
-            urlFoto: req.file?.filename || null,
+            urlFoto: req.file?.filename || data.urlFoto || null,
             date: Math.floor((new Date().getTime()) / 1000),
             idCatch: Number(data.idCatch)
         };
@@ -187,9 +263,24 @@ exports.setCatch = async (req, res) => {
             });
         });
 
+        let exifDate = null;
+
+        if (req.file && req.file.path) {
+            try {
+                const exif = await exifr.parse(filePath, { gps: true, tiff: true, exif: true })
+                console.log(exif)
+                console.log(exif.ComponentsConfiguration)
+                if (exif?.DateTimeOriginal) {
+                    exifDate = Math.floor(new Date(exif.DateTimeOriginal).getTime() / 1000);
+                    console.log('Дата съёмки из EXIF:', exif.DateTimeOriginal);
+                }
+            } catch (err) {
+                console.warn('EXIF не извлечён:', err);
+            }
+        }
 
         const data = req.body;
-        console.log(data)
+        console.log(exifDate)
         const formState = {
             fishs: data.fishs,
             reservuors: data.reservuors,
@@ -201,7 +292,7 @@ exports.setCatch = async (req, res) => {
             idTour: Number(data.idTour),
             idUser: Number(data.idUser),
             urlFoto: req.file?.filename || null,
-            date: Math.floor((new Date().getTime()) / 1000)
+            date: exifDate || Math.floor((new Date().getTime()) / 1000)
         };
 
         const [result, ok] = await Promise.all([
@@ -366,6 +457,7 @@ exports.deleteTour = async (req, res) => {
 }
 
 
+
 exports.getContentTour = async (req, res) => {
     const id = req.body.id
     const instance = new JobUsers()
@@ -381,6 +473,9 @@ exports.updateAnchor = async (req, res) => {
     const result = await instance.updateAnchorState(id, state, clickIDtour)
     res.json(result)
 }
+
+
+
 
 
 
