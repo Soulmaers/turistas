@@ -3,15 +3,18 @@ import { Catch } from '../components/FormCatch'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react'
-import { RootState, TourEvent, Property, set_validTours, set_stateModalWindowTwo } from '../../../../GlobalStor'
+import { RootState, TourEvent, Property, set_validTours, PropertyTour, set_stateModalWindowTwo } from '../../../../GlobalStor'
 
 
 
 
 export const useSetCatch = () => {
-    const validTours = useSelector((state: RootState) => state.slice.validTours)
-    const setCatch = async (formData: FormData) => {
-        console.log(formData)
+
+    const setCatch = async (formData: FormData, validTours: PropertyTour[] | null) => {
+
+        console.log(validTours)
+        const toursId = validTours?.filter(e => e.flag === 1).map(el => el.id)
+        formData.append('validTours', JSON.stringify(toursId));
         const params = {
             method: 'POST',
             body: formData

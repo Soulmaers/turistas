@@ -5,7 +5,7 @@ import { useSetCatch } from '../hooks/setCatch'
 import { CatchModalFooter } from './CatchModalFooter'
 import { CatchFileUploader } from './CatchFileUploader'
 import { ZoomModal } from './ZoomModal'
-import { RootState, set_action_catch, set_catch, set_catchsList, set_stateModalWindowTwo, set_stateModalWindow, set_urlFoto } from '../../../../GlobalStor'
+import { RootState, set_action_catch, set_catch, set_catchsList, PropertyTour, set_stateModalWindowTwo, set_validTours, set_stateModalWindow, set_urlFoto } from '../../../../GlobalStor'
 import { ExtendedBigFish } from '../../../../GlobalStor'
 import '../styles/FormCatch.css'
 import { useGetImages } from '../../tabletours/hooks/getImages'
@@ -106,7 +106,7 @@ export const FormCatch = () => {
         return () => cancelIdleCallback?.(id);
     }, []);
 
-
+    console.log(formDefault)
     useEffect(() => {
         if (catchOne.name_day === '') {
             const hours = new Date().getHours();
@@ -249,23 +249,22 @@ export const FormCatch = () => {
                 mess = await updateCatch(formData);
 
             } else {
-                console.log('сет')
-                mess = await setCatch(formData);
-
+                console.log(formData)
+                mess = await setCatch(formData, validTours);
             }
             console.log(mess)
             if (mess) {
-                const setCatch = localStorage.getItem('setCatch')
-                const arraySet = setCatch ? JSON.parse(setCatch) : []
-                console.log(arraySet)
-                type CatchKeys = keyof Catch;
+                /*  const setCatch = localStorage.getItem('setCatch')
+                  const arraySet = setCatch ? JSON.parse(setCatch) : []
+                  console.log(arraySet)
+                  type CatchKeys = keyof Catch;
+  
+                  const obj = arraySet.reduce((acc: Record<CatchKeys, any>, e: CatchKeys) => {
+                      acc[e] = formState[e]; // Здесь e гарантированно является ключом Catch
+                      return acc;
+                  }, {} as Record<CatchKeys, any>);*/
 
-                const obj = arraySet.reduce((acc: Record<CatchKeys, any>, e: CatchKeys) => {
-                    acc[e] = formState[e]; // Здесь e гарантированно является ключом Catch
-                    return acc;
-                }, {} as Record<CatchKeys, any>);
-
-                localStorage.setItem('fishingData', JSON.stringify(obj));
+                localStorage.setItem('fishingData', JSON.stringify({ fishs: formState.fishs, reservuors: formState.reservuors, typeFishing: formState.typeFishing, baits: formState.baits }));
                 setInfo(mess.mess);
 
                 if (mess !== null && mess.catch) {

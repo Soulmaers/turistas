@@ -37,7 +37,6 @@ class ProcessCatch {
     }
 
     static async updateCatch(data) {
-        console.log(data)
         const { idCatch, fishs, reservuors, typeFishing, timeDay, baits, weight, comment, urlFoto } = data
         const res = reservuors ? Number(reservuors) : 0
         const type = typeFishing ? Number(typeFishing) : 0
@@ -68,17 +67,20 @@ class ProcessCatch {
         }
     }
     static async setCatch(data) {
-        const { idTour, idUser, fishs, reservuors, typeFishing, timeDay, baits, weight, comment, date, urlFoto } = data
+        const { idTour, idUser, fishs, reservuors, typeFishing, timeDay, baits, weight, comment, date, urlFoto, tours } = data
 
         const res = reservuors ? Number(reservuors) : 0
         const type = typeFishing ? Number(typeFishing) : 0
         const bait = baits ? Number(baits) : 0
-        console.log(data)
+        console.log(tours)
         const post = `INSERT INTO catch(idTournament, idUser, idFish,idReservour,idTypeCatch,idTimeDay,idBait,weight,comment,data,urlFoto)
-           VALUES (@idTour, @idUser, @fishs, @reservuors, @typeFishing, @timeDay, @baits, @weight, @comment, @date,@urlFoto)`
+           OUTPUT INSERTED.id 
+        VALUES (@idTour, @idUser, @fishs, @reservuors, @typeFishing, @timeDay, @baits, @weight, @comment, @date,@urlFoto)`
 
+        const pool = await connection
+        const transaction = new sql.Transaction(pool);
         try {
-            const pool = await connection
+            await transaction.begin();
             const result = await pool.request()
                 .input('idTour', idTour)
                 .input('idUser', idUser)
@@ -92,16 +94,32 @@ class ProcessCatch {
                 .input('date', date)
                 .input('urlFoto', urlFoto)
                 .query(post)
-            return 'Улов добавлен'
+
+
+            const idCatch = result.recordset[0].id
+            const insertTournamentCatchQuery = `
+            INSERT INTO tournamentCatchs(tournamentId, catchId)
+            VALUES (@tournamentId, @catchId)`
+            // Для каждого ID турнира в массиве
+            for (const tourId of tours) {
+                await pool.request()
+                    .input('tournamentId', tourId)
+                    .input('catchId', idCatch)
+                    .query(insertTournamentCatchQuery);
+            }
+
+            await transaction.commit();
+            return 'Улов успешно добавлен'
         }
         catch (e) {
-            console.log(e)
-            return 'Что-то пошло не так'
+            await transaction.rollback();
+            console.error('Ошибка при добавлении улова:', e);
+            return 'Ошибка при добавлении улова'
         }
     }
 
     static async deleteCatch(id) {
-        const post = `DELETE FROM catch WHERE id=@id`
+        const post = `DELETE FROM catch WHERE id = @id`
         try {
             const pool = await connection
             await pool.request()
@@ -132,27 +150,27 @@ class ProcessCatch {
 
     static async getAllCatchs() {
         const post = `
-        SELECT 
-        c.id,
-        c.idTournament,
-            c.idUser,
-            c.idFish,
-            c.idReservour,
-            c.idTypeCatch,
-            c.idTimeDay,
-            c.idBait,
-            c.comment,
-            c.data,
-            u.name_user,
-            u.foto,
-            f.name as name_fish,
-            c.weight,
-            c.urlFoto,
-            r.name AS name_reservour,
-                t.name AS name_type,
-                   b.name AS name_bait,
-                   d.name as name_day
-        FROM 
+            SELECT
+            c.id,
+                c.idTournament,
+                c.idUser,
+                c.idFish,
+                c.idReservour,
+                c.idTypeCatch,
+                c.idTimeDay,
+                c.idBait,
+                c.comment,
+                c.data,
+                u.name_user,
+                u.foto,
+                f.name as name_fish,
+                c.weight,
+                c.urlFoto,
+                r.name AS name_reservour,
+                    t.name AS name_type,
+                        b.name AS name_bait,
+                            d.name as name_day
+            FROM 
             catch c
         INNER JOIN 
             users u ON c.idUser = u.id
@@ -166,7 +184,7 @@ class ProcessCatch {
             baits b ON c.idBait = b.id
                     INNER JOIN 
             time_day d ON c.idTimeDay = d.id
-          `;
+                `;
 
         try {
             const pool = await connection
@@ -182,26 +200,26 @@ class ProcessCatch {
 
     static async getCatch(idCatch) {
         const post = `
-        SELECT 
-        c.id,
-          c.idTournament,
-            c.idUser,
-            c.idFish,
-            c.idReservour,
-            c.idTypeCatch,
-            c.idTimeDay,
-            c.idBait,
-            c.data,
-            u.name_user,
-            u.foto,
-            f.name as name_fish,
-            c.weight,
-            c.urlFoto,
-            r.name AS name_reservour,
-                t.name AS name_type,
-                   b.name AS name_bait,
-                   d.name as name_day
-        FROM 
+            SELECT
+            c.id,
+                c.idTournament,
+                c.idUser,
+                c.idFish,
+                c.idReservour,
+                c.idTypeCatch,
+                c.idTimeDay,
+                c.idBait,
+                c.data,
+                u.name_user,
+                u.foto,
+                f.name as name_fish,
+                c.weight,
+                c.urlFoto,
+                r.name AS name_reservour,
+                    t.name AS name_type,
+                        b.name AS name_bait,
+                            d.name as name_day
+            FROM 
             catch c
         INNER JOIN 
             users u ON c.idUser = u.id
@@ -215,9 +233,9 @@ class ProcessCatch {
             baits b ON c.idBait = b.id
                     INNER JOIN 
             time_day d ON c.idTimeDay = d.id
-        WHERE 
+            WHERE
             c.id = @idCatch
-    `;
+                `;
 
         try {
             const pool = await connection
@@ -234,24 +252,69 @@ class ProcessCatch {
 
     static async getCatchs(idTour) {
         const post = `
-        SELECT 
+          SELECT DISTINCT
+              c.idUser,
+              c.idFish,
+              c.idReservour,
+              c.idTypeCatch,
+              c.idTimeDay,
+              c.idBait,
+              c.data,
+              u.name_user,
+              u.foto,
+              f.name AS name_fish,
+              c.weight,
+              c.urlFoto,
+              r.name AS name_reservour,
+              t.name AS name_type,
+              b.name AS name_bait,
+              d.name AS name_day
+          FROM 
+              catch c
+              INNER JOIN tournamentCatchs tc ON tc.catchId = c.id
+              INNER JOIN users u      ON c.idUser      = u.id
+              INNER JOIN reservours r ON c.idReservour = r.id
+              INNER JOIN fishs f      ON c.idFish      = f.id
+              INNER JOIN type_catch t ON c.idTypeCatch = t.id
+              INNER JOIN baits b      ON c.idBait      = b.id
+              INNER JOIN time_day d   ON c.idTimeDay   = d.id
+          WHERE
+              tc.tournamentId = @idTour
+          ORDER BY c.data DESC;
+        `;
+
+        try {
+            const pool = await connection;
+            const res = await pool.request()
+                .input('idTour', idTour)
+                .query(post);
+            return res.recordset;
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
+    }
+
+    /*static async getCatchs(idTour) {
+        const post = `
+            SELECT
             c.idUser,
-            c.idFish,
-            c.idReservour,
-            c.idTypeCatch,
-            c.idTimeDay,
-            c.idBait,
-            c.data,
-            u.name_user,
-            u.foto,
-            f.name as name_fish,
-            c.weight,
-            c.urlFoto,
-            r.name AS name_reservour,
-                t.name AS name_type,
-                   b.name AS name_bait,
-                   d.name as name_day
-        FROM 
+                c.idFish,
+                c.idReservour,
+                c.idTypeCatch,
+                c.idTimeDay,
+                c.idBait,
+                c.data,
+                u.name_user,
+                u.foto,
+                f.name as name_fish,
+                c.weight,
+                c.urlFoto,
+                r.name AS name_reservour,
+                    t.name AS name_type,
+                        b.name AS name_bait,
+                            d.name as name_day
+            FROM 
             catch c
         INNER JOIN 
             users u ON c.idUser = u.id
@@ -265,9 +328,9 @@ class ProcessCatch {
             baits b ON c.idBait = b.id
                     INNER JOIN 
             time_day d ON c.idTimeDay = d.id
-        WHERE 
+            WHERE
             c.idTournament = @idTour
-    `;
+                `;
 
         try {
             const pool = await connection
@@ -280,7 +343,7 @@ class ProcessCatch {
             console.log(e)
             return []
         }
-    }
+    }*/
 }
 
 

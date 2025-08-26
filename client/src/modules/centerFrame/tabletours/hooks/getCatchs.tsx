@@ -11,6 +11,7 @@ export const useGetCatchs = () => {
         }
         const res = await fetch('/api/getCatchs', params)
         const data = await res.json()
+        console.log(data)
         return data
     }
 

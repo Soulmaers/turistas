@@ -9,16 +9,13 @@ class TournamentInserter {
     }
 
     async insertInto(tableName, tournamentId, idField, dataArray) {
-        console.log(tableName);
-        console.log(dataArray);
-        console.log(idField);
+
         for (const item of dataArray) {
             const request = new sql.Request(this.transaction);
             request.input('tournamentId', sql.Int, tournamentId);
             request.input(idField, sql.Int, item);
             await request.query(`INSERT INTO ${tableName} (tournamentId, ${idField}) VALUES (@tournamentId, @${idField})`);
         }
-        console.log('тута');
     }
 
     async deleteFrom(tableName, tournamentId, idField, dataArray) {
@@ -96,7 +93,6 @@ class TournamentInserter {
 
         const minStart = Math.min(...starts);
         const maxFinish = Math.max(...finishes);
-        console.log(nowData, minStart, maxFinish)
         let status;
         if (nowData < minStart) {
             status = 0; // Будущий
@@ -111,19 +107,13 @@ class TournamentInserter {
 
     // --- Универсальная функция для обновления связей ---
     async updateRelation(tableName, idField, newItems, idTour) {
-        console.log(tableName, idField)
         // Получаем текущие записи из базы
         const currentRecords = await this.getTournamentConnect(idField, idTour, tableName)
         const currentIds = currentRecords.map(r => r[idField]);
-        console.log(currentIds)
-        console.log(newItems)
-        // Выделяем id из новых данных
-        // const newIds = newItems.map(item => item[idField]);
-        // console.log(newIds)
+
         // Определяем что добавить и что удалить
         const toAdd = newItems.filter(i => !currentIds.includes(i));
         const toRemove = currentIds.filter(i => !newItems.includes(i));
-        console.log(toAdd)
         // Удаляем лишние
         if (toRemove.length) {
             await this.deleteFrom(tableName, idTour, idField, toRemove);
@@ -150,7 +140,6 @@ class TournamentInserter {
     }
 
     async updateTournament(id, name, startTime, finishTime, fotoAll, fotoLider, dopsub) {
-        console.log(name)
         const nowData = Math.floor((new Date().getTime()) / 1000)
         const status = nowData > Number(finishTime) ? 2 : nowData > Number(startTime) ? 1 : 0
         const updateModel = `UPDATE tournaments SET name = @name, dateStart = @startTime, dateFinish = @finishTime,
@@ -190,7 +179,6 @@ class TournamentInserter {
         // Получаем текущие связи
         const currentRelations = await this.getTournamentConnect('timingId', tournamentId, 'tournamentTimings');
         const currentIds = currentRelations.map(r => r.timingId);
-        console.log('newTimings:', newTimings);
 
         // Определяем, что удалить (есть в current, но нет в новых)
         const newIds = newTimings.filter(t => t.id).map(t => t.id);

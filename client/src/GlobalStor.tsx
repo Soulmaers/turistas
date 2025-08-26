@@ -67,12 +67,12 @@ interface UpdateReservours {
     text: string;
 }
 
-interface FishCatch {
+export interface FishCatch {
     'Лещ': number,
     'Щука': number,
     'Судак': number,
     'Окунь': number,
-    'Форель': number,
+    'Другое': number,
     'Всего': number,
     name_user: string | null;
     idUser: number
@@ -305,6 +305,10 @@ const slice = createSlice({
                 state.activeModalLevel = action.payload;
             }
         },
+        remove_catch: (state, action) => {
+            const id = action.payload as number;
+            state.catchsList = state.catchsList.filter(c => c.idCatch !== id);
+        },
         setModalStackPop: (state) => {
             state.modalStack.pop();
             state.activeModalLevel = state.modalStack[state.modalStack.length - 1] || 0;
@@ -436,6 +440,7 @@ const slice = createSlice({
 
 // Экспортируем actions
 export const {
+    remove_catch,
     set_validTours,
     setIntervalId,
     set_stateCardTour,

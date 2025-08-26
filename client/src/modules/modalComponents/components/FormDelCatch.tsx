@@ -45,7 +45,7 @@ export const FormDelCatch = () => {
         console.log(deleteIdCatch.idCatch)
         const mess = await delCatch(deleteIdCatch.idCatch, deleteIdCatch.idUser)
         console.log(mess)
-        setText(mess)
+        //   setText(mess)
         setDel(true)
         dispatch(deleteCatch(deleteIdCatch.idCatch))
         setTimeout(() => {

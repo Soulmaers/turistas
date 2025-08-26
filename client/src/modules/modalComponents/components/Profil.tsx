@@ -18,7 +18,7 @@ export const Profil = () => {
     const onClick = () => {
         dispatch(resetAll())
         localStorage.removeItem('lastContact');
-
+        localStorage.removeItem('fishingData');
         if (intervalId) {
             clearInterval(intervalId);
             dispatch(setIntervalId(null));

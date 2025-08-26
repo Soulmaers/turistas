@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState, set_catchs, set_bigfish } from '../../../../GlobalStor'
+import { RootState, set_catchs, FishCatch, set_bigfish } from '../../../../GlobalStor'
 import React, { useEffect } from 'react'
 import { useGetCatchs } from '../hooks/getCatchs'
 import { useEditTour } from '../../../leftFrame/hooks'
@@ -22,7 +22,7 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     const tourEvent = useSelector((state: RootState) => state.slice.tourEvent)
     const dispatch = useDispatch()
 
-
+    console.log(tourEvent)
     const fetchData = async () => {
         const [data] = await Promise.all([
             getCatchs(idTour),
@@ -49,41 +49,48 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     const sortedUsers = usersWithTotals.sort((a, b) => b.total - a.total); // Сортировка по убыванию
 
     // Теперь отображаем отсортированные строки
+    // console.log(sortedUsers)
     const rows = sortedUsers.map((e, index) => {
         const isCurrentUser = userStatus?.user?.id === e.userId;
         const rowStyle = isCurrentUser ? { backgroundColor: 'rgba(229, 209, 28, 1)' } : {};
         const rowStyleCel = isCurrentUser ? { backgroundColor: 'rgba(211, 211, 211, 0.7)' } : {};
         const rowStyleTwo = isCurrentUser ? { backgroundColor: 'rgba(77, 70, 70, 0.7)' } : {};
-        const count = 0;
+
 
         const catchsFisher = catchs.find(el => el.idUser === e.userId);
+        const uniqFish = [...new Set(tourEvent.fishs.map(e => e.name)), 'Всего'];
+
+        const fishCount = uniqFish.map(fishType => {
+            // Утверждаем, что fishType является ключом для catchsFisher
+            const count = catchsFisher && catchsFisher[fishType as keyof FishCatch] ? catchsFisher[fishType as keyof FishCatch] : 0;
+
+            return (
+                <td className="cel" style={rowStyleCel} key={fishType}>
+                    {count}
+                </td>
+            );
+        });
+
+
 
         return (
             <tr key={e.name_user} style={rowStyle}>
                 <td className="cel_two" style={rowStyleTwo}>{index + 1}</td>
                 <td className="cel_two" style={rowStyleTwo}>{catchsFisher ? catchsFisher.name_user : e.name_user?.toUpperCase()}</td>
-                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Лещ'] : count}</td>
-                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Щука'] : count}</td>
-                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Судак'] : count}</td>
-                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Окунь'] : count}</td>
-                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Форель'] : count}</td>
-                <td className="cel" style={rowStyleCel}>{catchsFisher ? catchsFisher['Всего'] : count}</td>
+                {fishCount}
             </tr>
         );
 
     })
 
+    const rowHeaders = tourEvent.fishs.map(e => <th>{e.name}</th>)
     return (
         <div className="container_table">
             <table className='styled_table'>
                 <thead><tr>
                     <th>№</th>
                     <th>Участики</th>
-                    <th>Лещ</th>
-                    <th>Щука</th>
-                    <th>Судак</th>
-                    <th>Окунь</th>
-                    <th>Форель</th>
+                    {rowHeaders}
                     <th>Всего</th>
                 </tr>
                 </thead>
@@ -94,4 +101,4 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     )
 }
 
-export default TableTournament
+export default React.memo(TableTournament)

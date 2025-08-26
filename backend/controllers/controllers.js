@@ -251,7 +251,6 @@ exports.updateCatch = async (req, res) => {
 }
 
 exports.setCatch = async (req, res) => {
-    console.log('тут')
     try {
         await new Promise((resolve, reject) => {
             setFoto(req, res, async (err) => {
@@ -268,8 +267,7 @@ exports.setCatch = async (req, res) => {
         if (req.file && req.file.path) {
             try {
                 const exif = await exifr.parse(filePath, { gps: true, tiff: true, exif: true })
-                console.log(exif)
-                console.log(exif.ComponentsConfiguration)
+
                 if (exif?.DateTimeOriginal) {
                     exifDate = Math.floor(new Date(exif.DateTimeOriginal).getTime() / 1000);
                     console.log('Дата съёмки из EXIF:', exif.DateTimeOriginal);
@@ -280,7 +278,6 @@ exports.setCatch = async (req, res) => {
         }
 
         const data = req.body;
-        console.log(exifDate)
         const formState = {
             fishs: data.fishs,
             reservuors: data.reservuors,
@@ -292,14 +289,15 @@ exports.setCatch = async (req, res) => {
             idTour: Number(data.idTour),
             idUser: Number(data.idUser),
             urlFoto: req.file?.filename || null,
-            date: exifDate || Math.floor((new Date().getTime()) / 1000)
+            date: exifDate || Math.floor((new Date().getTime()) / 1000),
+            tours: JSON.parse(data.validTours)
         };
 
         const [result, ok] = await Promise.all([
             ProcessCatch.setCatch(formState),
             ProcessCatch.updateUserStatus(formState)
         ]);
-        console.log(result)
+        console.log(result, ok)
         if (ok) {
             res.json({ mess: result, catch: null });
         } else {
@@ -317,7 +315,6 @@ exports.getCatchsList = async (req, res) => {
 
     console.time('fetch')
     const result = await ProcessCatch.getAllCatchs()
-    console.log(result)
     console.timeEnd('fetch')
     const data = result.map(e => {
         return {
@@ -344,35 +341,49 @@ exports.getCatchsList = async (req, res) => {
     res.json(data)
 }
 exports.getCatchs = async (req, res) => {
-    console.log('запрос уловов со статичтикой')
+
     const idTour = req.body.idTour
     const result = await ProcessCatch.getCatchs(idTour)
-    const fishCategories = ["Лещ", "Щука", "Судак", "Окунь", "Форель", "Другое", "Всего"];
+    // const fishCategories = ["Лещ", "Щука", "Судак", "Окунь", "Другое", "Всего"];
+    const fs = result.map(e => e.name_fish)
 
+    const uniqueFs = [...new Set(fs)];
+    console.log(uniqueFs)
     const data = [];
 
+    function createFishCountObject(fishArray) {
+        return fishArray.reduce((obj, fish) => {
+            obj[fish] = 0;
+            return obj;
+        }, {});
+    }
+
+
     result.forEach(item => {
-        // console.log(item)
         const { name_user, name_fish, idUser } = item;
-        const fishType = fishCategories.includes(name_fish) ? name_fish : "Другое";
+        const fishType = uniqueFs.includes(name_fish)
 
         let userEntry = data.find(entry => entry.name_user === name_user);
-
+        console.log(userEntry)
         if (!userEntry) {
             userEntry = {
-                idUser: idUser,
-                name_user: name_user,
-                "Лещ": 0,
-                "Щука": 0,
-                "Судак": 0,
-                "Окунь": 0,
-                "Форель": 0,
-                "Другое": 0,
+                idUser,
+                name_user,
+                ...createFishCountObject(uniqueFs),
                 "Всего": 0
             };
             data.push(userEntry);
         }
-        userEntry[fishType]++;
+        // Увеличиваем счётчик для текущей рыбы
+        if (userEntry.hasOwnProperty(name_fish)) {
+            userEntry[name_fish]++;
+        } else {
+            // Если рыба не из уникальных (например, "Другое"), можно обработать отдельно
+            if (!userEntry["Другое"]) userEntry["Другое"] = 0;
+            userEntry["Другое"]++;
+        }
+
+        // Увеличиваем общий счётчик
         userEntry["Всего"]++;
     });
 
