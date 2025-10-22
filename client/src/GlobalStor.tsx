@@ -100,6 +100,7 @@ export interface BigFish {
     data: string,
     comment: string
     urlFoto: null | string//null | {} | string
+    idUser: number
 }
 export interface ExtendedBigFish extends BigFish {
     idUser: number;

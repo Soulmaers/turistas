@@ -22,6 +22,6 @@ router.post('/api/getFisher', controllers.getFisher)
 router.post('/api/addTour', controllers.addTour)
 router.post('/api/getFisherAddTour', controllers.getFisherAddTour)
 router.post('/api/save_anchor', controllers.updateAnchor)
-
+router.post('/api/setFinal', controllers.setFinal)
 
 

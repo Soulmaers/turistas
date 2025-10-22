@@ -82,29 +82,29 @@ export const FormCatch = () => {
     const [formState, setFormState] = useState<Catch>(formDefault);
     const modalka = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        if (typeof window === 'undefined' || !('requestIdleCallback' in window)) return;
-
-        const id = requestIdleCallback(async () => {
-            try {
-                await loadModel();
-
-                const canvas = document.createElement('canvas');
-                canvas.width = 224;
-                canvas.height = 224;
-
-                const ctx = canvas.getContext('2d');
-                if (ctx) ctx.fillRect(0, 0, 224, 224);
-
-                await predictFromImage(canvas);
-                console.log('🔥 Модель прогрета');
-            } catch (e) {
-                console.error('Ошибка прогрева модели:', e);
-            }
-        }, { timeout: 600 });
-
-        return () => cancelIdleCallback?.(id);
-    }, []);
+    /*useEffect(() => {
+         if (typeof window === 'undefined' || !('requestIdleCallback' in window)) return;
+ 
+         const id = requestIdleCallback(async () => {
+             try {
+                 await loadModel();
+ 
+                 const canvas = document.createElement('canvas');
+                 canvas.width = 224;
+                 canvas.height = 224;
+ 
+                 const ctx = canvas.getContext('2d');
+                 if (ctx) ctx.fillRect(0, 0, 224, 224);
+ 
+                 await predictFromImage(canvas);
+                 console.log('🔥 Модель прогрета');
+             } catch (e) {
+                 console.error('Ошибка прогрева модели:', e);
+             }
+         }, { timeout: 600 });
+ 
+         return () => cancelIdleCallback?.(id);
+     }, []);*/
 
     console.log(formDefault)
     useEffect(() => {
@@ -145,8 +145,8 @@ export const FormCatch = () => {
     }, [dispatch])
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setInfo('Распознавание изображения');
-        setShowRecognitionAlert(true)
+        //  setInfo('Распознавание изображения');
+        //  setShowRecognitionAlert(true)
         const file = event.target.files && event.target.files[0];
         //   console.log(event.target.files)
         if (file?.name) {
@@ -159,40 +159,40 @@ export const FormCatch = () => {
 
 
             // Создаем HTMLImageElement
-            const img = new Image();
-            img.src = imageUrl;
-            img.crossOrigin = "anonymous"; // важно для предсказания
+            /*   const img = new Image();
+               img.src = imageUrl;
+               img.crossOrigin = "anonymous"; // важно для предсказания*/
 
-            img.onload = async () => {
-                try {
-                    const prediction = await predictFromImage(img);
-
-                    console.log('Предсказание:', prediction);
-
-                    // Пример: если классы совпадают с ID в справочнике
-                    const className = prediction.className;
-
-                    const fishMapping: Record<string, string> = {
-                        "Щука": '2',
-                        "Судак": '3',
-                        "Окунь": '4',
-                        "Лещ": '1'
-                    };
-                    console.log(className)
-                    const predictedId = fishMapping[className];
-                    if (predictedId) {
-                        setFormState(prev => ({ ...prev, fishs: String(predictedId) }));
-                        setInfo('')
-                        setShowRecognitionAlert(false);
-                    }
-                } catch (error) {
-                    console.error("Ошибка распознавания изображения:", error);
-                }
-            };
-
-            img.onerror = (e) => {
-                console.error("Ошибка загрузки изображения для предсказания", e);
-            };
+            /*   img.onload = async () => {
+                   try {
+                       const prediction = await predictFromImage(img);
+   
+                       console.log('Предсказание:', prediction);
+   
+                        Пример: если классы совпадают с ID в справочнике
+                       const className = prediction.className;
+   
+                       const fishMapping: Record<string, string> = {
+                           "Щука": '2',
+                           "Судак": '3',
+                           "Окунь": '4',
+                           "Лещ": '1'
+                       };
+                       console.log(className)
+                       const predictedId = fishMapping[className];
+                       if (predictedId) {
+                           setFormState(prev => ({ ...prev, fishs: String(predictedId) }));
+                           setInfo('')
+                           setShowRecognitionAlert(false);
+                       }
+                   } catch (error) {
+                       console.error("Ошибка распознавания изображения:", error);
+                   }
+               };
+   
+               img.onerror = (e) => {
+                   console.error("Ошибка загрузки изображения для предсказания", e);
+               };*/
         }
     };
     const handleButtonClick = () => {

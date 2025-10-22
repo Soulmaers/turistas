@@ -80,6 +80,41 @@
     .status {
         font-size: 0.9rem
     }
+
+    .sub_function {
+        margin: 3px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%
+    }
+
+    .find_i {
+        padding: 5px;
+        border-radius: 0 10px 10px 0;
+        background-color: #e5951c;
+        color: #000;
+        padding: 5px 20px;
+        width: 120px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-align: center;
+        padding: 5px 20px;
+        box-sizing: border-box;
+    }
+
+    .all_fishers {
+        padding: 5px;
+        border-radius: 10px 0 0 10px;
+        background-color: #e5951c;
+        color: #000;
+        padding: 5px 10px;
+        width: 120px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-align: center;
+    }
+
 }
 
 @media (height<670px) {

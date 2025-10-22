@@ -84,7 +84,7 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
     })
 
     const rowHeaders = tourEvent.fishs.map(e => <th>{e.name}</th>)
-    return (
+    return (<>
         <div className="container_table">
             <table className='styled_table'>
                 <thead><tr>
@@ -98,6 +98,11 @@ const TableTournament: React.FC<TableTournamentProps> = ({ idTour }) => {
             </table>
 
         </div>
+        <div className="sub_function">
+            <div className="find_i">НАЙТИ СЕБЯ</div>
+            <div className="all_fishers">ПОКАЗАТЬ ВСЕХ УЧАСТНИКОВ</div>
+        </div>
+    </>
     )
 }
 

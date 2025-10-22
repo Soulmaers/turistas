@@ -46,6 +46,19 @@ class JobUsers {
 
     }
 
+    async setFinal(user) {
+        const postModel = `UPDATE user SET trofys = trofys + 1 WHERE id=@user`
+        try {
+            const pool = await connection
+            const result = await pool.request().input('id', user).query(postModel)
+            return result.recordset[0]
+        }
+        catch (e) {
+            console.log(e)
+        }
+
+    }
+
     async getTournaments(idUser) {
 
         const postModel = `SELECT  t.*

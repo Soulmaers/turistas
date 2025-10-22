@@ -14,6 +14,7 @@ const RenderHeaderRight = () => {
 
     const userStatus = useSelector((state: RootState) => state.slice.userStatus);
     const actionCatch = useSelector((state: RootState) => state.slice.actionCatch)
+    const tourEvent = useSelector((state: RootState) => state.slice.tourEvent)
     const dispatch = useDispatch()
 
     const { getStatusUser } = useGetStatusUser()
@@ -29,14 +30,14 @@ const RenderHeaderRight = () => {
         }
         if (userStatus.user) fetchData()
 
-    }, [userStatus.user?.id, actionCatch])
+    }, [userStatus.user?.id, actionCatch, tourEvent])
 
 
     const onClickProfil = () => {
         dispatch(set_stateModalWindow({ type: 'profil', status: true }))
     }
 
-
+    console.log('турэвент')
     return (
         <div className="header_admin_container">
             <div className="wrapper_account">

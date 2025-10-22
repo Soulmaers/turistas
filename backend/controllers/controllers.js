@@ -401,7 +401,8 @@ exports.getCatchs = async (req, res) => {
         weight: maxWeightObject.weight,
         foto_user: maxWeightObject.foto,
         urlFoto: maxWeightObject.urlFoto,
-        data: formatData(maxWeightObject.data)
+        data: formatData(maxWeightObject.data),
+        idUser: maxWeightObject.idUser
     } : null;
 
     data.sort((a, b) => b['Всего'] - a['Всего']);
@@ -426,6 +427,16 @@ exports.getFisher = async (req, res) => {
     console.log(user)
     res.json(user)
 }
+
+exports.setFinal = async (req, res) => {
+    const user = req.body.idUser
+    const instance = new JobUsers()
+    const result = await instance.setFinal(user)
+    console.log(result)
+    res.json(result)
+}
+
+
 
 exports.getFisherAddTour = async (req, res) => {
     const contactID = req.body.contactID

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { statusTour } from '../stor'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, set_tourEvent, set_bigfish } from '../../../../GlobalStor'
-
+import { useSetFinal } from '../hooks/getCatchs'
 
 interface TimeDisplayProps {
     status: number;
@@ -14,7 +14,8 @@ interface TimeDisplayProps {
 
 const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish, name }) => {
     const dispatch = useDispatch()
-
+    const { setFinal } = useSetFinal()
+    const bigFish = useSelector((state: RootState) => state.slice.bigFish)
     const tourEvent = useSelector((state: RootState) => state.slice.tourEvent)
 
 
@@ -46,6 +47,7 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish
     }
     const [time, setTime] = useState<string | null>(() => calculaterTime());
 
+    console.log(bigFish)
     useEffect(() => {
         const updateStatusAndTime = () => {
             const now = Math.floor(Date.now() / 1000);
@@ -53,6 +55,7 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ status, dateStart, dateFinish
 
             if (now >= Number(dateFinish)) {
                 newStatus = 2;
+                if (bigFish) setFinal(bigFish.idUser)
             } else if (now >= Number(dateStart)) {
                 newStatus = 1;
             } else {
